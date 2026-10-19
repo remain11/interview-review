@@ -1,0 +1,1505 @@
+[
+ {
+  "id": "xl-mysql-001",
+  "category": "数据库",
+  "title": "NOSQL和SQL的区别？",
+  "answer": "<p>SQL数据库，指关系型数据库 - 主要代表：SQL Server，Oracle，MySQL(开源)，PostgreSQL(开源)。</p> <p>关系型数据库存储结构化数据。这些数据逻辑上以行列二维表的形式存在，每一列代表数据的一种属性，每一行代表一个数据实体。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725232218438.png\" alt=\"image-20240725232218438\"></p> <p>NoSQL指非关系型数据库 ，主要代表：MongoDB，Redis。NoSQL 数据库逻辑上提供了不同于二维表的存储方式，存储方式可以是JSON文档、哈希表或者其他方式。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725232206455.png\" alt=\"image-20240725232206455\"></p> <p>选择 SQL vs NoSQL，考虑以下因素。</p> <blockquote><p>ACID vs BASE</p></blockquote> <p>关系型数据库通常支持 ACID，也就是原子性、一致性、隔离性和持久性。部分 NoSQL 系统更强调 BASE，也就是基本可用、软状态和最终一致性。</p> <p>不过，<strong>不能简单认为 SQL 就一定支持完整事务、NoSQL 就一定不支持事务</strong>。比如 MySQL 的事务能力和存储引擎有关，MongoDB 也支持多文档事务，具体还是要看数据库的实现和配置。</p> <p>从实用的角度出发，我们需要考虑对于面对的应用场景，ACID 是否是必须的。比如银行应用就必须保证 ACID，否则一笔钱可能被使用两次；又比如社交软件不必保证 ACID，因为一条状态的更新对于所有用户读取先后时间有数秒不同并不影响使用。</p> <p>对于需要事务和复杂关联查询的应用，通常优先考虑关系型数据库；对于缓存、文档存储等场景，可以考虑对应的 NoSQL 数据库。一个系统也可以同时使用两者，比如 MySQL 存业务数据，Redis 缓存热点数据。</p> <blockquote><p>扩展性对比</p></blockquote> <p>很多 NoSQL 数据库围绕特定的数据模型设计，较少依赖跨节点 JOIN，因此更容易按键分片。比如 Redis 支持主从复制、哨兵和 Cluster，但扩展时仍然需要考虑热点数据、跨分片操作和一致性等问题。</p> <p>相反关系型数据库的数据之间存在关联性，水平扩展较难 ，需要解决跨服务器 JOIN，分布式事务等问题。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#nosql和sql的区别"
+ },
+ {
+  "id": "xl-mysql-002",
+  "category": "数据库",
+  "title": "数据库三大范式是什么？",
+  "answer": "<p><strong>第一范式（1NF）：要求数据库表的每一列都是不可分割的原子数据项。</strong></p> <p>举例说明：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1218459-20180909201651535-1215699096.png\" alt=\"img\"></p> <p>在上面的表中，“家庭信息”和“学校信息”列均不满足原子性的要求，故不满足第一范式，调整如下：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1218459-20180909202243826-1032549277.png\" alt=\"img\"></p> <p>可见，调整后的每一列都是不可再分的，因此满足第一范式（1NF）；</p> <p><strong>第二范式（2NF）：在1NF的基础上，非码属性必须完全依赖于候选码（在1NF基础上消除非主属性对主码的部分函数依赖）</strong></p> <p><strong>第二范式需要确保数据库表中的每一列都和主键相关，而不能只与主键的某一部分相关（主要针对联合主键而言）。</strong></p> <p>举例说明：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1218459-20180909204750951-639647799.png\" alt=\"img\"></p> <p>在上图所示的情况中，同一个订单中可能包含不同的产品，因此主键必须是“订单号”和“产品号”联合组成，</p> <p>但可以发现，产品数量、产品折扣、产品价格与“订单号”和“产品号”都相关，但是订单金额和订单时间仅与“订单号”相关，与“产品号”无关，</p> <p>这样就不满足第二范式的要求，调整如下，需分成两个表：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1218459-20180909210444227-1008056975.png\" alt=\"img\"></p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1218459-20180909210458847-2092897116.png\" alt=\"img\"></p> <p><strong>第三范式（3NF）：在2NF基础上，任何非主<a target=\"_blank\" rel=\"noopener\" href=\"https://baike.baidu.com/item/%E5%B1%9E%E6%80%A7\" target=\"_blank\" rel=\"noopener noreferrer\">属性<span><svg xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" focusable=\"false\" x=\"0px\" y=\"0px\" viewBox=\"0 0 100 100\" width=\"15\" height=\"15\" class=\"icon outbound\"><path fill=\"currentColor\" d=\"M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z\"></path> <polygon fill=\"currentColor\" points=\"45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9\"></polygon></svg> <span class=\"sr-only\">(opens new window)</span></span></a>不依赖于其它非主属性（在2NF基础上消除传递依赖）</strong></p> <p><strong>第三范式需要确保数据表中的每一列数据都和主键直接相关，而不能间接相关。</strong></p> <p>举例说明：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1218459-20180909211311408-1364899740.png\" alt=\"img\"></p> <p>上表中，所有属性都完全依赖于学号，所以满足第二范式，但是“班主任性别”和“班主任年龄”直接依赖的是“班主任姓名”，</p> <p>而不是主键“学号”，所以需做如下调整：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1218459-20180909211539242-1391100354.png\" alt=\"img\"></p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1218459-20180909211602202-1069383439.png\" alt=\"img\"></p> <p>这样以来，就满足了第三范式的要求。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#数据库三大范式是什么"
+ },
+ {
+  "id": "xl-mysql-003",
+  "category": "数据库",
+  "title": "MySQL 怎么连表查询？",
+  "answer": "<p>数据库有以下几种联表查询类型：</p> <ol><li><strong>内连接 (INNER JOIN)</strong></li> <li><strong>左外连接 (LEFT JOIN)</strong></li> <li><strong>右外连接 (RIGHT JOIN)</strong></li> <li><strong>全外连接 (FULL JOIN)</strong></li></ol> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1721710415166-eff24e6c-555c-436c-b1b8-7c6dbb5850d7.webp\" alt=\"\"></p> <p><strong>1. 内连接 (INNER JOIN)</strong></p> <p>内连接返回两个表中有匹配关系的行。<strong>示例</strong>:</p> <pre><code class=\"language-sql\">SELECT employees.name, departments.name\nFROM employees\nINNER JOIN departments\nON employees.department_id = departments.id;\n</code></pre><p>这个查询返回每个员工及其所在的部门名称。</p> <p><strong>2. 左外连接 (LEFT JOIN)</strong></p> <p>左外连接返回左表中的所有行，即使在右表中没有匹配的行。未匹配的右表列会包含NULL。<strong>示例</strong>:</p> <pre><code class=\"language-sql\">SELECT employees.name, departments.name\nFROM employees\nLEFT JOIN departments\nON employees.department_id = departments.id;\n</code></pre><p>这个查询返回所有员工及其部门名称，包括那些没有分配部门的员工。</p> <p><strong>3. 右外连接 (RIGHT JOIN)</strong></p> <p>右外连接返回右表中的所有行，即使左表中没有匹配的行。未匹配的左表列会包含NULL。<strong>示例</strong>:</p> <pre><code class=\"language-sql\">SELECT employees.name, departments.name\nFROM employees\nRIGHT JOIN departments\nON employees.department_id = departments.id;\n</code></pre><p>这个查询返回所有部门及其员工，包括那些没有分配员工的部门。</p> <p><strong>4. 全外连接 (FULL JOIN)</strong></p> <p>全外连接返回两个表中所有行，包括非匹配行，在MySQL中，FULL JOIN 需要使用 UNION 来实现，因为 MySQL 不直接支持 FULL JOIN。<strong>示例</strong>:</p> <pre><code class=\"language-sql\">SELECT employees.name, departments.name\nFROM employees\nLEFT JOIN departments\nON employees.department_id = departments.id\n\nUNION ALL\n\nSELECT employees.name, departments.name\nFROM employees\nRIGHT JOIN departments\nON employees.department_id = departments.id\nWHERE employees.id IS NULL;\n</code></pre><p>这个查询返回所有员工和所有部门，包括没有匹配行的记录。第二部分只取右表没有匹配到员工的行，再用 <code>UNION ALL</code> 合并，这样既不会重复返回已经匹配的行，也不会把姓名相同的不同员工误当成重复结果去掉。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql-怎么连表查询"
+ },
+ {
+  "id": "xl-mysql-004",
+  "category": "数据库",
+  "title": "MySQL如何避免重复插入数据？",
+  "answer": "<p><strong>方式一：使用UNIQUE约束</strong></p> <p>在表的相关列上添加UNIQUE约束，确保每个值在该列中唯一。例如：</p> <pre><code class=\"language-sql\">CREATE TABLE users (\n    id INT PRIMARY KEY AUTO_INCREMENT,\n    email VARCHAR(255) NOT NULL UNIQUE,\n    name VARCHAR(255)\n);\n</code></pre><p>如果尝试插入重复的email，MySQL会返回错误。</p> <p><strong>方式二：使用INSERT ... ON DUPLICATE KEY UPDATE</strong></p> <p>这种语句允许在插入记录时处理重复键的情况。如果插入的记录与现有记录冲突，可以选择更新现有记录：</p> <pre><code class=\"language-sql\">INSERT INTO users (email, name) \nVALUES ('example@example.com', 'John Doe') AS new_row\nON DUPLICATE KEY UPDATE name = new_row.name;\n</code></pre><p>上面用的是 MySQL 8.0.19 及之后支持的新行别名写法。较早版本可以写 <code>name = VALUES(name)</code>，不过这种写法从 MySQL 8.0.20 开始被弃用。</p> <p><strong>方式三：使用INSERT IGNORE</strong>：\n该语句会在插入记录时忽略那些因重复键而导致的插入错误。例如：</p> <pre><code class=\"language-sql\">INSERT IGNORE INTO users (email, name) \nVALUES ('example@example.com', 'John Doe');\n</code></pre><p>如果 email 已经存在，这条插入语句会被忽略。不过，<code>IGNORE</code> 还可能把部分数据转换错误降为警告，不能把它理解成只忽略重复键错误。</p> <p>选择哪种方法取决于具体的需求：</p> <ul><li>如果需要保证表内某个业务键唯一，先建立 UNIQUE 约束。联合唯一索引可以保证多个字段的组合不重复。</li> <li>如果需要插入和更新结合可以使用<code>ON DUPLICATE KEY UPDATE</code>。</li> <li>对于允许忽略重复插入的场景，可以使用 <code>INSERT IGNORE</code>，同时注意检查警告。</li></ul> <p><strong>防重复的关键还是唯一约束</strong>，后面两种写法都是建立在主键或唯一索引冲突的基础上处理数据。如果只是先 SELECT 判断不存在，再 INSERT，并发时两个请求都可能查到不存在，还是会重复插入。另外，唯一索引允许多个 NULL，如果业务要求该字段一定唯一，通常还要加上 <code>NOT NULL</code>。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/a9ca789a_unique-key-concurrent-insert.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql如何避免重复插入数据"
+ },
+ {
+  "id": "xl-mysql-005",
+  "category": "数据库",
+  "title": "CHAR 和 VARCHAR有什么区别？",
+  "answer": "<ul><li><strong>CHAR 是定长字符串</strong>，比如 <code>CHAR(10)</code>，不足的部分会在存储时补空格，读取时通常会去掉末尾的填充空格，适合长度比较固定的数据。</li> <li><strong>VARCHAR 是变长字符串</strong>，比如 <code>VARCHAR(100)</code>，100 表示最多保存 100 个字符，实际占用空间取决于内容的字节数，还需要 1 或 2 个字节记录长度，适合姓名、地址等长度不固定的数据。</li></ul> <p>这里的长度是字符数，不是字节数。尤其使用多字节字符集时，不能简单认为 <code>CHAR(10)</code> 就只占 10 个字节。选择哪一种主要看数据特点，也不能直接认为 CHAR 一定比 VARCHAR 快。</p> <p><span id=\"varchar后面代表字节还是会字符\"></span></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#char-和-varchar有什么区别"
+ },
+ {
+  "id": "xl-mysql-006",
+  "category": "数据库",
+  "title": "VARCHAR 后面代表字节还是字符？",
+  "answer": "<p><code>VARCHAR</code> 后面括号里的数字代表的是字符数，而不是字节数。</p> <p>比如 <code>VARCHAR(10)</code>，这里的 10 表示该字段最多可以存储 10 个字符。字符的字节长度取决于所使用的字符集。</p> <ul><li>如果字符集是 ASCII 字符集：ASCII 字符集每个字符占用 1 个字节，那么 VARCHAR(10) 最多可以存储 10 个 ASCII 字符，同时占用的存储空间最多为 10 个字节（不考虑额外的长度记录开销）。</li> <li>如果字符集是 <code>utf8mb4</code>，每个字符最多占用 4 个字节，<code>VARCHAR(10)</code> 最多可以存储 10 个字符，内容最多占 40 个字节，另外还需要长度记录开销。MySQL 的 <code>utf8mb3</code> 每个字符最多占 3 个字节，不能和 <code>utf8mb4</code> 混为一谈。</li></ul> <p>VARCHAR 的最大可声明长度还受到字符集和整行 65,535 字节上限等限制，并不是可以随意把括号里的数字设得很大。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#varchar-后面代表字节还是字符"
+ },
+ {
+  "id": "xl-mysql-007",
+  "category": "数据库",
+  "title": "int(1) int(10) 在mysql有什么不同？",
+  "answer": "<p><code>INT(1)</code> 和 <code>INT(10)</code> 的区别主要在于 <strong>显示宽度</strong>，而不是存储范围或数据类型本身的大小。以下是核心区别的总结：</p> <ul><li>本质是显示宽度，不改变存储方式：<code>INT</code> 的存储固定为 4 字节，所有 <code>INT</code>（无论写成 <code>INT(1)</code> 还是 <code>INT(10)</code>）占用的存储空间 均为 4 字节。括号内的数值（如 <code>1</code> 或 <code>10</code>）是显示宽度，用于在 特定场景下 控制数值的展示格式。</li> <li>唯一作用场景：<code>ZEROFILL</code> 补零显示，当字段设置 <code>ZEROFILL</code> 时：数字显示时会用前导零填充至指定宽度。比如，字段类型为 <code>INT(4) ZEROFILL</code>，实际存入 <code>5</code> → 显示为 <code>0005</code>，实际存入 <code>12345</code> → 显示仍为 <code>12345</code>（宽度超限时不截断）。</li></ul> <p>举一个例子</p> <pre><code class=\"language-sql\">-- 创建一个包含 INT(1) 和 INT(10) 字段的表，并设置 ZEROFILL 属性\nCREATE TABLE test_int (\n    num1 INT(1) ZEROFILL,\n    num2 INT(10) ZEROFILL\n);\n\n-- 插入数据\nINSERT INTO test_int (num1, num2) VALUES (1, 1);\n\n-- 查询数据\nSELECT * FROM test_int;\n</code></pre><p>结果分析：</p> <ul><li><code>num1</code> 字段由于设置为 <code>INT(1) ZEROFILL</code>，其显示宽度为 1，插入数据 <code>1</code> 时会显示为 <code>1</code>。</li> <li><code>num2</code> 字段设置为 <code>INT(10) ZEROFILL</code>，显示宽度为 10，插入数据 <code>1</code> 时会在前面填充零，显示为 <code>0000000001</code>。</li></ul> <p>整数显示宽度和 <code>ZEROFILL</code> 从 MySQL 8.0.17 开始被弃用，新表直接用 <code>INT</code> 就好，需要补零展示可以交给应用处理。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#int-1-int-10-在mysql有什么不同"
+ },
+ {
+  "id": "xl-mysql-008",
+  "category": "数据库",
+  "title": "Text数据类型可以无限大吗？",
+  "answer": "<p>不能。MySQL 有 4 种 TEXT 类型，最大长度按字节计算：</p> <ul><li>TINYTEXT：255 字节。</li> <li>TEXT：65,535 字节，约 64 KB。</li> <li>MEDIUMTEXT：16,777,215 字节，约 16 MB。</li> <li>LONGTEXT：4,294,967,295 字节，约 4 GB。</li></ul> <p>这里限制的是字节数，所以使用 <code>utf8mb4</code> 存储中文或表情时，能放下的字符数会少于这个数字。实际读写还会受到 <code>max_allowed_packet</code>、内存和传输成本等限制，大文件通常更适合放到对象存储，数据库里保存文件地址。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#text数据类型可以无限大吗"
+ },
+ {
+  "id": "xl-mysql-009",
+  "category": "数据库",
+  "title": "金额为什么建议用 DECIMAL，而不是 FLOAT 或 DOUBLE？",
+  "answer": "<p>因为 <strong>DECIMAL 保存的是精确的十进制数，而 FLOAT 和 DOUBLE 保存的是近似值</strong>。金额计算如果存在精度误差，就可能出现对账不一致的问题。</p> <p>比如 <code>DECIMAL(10, 2)</code>，10 表示总位数，2 表示小数位数，也就是整数部分最多 8 位，小数部分最多 2 位。</p> <p>也可以用整数保存最小货币单位，比如用 BIGINT 保存「分」，100 元保存为 10000。无论采用哪一种，应用里的金额计算也要使用对应的精确类型，并明确舍入规则，不能在应用中先用浮点数算错了，再存到 DECIMAL 里。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#金额为什么建议用-decimal-而不是-float-或-double"
+ },
+ {
+  "id": "xl-mysql-010",
+  "category": "数据库",
+  "title": "IP地址如何在数据库里存储？",
+  "answer": "<p>IPv4 地址是一个 32 位的二进制数，通常以点分十进制表示法呈现，例如 <code>192.168.1.1</code>。</p> <p><strong>字符串类型的存储方式</strong>：直接将 IP 地址作为字符串存储在数据库中，比如可以用 <code>VARCHAR(15)</code>来存储。</p> <pre><code class=\"language-sql\">-- 创建一个表，使用VARCHAR类型存储IPv4地址\nCREATE TABLE ip_records (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    ip_address VARCHAR(15)\n);\n\n-- 插入数据\nINSERT INTO ip_records (ip_address) VALUES ('192.168.1.1');\n</code></pre><ul><li><strong>优点</strong>：直观易懂，方便直接进行数据的插入、查询和显示，不需要进行额外的转换操作。</li> <li><strong>缺点</strong>：占用存储空间较大，字符串比较操作的性能相对较低，不利于进行范围查询。</li></ul> <p>整数类型的存储方式：将 IPv4 地址转换为 32 位无符号整数进行存储，常用的数据类型有 <code>INT UNSIGNED</code>。</p> <pre><code class=\"language-sql\">-- 创建一个表，使用INT UNSIGNED类型存储IPv4地址\nCREATE TABLE ip_records (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    ip_address INT UNSIGNED\n);\n\n-- 插入数据，需要先将IP地址转换为整数\nINSERT INTO ip_records (ip_address) VALUES (INET_ATON('192.168.1.1'));\n\n-- 查询时将整数转换回IP地址\nSELECT INET_NTOA(ip_address) FROM ip_records;\n</code></pre><ul><li><strong>优点</strong>：占用存储空间小，整数比较操作的性能较高，便于进行范围查询。</li> <li><strong>缺点</strong>：需要进行额外的转换操作，不够直观，增加了开发的复杂度。</li></ul> <p>如果还要支持 IPv6，就不能只用 INT UNSIGNED 了，可以用 <code>VARBINARY(16)</code> 保存二进制地址，写入时用 <code>INET6_ATON()</code>，读取时用 <code>INET6_NTOA()</code>。这两个函数也能处理 IPv4 地址。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#ip地址如何在数据库里存储"
+ },
+ {
+  "id": "xl-mysql-011",
+  "category": "数据库",
+  "title": "说一下外键约束",
+  "answer": "<p>外键约束的作用是维护表与表之间的引用关系，避免出现「子表引用的父表记录不存在」的情况。</p> <p>举个栗子，一个学生可以选多门课程，一门课程也可以被多个学生选择，这是多对多关系，需要用选课表来关联，不能只在学生表里放一个 course_id。</p> <pre><code class=\"language-sql\">CREATE TABLE students (\n    id INT PRIMARY KEY,\n    name VARCHAR(50)\n) ENGINE = InnoDB;\n\nCREATE TABLE courses (\n    id INT PRIMARY KEY,\n    name VARCHAR(50)\n) ENGINE = InnoDB;\n\nCREATE TABLE student_courses (\n    student_id INT NOT NULL,\n    course_id INT NOT NULL,\n    PRIMARY KEY (student_id, course_id),\n    FOREIGN KEY (student_id) REFERENCES students(id),\n    FOREIGN KEY (course_id) REFERENCES courses(id)\n) ENGINE = InnoDB;\n</code></pre><p>这样，给一个不存在的学生添加选课记录，或者选择不存在的课程，数据库都会拒绝。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/b84778e7_foreign-key-many-to-many.png\" alt=\"\"></p> <p>删除父表记录时，还可以指定处理方式：</p> <ul><li><strong>RESTRICT</strong>：如果还有子表记录引用，就拒绝删除，InnoDB 的 NO ACTION 也是这种效果。</li> <li><strong>CASCADE</strong>：删除父表记录时，把关联的子表记录一起删除。</li> <li><strong>SET NULL</strong>：把子表的外键字段设置为 NULL，前提是该字段允许为空。</li></ul> <p>外键可以把引用完整性检查交给数据库，不过也会增加检查和加锁开销。实际是否使用，要结合写入压力、分库分表需求来判断；如果不用外键，就需要应用自己维护这些关系。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#说一下外键约束"
+ },
+ {
+  "id": "xl-mysql-012",
+  "category": "数据库",
+  "title": "MySQL的关键字 IN 和 EXISTS",
+  "answer": "<p>在MySQL中，<code>IN</code> 和 <code>EXISTS</code> 都是用来处理子查询的关键词，但它们在功能、性能和使用场景上有各自的特点和区别。</p> <blockquote><p>IN关键字</p></blockquote> <p><code>IN</code> 用于检查左边的表达式是否存在于右边的列表或子查询的结果集中。如果存在，则<code>IN</code> 返回<code>TRUE</code>，否则返回<code>FALSE</code>。</p> <p>语法结构：</p> <pre><code class=\"language-sql\">SELECT column_name(s)\nFROM table_name\nWHERE column_name IN (value1, value2, ...);\n</code></pre><p>或</p> <pre><code class=\"language-sql\">SELECT column_name(s)\nFROM table_name\nWHERE column_name IN (SELECT column_name FROM another_table WHERE condition);\n</code></pre><p>例子：</p> <pre><code class=\"language-sql\">SELECT * FROM Customers\nWHERE Country IN ('Germany', 'France');\n</code></pre><blockquote><p>EXISTS关键字</p></blockquote> <p><code>EXISTS</code> 用于判断子查询是否至少能返回一行数据。它不关心子查询返回什么数据，只关心是否有结果。如果子查询有结果，则<code>EXISTS</code> 返回<code>TRUE</code>，否则返回<code>FALSE</code>。</p> <p>语法结构：</p> <pre><code class=\"language-sql\">SELECT column_name(s)\nFROM table_name\nWHERE EXISTS (SELECT column_name FROM another_table WHERE condition);\n</code></pre><p>例子：</p> <pre><code class=\"language-sql\">SELECT * FROM Customers\nWHERE EXISTS (SELECT 1 FROM Orders WHERE Orders.CustomerID = Customers.CustomerID);\n</code></pre><p>区别与选择：</p> <ul><li><strong>语义区别</strong>：IN 比较值是否属于一个集合，EXISTS 判断子查询有没有返回行。<code>EXISTS (SELECT NULL)</code> 也为 TRUE，因为它确实返回了一行。</li> <li><strong>性能区别</strong>：不能简单背「大表用 EXISTS、小表用 IN」。MySQL 优化器可能把它们转成半连接或者对子查询结果做物化，具体性能取决于索引、数据分布和执行计划。</li> <li><strong>NULL 值处理</strong>：IN 在没有找到匹配值、但集合中包含 NULL 时，结果是 UNKNOWN，在 WHERE 中不会被保留。尤其使用 NOT IN 时，这一点很容易踩坑。</li></ul> <p>比如下面这个条件：</p> <pre><code class=\"language-sql\">SELECT 1 NOT IN (2, NULL);\n</code></pre><p>结果是 NULL，而不是 TRUE。如果要查询「没有订单的客户」，通常可以用相关子查询的 NOT EXISTS：</p> <pre><code class=\"language-sql\">SELECT c.*\nFROM Customers c\nWHERE NOT EXISTS (\n    SELECT 1 FROM Orders o WHERE o.CustomerID = c.CustomerID\n);\n</code></pre><p>这样，Orders 中有 CustomerID 为 NULL 的行，也不会把所有客户都排除掉。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/a86ffa27_not-in-null-vs-not-exists.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql的关键字-in-和-exists"
+ },
+ {
+  "id": "xl-mysql-013",
+  "category": "数据库",
+  "title": "mysql中的一些基本函数，你知道哪些？",
+  "answer": "<blockquote><p>一、字符串函数</p></blockquote> <p><strong>CONCAT(str1, str2, ...)</strong>：连接多个字符串，返回一个合并后的字符串。</p> <pre><code class=\"language-sql\">SELECT CONCAT('Hello', ' ', 'World') AS Greeting;\n</code></pre><p><strong>LENGTH(str)</strong>：返回字符串的字节数；如果要统计字符数，使用 <code>CHAR_LENGTH(str)</code>。</p> <pre><code class=\"language-sql\">SELECT LENGTH('小林') AS ByteLength, CHAR_LENGTH('小林') AS CharLength;\n</code></pre><p><strong>SUBSTRING(str, pos, len)</strong>：从指定位置开始，截取指定长度的子字符串。</p> <pre><code class=\"language-sql\">SELECT SUBSTRING('Hello World', 1, 5) AS SubStr;\n</code></pre><p><strong>REPLACE(str, from_str, to_str)</strong>：将字符串中的某部分替换为另一个字符串。</p> <pre><code class=\"language-sql\">SELECT REPLACE('Hello World', 'World', 'MySQL') AS ReplacedStr;\n</code></pre><blockquote><p>二、数值函数</p></blockquote> <p><strong>ABS(num)</strong>：返回数字的绝对值。</p> <pre><code class=\"language-sql\">SELECT ABS(-10) AS AbsoluteValue;\n</code></pre><p><strong>POWER(num, exponent)</strong>：返回指定数字的指定幂次方。</p> <pre><code class=\"language-sql\">SELECT POWER(2, 3) AS PowerValue;\n</code></pre><blockquote><p>三、日期和时间函数</p></blockquote> <p><strong>NOW()</strong>：返回当前日期和时间。</p> <pre><code class=\"language-sql\">SELECT NOW() AS CurrentDateTime;\n</code></pre><p><strong>CURDATE()</strong>：返回当前日期。</p> <pre><code class=\"language-sql\">SELECT CURDATE() AS CurrentDate;\n</code></pre><blockquote><p>四、聚合函数</p></blockquote> <p><strong>COUNT(column)</strong>：计算指定列中的非 NULL 值的个数；<code>COUNT(*)</code> 统计结果集中的行数，包括列值为 NULL 的行。</p> <pre><code class=\"language-sql\">SELECT COUNT(*) AS RowCount FROM my_table;\n</code></pre><p><strong>SUM(column)</strong>：计算指定列的总和。</p> <pre><code class=\"language-sql\">SELECT SUM(price) AS TotalPrice FROM orders;\n</code></pre><p><strong>AVG(column)</strong>：计算指定列的平均值。</p> <pre><code class=\"language-sql\">SELECT AVG(price) AS AveragePrice FROM orders;\n</code></pre><p><strong>MAX(column)</strong>：返回指定列的最大值。</p> <pre><code class=\"language-sql\">SELECT MAX(price) AS MaxPrice FROM orders;\n</code></pre><p><strong>MIN(column)</strong>：返回指定列的最小值。</p> <pre><code class=\"language-sql\">SELECT MIN(price) AS MinPrice FROM orders;\n</code></pre>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql中的一些基本函数-你知道哪些"
+ },
+ {
+  "id": "xl-mysql-014",
+  "category": "数据库",
+  "title": "COUNT(*)、COUNT(1) 和 COUNT(字段) 有什么区别？",
+  "answer": "<ul><li><strong>COUNT(*)</strong>：统计行数，不管某一列是不是 NULL。</li> <li><strong>COUNT(1)</strong>：对每一行统计常量 1，1 不为 NULL，所以统计结果和 COUNT(*) 一样。</li> <li><strong>COUNT(字段)</strong>：只统计该字段不为 NULL 的行。如果字段定义为 NOT NULL，结果才和 COUNT(*) 相同。</li></ul> <p>对于 InnoDB，<strong>不能直接读取一个固定的总行数返回</strong>，因为不同事务的可见数据可能不同。没有 WHERE 条件时，MySQL 通常会选择较小的二级索引扫描；没有合适的二级索引，再扫描聚簇索引。</p> <p>所以，不需要为了性能把 COUNT(<em>) 改成 COUNT(1)，通常直接用 COUNT(</em>) 表达「统计行数」就好。大表频繁统计且允许有延迟时，可以考虑维护汇总数据。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#count-、count-1-和-count-字段-有什么区别"
+ },
+ {
+  "id": "xl-mysql-015",
+  "category": "数据库",
+  "title": "NULL 和空字符串有什么区别？",
+  "answer": "<p><strong>NULL 表示值未知或者缺失，空字符串表示值已知，但内容为空</strong>，两者不是一回事。</p> <pre><code class=\"language-sql\">SELECT * FROM users WHERE name IS NULL;\nSELECT * FROM users WHERE name = '';\n</code></pre><p>判断 NULL 要用 <code>IS NULL</code> 或 <code>IS NOT NULL</code>，不能写 <code>name = NULL</code>。普通比较运算遇到 NULL，结果通常是 UNKNOWN，WHERE 只保留结果为 TRUE 的行。如果需要把两个 NULL 也当成相等，可以用 MySQL 的 NULL 安全等于运算符 <code>&lt;=&gt;</code>。</p> <p>另外，<strong>NULL 并不意味着不能走索引</strong>，<code>IS NULL</code> 也可能使用索引；唯一索引允许多个 NULL，而 COUNT(字段) 不会统计 NULL，这些都是面试里容易追问的点。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#null-和空字符串有什么区别"
+ },
+ {
+  "id": "xl-mysql-016",
+  "category": "数据库",
+  "title": "DELETE、TRUNCATE 和 DROP 有什么区别？",
+  "answer": "<ul><li><strong>DELETE</strong>：删除表中的记录，可以带 WHERE 条件，表结构保留。对于 InnoDB，它是事务操作，在事务提交前可以回滚，会产生 undo 和 redo，也会逐行触发 DELETE 触发器。</li> <li><strong>TRUNCATE</strong>：清空整张表，不能带 WHERE，表结构保留，通常会重建表并重置自增计数器，不会逐行触发 DELETE 触发器。</li> <li><strong>DROP</strong>：删除整张表，表结构和数据都不再保留。</li></ul> <p>TRUNCATE 和普通 DROP TABLE 都属于 DDL，会隐式提交，不能通过应用执行 ROLLBACK 撤销。MySQL 8.0 的原子 DDL 保证的是崩溃时操作的一致性，不能把它理解成 DDL 可以像普通事务一样手动回滚。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#delete、truncate-和-drop-有什么区别"
+ },
+ {
+  "id": "xl-mysql-017",
+  "category": "数据库",
+  "title": "SQL查询语句的执行顺序是怎么样的？",
+  "answer": "<p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240820114027032.png\" alt=\"image-20240820114027032\"></p> <p>这里说的是 SQL 的<strong>逻辑处理顺序</strong>，不是数据库内部实际执行每一步的顺序。可以按下面这个顺序理解：</p> <pre><code class=\"language-text\">FROM / JOIN → ON → WHERE → GROUP BY → HAVING\n→ SELECT → DISTINCT → ORDER BY → LIMIT\n</code></pre><ul><li>先确定从哪些表取数据，按 ON 条件关联，再用 WHERE 过滤记录。</li> <li>然后分组、计算聚合结果，通过 HAVING 过滤分组。</li> <li>最后选择输出的列、去重、排序，再限制返回行数。</li></ul> <p>所以，<strong>WHERE 过滤的是分组前的记录，HAVING 过滤的是分组后的结果</strong>。SELECT 中定义的别名通常不能直接用于 WHERE，不过 MySQL 允许在 GROUP BY、HAVING 和 ORDER BY 中使用。</p> <p>实际执行时，优化器可能调整连接顺序、提前过滤条件，或者利用索引省掉排序，并不会每一步都真正生成一张临时表。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#sql查询语句的执行顺序是怎么样的"
+ },
+ {
+  "id": "xl-mysql-018",
+  "category": "数据库",
+  "title": "sql题：给学生表、课程成绩表，求不存在01课程但存在02课程的学生的成绩",
+  "answer": "<p>可以使用SQL的子查询和<code>LEFT JOIN</code>或者<code>EXISTS</code>关键字来实现，这里我将展示两种不同的方法来完成这个查询。</p> <p>假设我们有以下两张表：</p> <ol><li><code>Student</code> 表，其中包含学生的<code>sid</code>（学生编号）和其他相关信息。</li> <li><code>Score</code> 表，其中包含<code>sid</code>（学生编号），<code>cid</code>（课程编号）和<code>score</code>（分数）。</li></ol> <p>方法1：使用LEFT JOIN 和 IS NULL</p> <pre><code class=\"language-sql\">SELECT s.sid, s.sname, sc2.cid, sc2.score\nFROM Student s\nLEFT JOIN Score AS sc1 ON s.sid = sc1.sid AND sc1.cid = '01'\nLEFT JOIN Score AS sc2 ON s.sid = sc2.sid AND sc2.cid = '02'\nWHERE sc1.cid IS NULL AND sc2.cid IS NOT NULL;\n</code></pre><p>方法2：使用NOT EXISTS</p> <pre><code class=\"language-sql\">SELECT s.sid, s.sname, sc.cid, sc.score\nFROM Student s\nJOIN Score sc ON s.sid = sc.sid AND sc.cid = '02'\nWHERE NOT EXISTS (\n    SELECT 1 FROM Score sc1 WHERE sc1.sid = s.sid AND sc1.cid = '01'\n);\n</code></pre>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#sql题-给学生表、课程成绩表-求不存在01课程但存在02课程的学生的成绩"
+ },
+ {
+  "id": "xl-mysql-019",
+  "category": "数据库",
+  "title": "给定一个学生表 student_score（stu_id，subject_id，score），查询总分排名在5-10名的学生id及对应的总分",
+  "answer": "<p>可以使用以下 SQL 查询来检索总分排名在 5 到 10 名的学生 ID 及对应的总分。其中我们先计算每个学生的总分，然后为其分配一个排名，最后检索排名在 5 到 10 之间的记录。</p> <pre><code class=\"language-sql\">WITH StudentTotalScores AS (\n    SELECT \n        stu_id,\n        SUM(score) AS total_score\n    FROM \n        student_score\n    GROUP BY \n        stu_id\n),\nRankedStudents AS (\n    SELECT\n        stu_id,\n        total_score,\n        RANK() OVER (ORDER BY total_score DESC) AS ranking\n    FROM\n        StudentTotalScores\n)\nSELECT\n    stu_id,\n    total_score\nFROM\n    RankedStudents\nWHERE\n    ranking BETWEEN 5 AND 10\nORDER BY ranking, stu_id;\n</code></pre><p>解释：</p> <ol><li>子查询 StudentTotalScores 中，我们通过对 student_score 表中的 stu_id 分组来计算每个学生的总分。</li> <li>子查询 RankedStudents 中，我们使用 RANK() 函数为每个学生分配一个排名，按总分从高到低排序。</li> <li>最后，我们在主查询中选择排名在 5 到 10 之间的学生。</li></ol> <p>这个写法需要 MySQL 8.0 及以上版本。另外，要先问清楚同分怎么算：<code>RANK()</code> 是并列名次、后面的名次会跳号；<code>DENSE_RANK()</code> 是并列名次、不跳号；如果只是取排序后的第 5 到第 10 条记录，可以用 <code>ROW_NUMBER() OVER (ORDER BY total_score DESC, stu_id)</code>，用 stu_id 保证同分时排序稳定。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#给定一个学生表-student-score-stu-id-subject-id-score-查询总分排名在5-10名的学生id及对应的总分"
+ },
+ {
+  "id": "xl-mysql-020",
+  "category": "数据库",
+  "title": "SQL题：查某个班级下所有学生的选课情况",
+  "answer": "<p>有三张表：学生信息表、学生选课表、学生班级表</p> <p>学生信息表（students）结构如下：</p> <pre><code class=\"language-sql\">CREATE TABLE students (\n  student_id INT PRIMARY KEY,     -- 学生的唯一标识，主键\n  student_name VARCHAR(50),       -- 学生姓名\n  class_id INT                    -- 学生所属班级的标识，用于关联班级表\n);\n</code></pre><p>学生选课表（<code>course_selections</code>）结构如下：</p> <pre><code class=\"language-sql\">CREATE TABLE course_selections (\n    selection_id INT PRIMARY KEY, -- 选课记录的唯一标识，主键\n    student_id INT,               -- 选课学生的标识，用于关联学生信息表\n    course_name VARCHAR(50)       -- 所选课程的名称\n);\n</code></pre><p>学生班级表（<code>classes</code>）结构如下：</p> <pre><code class=\"language-sql\">CREATE TABLE classes (\n    class_id INT PRIMARY KEY,   -- 班级的唯一标识，主键\n    class_name VARCHAR(50)      -- 班级名称\n);\n</code></pre><p>要查询某个班级（例如班级名称为 'Class A'）下所有学生的选课情况，可以使用以下 SQL 查询语句：</p> <pre><code class=\"language-sql\">SELECT \n    s.student_id,\n    s.student_name,\n    cs.course_name\nFROM \n    students s\nLEFT JOIN\n    course_selections cs ON s.student_id = cs.student_id\nJOIN \n    classes c ON s.class_id = c.class_id\nWHERE \n    c.class_name = 'Class A';\n</code></pre><p>选课表这里要用 LEFT JOIN，因为题目要求的是「所有学生」，没有选课的学生也要返回，对应的 course_name 为 NULL。如果把选课表的过滤条件写到 WHERE 中，还要注意不要把这些未匹配的学生过滤掉；需要保留时，通常把右表的限制条件放在 ON 中。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#sql题-查某个班级下所有学生的选课情况"
+ },
+ {
+  "id": "xl-mysql-021",
+  "category": "数据库",
+  "title": "如何用 MySQL 实现一个可重入的锁？",
+  "answer": "<p>可以用一张锁表，记录「锁名、持有者、重入次数」，再通过事务和 <code>SELECT ... FOR UPDATE</code> 保证加锁、解锁过程不会被并发请求打乱。</p> <pre><code class=\"language-sql\">CREATE TABLE lock_table (\n    lock_name VARCHAR(128) PRIMARY KEY,\n    holder_id VARCHAR(128) DEFAULT NULL,\n    reentry_count INT NOT NULL DEFAULT 0\n) ENGINE = InnoDB;\n\n-- 提前初始化要使用的锁，记录一直保留\nINSERT INTO lock_table (lock_name) VALUES ('order_lock');\n</code></pre><p>锁名必须唯一。持有者也不能只用线程名称，不同服务实例可能有同名线程，可以使用「实例 ID + 线程 ID + 唯一标识」来区分。</p> <blockquote><p>加锁的逻辑</p></blockquote> <ol><li>开启事务，查询该锁记录：<code>SELECT holder_id, reentry_count FROM lock_table WHERE lock_name = ? FOR UPDATE</code>。</li> <li>如果 holder_id 为 NULL，说明锁空闲，把 holder_id 设为自己，reentry_count 设为 1。</li> <li>如果 holder_id 是自己，说明是重入，把 reentry_count 加 1。</li> <li>如果 holder_id 是其他持有者，说明加锁失败，结束事务后再决定返回失败还是等待重试。</li> <li>提交事务。这里释放的是数据库行锁，业务锁的归属仍然保存在记录里。</li></ol> <blockquote><p>解锁的逻辑</p></blockquote> <ol><li>开启事务，通过 FOR UPDATE 锁住同一条记录，并检查 holder_id 是否是自己。</li> <li>如果不是自己，不能释放锁。</li> <li>如果 reentry_count 大于 1，就减 1；如果等于 1，就把 holder_id 置为 NULL、reentry_count 置为 0，完全释放业务锁。</li> <li>提交事务。</li></ol> <p>这里保留固定的锁记录，可以避免「记录不存在时，多个请求同时插入」的问题。如果要动态创建锁，也必须通过主键唯一约束处理并发插入失败和重试。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/796d7f04_reentrant-lock-state-machine.png\" alt=\"\"></p> <p>不过，这只是基本实现。持有者崩溃后，数据库事务虽然已经结束，表里的业务锁记录仍可能一直被占用。生产环境还需要考虑租约、续期，以及过期持有者继续写入的问题；只是加一个过期时间，还不能保证业务操作始终互斥。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "SQL基础",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#如何用-mysql-实现一个可重入的锁"
+ },
+ {
+  "id": "xl-mysql-022",
+  "category": "数据库",
+  "title": "执行一条SQL请求的过程是什么？",
+  "answer": "<p>先来一个上帝视角图，下面就是 MySQL 执行一条 SQL 查询语句的流程，也从图中可以看到 MySQL 内部架构里的各个功能模块。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1720155840218-b95c4217-6502-42b8-bcc5-384b297de75d.png\" alt=\"img\"></p> <ul><li><p>连接器：建立连接，管理连接、校验用户身份；</p></li> <li><p>查询缓存：查询语句如果命中查询缓存则直接返回，否则继续往下执行。MySQL 8.0 已删除该模块；</p></li> <li><p>解析 SQL，通过解析器对 SQL 查询语句进行词法分析、语法分析，然后构建语法树，方便后续模块读取表名、字段、语句类型；</p></li> <li><p>执行 SQL：执行 SQL 共有三个阶段：</p> <ul><li><p>预处理阶段：检查表或字段是否存在；将 <code>select *</code> 中的 <code>*</code> 符号扩展为表上的所有列。</p></li> <li><p>优化阶段：基于查询成本的考虑， 选择查询成本最小的执行计划；</p></li> <li><p>执行阶段：根据执行计划执行 SQL 查询语句，从存储引擎读取记录，返回给客户端；</p></li></ul></li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "存储引擎",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#执行一条sql请求的过程是什么"
+ },
+ {
+  "id": "xl-mysql-023",
+  "category": "数据库",
+  "title": "讲一讲mysql的引擎吧，你有什么了解？",
+  "answer": "<ul><li>InnoDB：InnoDB是MySQL的默认存储引擎，具有ACID事务支持、行级锁、外键约束等特性。它适用于高并发的读写操作，支持较好的数据完整性和并发控制。</li> <li>MyISAM：MyISAM 是较早版本中常用的存储引擎，数据和索引分开保存，使用表级锁，不支持事务和外键。它在部分只读场景中有优势，但不能简单认为读多的业务就一定适合 MyISAM，实际还要考虑并发写入和故障恢复需求。</li> <li>Memory：Memory引擎将数据存储在内存中，适用于对性能要求较高的读操作，但是在服务器重启或崩溃时数据会丢失。它不支持事务、行级锁和外键约束。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "存储引擎",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#讲一讲mysql的引擎吧-你有什么了解"
+ },
+ {
+  "id": "xl-mysql-024",
+  "category": "数据库",
+  "title": "MySQL为什么InnoDB是默认引擎？",
+  "answer": "<p>InnoDB引擎在事务支持、并发性能、崩溃恢复等方面具有优势，因此被MySQL选择为默认的存储引擎。</p> <ul><li>事务支持：InnoDB引擎提供了对事务的支持，可以进行ACID（原子性、一致性、隔离性、持久性）属性的操作。Myisam存储引擎是不支持事务的。</li> <li>并发性能：InnoDB引擎采用了行级锁定的机制，可以提供更好的并发性能，Myisam存储引擎只支持表锁，锁的粒度比较大。</li> <li>崩溃恢复：InnoDB 引擎通过 redo log 日志实现了崩溃恢复，可以在数据库发生异常情况（如断电）时，通过日志文件进行恢复，保证数据的持久性和一致性。MyISAM 是不支持崩溃恢复的。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "存储引擎",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql为什么innodb是默认引擎"
+ },
+ {
+  "id": "xl-mysql-025",
+  "category": "数据库",
+  "title": "说一下mysql的innodb与MyISAM的区别？",
+  "answer": "<ul><li><strong>事务</strong>：InnoDB 支持事务，MyISAM 不支持事务，这是 MySQL 将默认存储引擎从 MyISAM 变成 InnoDB 的重要原因之一。</li> <li><strong>索引结构</strong>：InnoDB 使用聚簇索引组织数据，MyISAM 的索引与数据分开保存。InnoDB 聚簇索引的叶子节点保存行数据，即使没有显式主键，也会选择合适的唯一索引或生成隐藏行 ID 来组织数据。辅助索引保存索引列和主键值，需要读取索引中没有的字段时才会回表；覆盖索引查询不需要为了获取这些字段而回表。因此，主键不应该过大，因为主键太大，其他索引也都会很大。而 MyISAM 的数据文件是分离的，索引保存的是数据记录的位置，主键索引和辅助索引都通过这个位置访问数据。</li> <li><strong>锁粒度</strong>：InnoDB 最小的锁粒度是行锁，MyISAM 最小的锁粒度是表锁。一个更新语句会锁住整张表，导致其他查询和更新都会被阻塞，因此并发访问受限。</li> <li><strong>count 的效率</strong>：InnoDB 不保存所有事务都能直接使用的精确总行数，执行无 WHERE 的 COUNT(*) 通常需要扫描索引，统计当前事务可见的记录。MyISAM 保存了整张表的行数，简单的无 WHERE 计数可以直接读取；加了 WHERE 条件后，也不能只靠这个总行数返回结果。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "存储引擎",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#说一下mysql的innodb与myisam的区别"
+ },
+ {
+  "id": "xl-mysql-026",
+  "category": "数据库",
+  "title": "数据管理里，数据文件大体分成哪几种数据文件？",
+  "answer": "<p>先区分一下版本和表空间配置。下面以 MySQL 5.7、InnoDB 独立表空间为例，数据目录假设是 <code>/var/lib/mysql/</code>，实际位置可以通过 <code>SHOW VARIABLES LIKE 'datadir'</code> 查看。每个数据库通常有对应的目录，用来保存该数据库的表文件。</p> <p>比如，我这里有一个名为 my_test 的 database，该 database 里有一张名为 t_order 数据库表。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1716792105334-854b63c4-0b44-43c9-b808-c5efe4f602fd.webp\" alt=\"img\"></p> <p>然后，我们进入 /var/lib/mysql/my_test 目录，看看里面有什么文件？</p> <pre><code class=\"language-plain\">[root@xiaolin ~]#ls /var/lib/mysql/my_test\ndb.opt  \nt_order.frm  \nt_order.ibd\n</code></pre><p>可以看到，共有三个文件，这三个文件分别代表着：</p> <ul><li>db.opt，用来存储当前数据库的默认字符集和字符校验规则。</li> <li>t_order.frm ，t_order 的表结构会保存在这个文件。在 MySQL 中建立一张表都会生成一个.frm 文件，该文件是用来保存每个表的元数据信息的，主要包含表结构定义。</li> <li>t_order.ibd，t_order 的表数据会保存在这个文件。表数据既可以存在共享表空间文件（文件名：ibdata1）里，也可以存放在独占表空间文件（文件名：表名字.ibd）。这个行为是由参数 innodb_file_per_table 控制的，若设置了参数 innodb_file_per_table 为 1，则会将存储的数据、索引等信息单独存储在一个独占表空间，从 MySQL 5.6.6 版本开始，它的默认值就是 1 了，默认情况下，新建表会使用独立的 .ibd 文件，但已有表或显式使用其他表空间的表不一定如此。</li></ul> <p><strong>MySQL 8.0 已经取消了 .frm 文件</strong>，表结构等元数据改为保存在事务型数据字典中。独立表空间的 .ibd 文件仍然保存表数据和索引，所以不能把上面的 5.7 文件布局直接套到 8.0 上。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "存储引擎",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#数据管理里-数据文件大体分成哪几种数据文件"
+ },
+ {
+  "id": "xl-mysql-027",
+  "category": "数据库",
+  "title": "Buffer Pool 是什么？有什么作用？",
+  "answer": "<p>Buffer Pool 是 InnoDB 的内存缓冲区，主要缓存数据页和索引页。大家可以把它理解成磁盘数据在内存里的「工作区」。</p> <ul><li>查询时，先看需要的页是否已经在 Buffer Pool 中，命中就直接读取；没命中才从磁盘加载。</li> <li>更新时，通常先修改 Buffer Pool 中的页，修改后的页叫脏页，再由后台线程择机刷回磁盘。</li> <li>事务提交时，如果 redo log 已经按要求持久化，就不需要等所有脏页刷盘，这样能减少提交时的随机 I/O。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/b9c39fdf_buffer-pool-read-write-paths.png\" alt=\"\"></p> <p>它和 MySQL 8.0 已删除的查询缓存不是一回事：<strong>Buffer Pool 缓存的是页，查询缓存缓存的是 SQL 的结果</strong>。</p> <p>为了避免一次大表扫描把热点页全部挤出去，InnoDB 采用改进的 LRU 策略，把链表分成新、老两个区域，新加载的页先进入老区域，再结合访问时机决定是否移到新区域。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/50c61943_buffer-pool-lru-scan-resistance.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "存储引擎",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#buffer-pool-是什么-有什么作用"
+ },
+ {
+  "id": "xl-mysql-028",
+  "category": "数据库",
+  "title": "索引是什么？有什么好处？",
+  "answer": "<p>索引类似于书籍的目录，可以减少扫描的数据量，提高查询效率。</p> <ul><li>没有合适索引时，通常需要扫描整张表，逐行判断是否满足条件，时间复杂度可以理解为 O(N)。</li> <li>有合适索引时，可以沿 B+ 树逐层定位，查找复杂度可以理解为 O(log N)，再扫描满足条件的记录。</li></ul> <p>不过，索引的价值不只是「找得快」，还可以帮助完成排序、分组，或者通过覆盖索引减少回表。对于范围查询，返回的数据越多，扫描和读取的成本也会越大，不能认为只要用了索引，整条 SQL 就一定很快。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#索引是什么-有什么好处"
+ },
+ {
+  "id": "xl-mysql-029",
+  "category": "数据库",
+  "title": "讲讲索引的分类是什么？",
+  "answer": "<p>MySQL可以按照四个角度来分类索引。</p> <ul><li>按「数据结构」分类：<strong>B+tree索引、Hash索引、Full-text索引</strong>。</li> <li>按「物理存储」分类：<strong>聚簇索引（主键索引）、二级索引（辅助索引）</strong>。</li> <li>按「字段特性」分类：<strong>主键索引、唯一索引、普通索引、前缀索引</strong>。</li> <li>按「字段个数」分类：<strong>单列索引、联合索引</strong>。</li></ul> <p>接下来，按照这些角度来说说各类索引的特点。</p> <blockquote><p>按数据结构分类</p></blockquote> <p>从数据结构的角度来看，MySQL 常见索引有 B+Tree 索引、HASH 索引、Full-Text 索引。</p> <p>每一种存储引擎支持的索引类型不一定相同，我在表中总结了 MySQL 常见的存储引擎 InnoDB、MyISAM 和 Memory 分别支持的索引类型。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719803663459-11b9a82a-6bf2-46cd-b882-e0b85e5a4256.png\" alt=\"img\"></p> <p>InnoDB 是在 MySQL 5.5 之后成为默认的 MySQL 存储引擎，B+Tree 索引类型也是 MySQL 存储引擎采用最多的索引类型。</p> <p>在创建表时，InnoDB 存储引擎会根据不同的场景选择聚簇索引：</p> <ul><li>如果有主键，默认会使用主键作为聚簇索引的索引键（key）；</li> <li>如果没有主键，就选择第一个所有索引列都定义为 NOT NULL 的唯一索引作为聚簇索引的索引键（key）；</li> <li>在上面两个都没有的情况下，InnoDB 会生成一个 6 字节的隐藏行 ID，作为聚簇索引的索引键（key）；</li></ul> <p>其它索引都属于辅助索引（Secondary Index），也被称为二级索引或非聚簇索引。<strong>创建的主键索引和二级索引默认使用的是 B+Tree 索引</strong>。</p> <blockquote><p>按物理存储分类</p></blockquote> <p>从物理存储的角度来看，索引分为聚簇索引（主键索引）、二级索引（辅助索引）。</p> <p>这两个区别在前面也提到了：</p> <ul><li>主键索引的 B+Tree 的叶子节点存放的是实际数据，所有完整的用户记录都存放在主键索引的 B+Tree 的叶子节点里；</li> <li>二级索引的 B+Tree 的叶子节点保存索引列的值和主键值，不保存完整的行数据。</li></ul> <p>所以，在查询时使用了二级索引，如果查询的数据能在二级索引里查询的到，那么就不需要回表，这个过程就是覆盖索引。如果查询的数据不在二级索引里，就会先检索二级索引，找到对应的叶子节点，获取到主键值后，然后再检索主键索引，就能查询到数据了，这个过程就是回表。</p> <blockquote><p>按字段特性分类</p></blockquote> <p>从字段特性的角度来看，索引分为主键索引、唯一索引、普通索引、前缀索引。</p> <ul><li>主键索引</li></ul> <p>主键索引就是建立在主键字段上的索引，通常在创建表的时候一起创建，一张表最多只有一个主键索引，索引列的值不允许有空值。</p> <p>在创建表时，创建主键索引的方式如下（这里只展示定义方式，其他字段省略）：</p> <pre><code class=\"language-sql\">CREATE TABLE table_name  (\n  ....\n  PRIMARY KEY (index_column_1) USING BTREE\n);\n</code></pre><ul><li>唯一索引</li></ul> <p>唯一索引用来限制索引键不重复，一张表可以有多个唯一索引。如果是联合唯一索引，限制的是多个字段的组合唯一，不是每个字段分别唯一。MySQL 的唯一索引允许多个 NULL，需要禁止空值时再加 NOT NULL。</p> <p>在创建表时，创建唯一索引的方式如下：</p> <pre><code class=\"language-sql\">CREATE TABLE table_name  (\n  ....\n  UNIQUE KEY(index_column_1,index_column_2,...) \n);\n</code></pre><p>建表后，如果要创建唯一索引，可以使用这面这条命令：</p> <pre><code class=\"language-sql\">CREATE UNIQUE INDEX index_name\nON table_name(index_column_1,index_column_2,...);\n</code></pre><ul><li>普通索引</li></ul> <p>普通索引就是建立在普通字段上的索引，既不要求字段为主键，也不要求字段为 UNIQUE。</p> <p>在创建表时，创建普通索引的方式如下：</p> <pre><code class=\"language-sql\">CREATE TABLE table_name  (\n  ....\n  INDEX(index_column_1,index_column_2,...) \n);\n</code></pre><p>建表后，如果要创建普通索引，可以使用这面这条命令：</p> <pre><code class=\"language-sql\">CREATE INDEX index_name\nON table_name(index_column_1,index_column_2,...);\n</code></pre><ul><li>前缀索引</li></ul> <p>前缀索引是指对字符类型字段的前几个字符建立的索引，而不是在整个字段上建立的索引，前缀索引可以建立在 CHAR、VARCHAR、BINARY、VARBINARY 等列上，TEXT、BLOB 列建立普通 B+ 树索引时也需要指定前缀长度。</p> <p>使用前缀索引的目的是为了减少索引占用的存储空间，提升查询效率。</p> <p>在创建表时，创建前缀索引的方式如下：</p> <pre><code class=\"language-sql\">CREATE TABLE table_name(\n    column_list,\n    INDEX(column_name(length))\n);\n</code></pre><p>建表后，如果要创建前缀索引，可以使用这面这条命令：</p> <pre><code class=\"language-sql\">CREATE INDEX index_name\nON table_name(column_name(length));\n</code></pre><blockquote><p>按字段个数分类</p></blockquote> <p>从字段个数的角度来看，索引分为单列索引、联合索引（复合索引）。</p> <ul><li>建立在单列上的索引称为单列索引，比如主键索引；</li> <li>建立在多列上的索引称为联合索引；</li></ul> <p>通过将多个字段组合成一个索引，该索引就被称为联合索引。</p> <p>比如，将商品表中的 product_no 和 name 字段组合成联合索引(product_no, name)，创建联合索引的方式如下：</p> <pre><code class=\"language-sql\">CREATE INDEX index_product_no_name ON product(product_no, name);\n</code></pre><p>联合索引(product_no, name) 的 B+Tree 示意图如下（图中叶子节点之间我画了单向链表，但是实际上是双向链表，原图我找不到了，修改不了，偷个懒我不重画了，大家脑补成双向链表就行）。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719803664258-9a1579a3-abd6-44e4-9393-6720d53a53b4.png\" alt=\"img\"></p> <p>可以看到，联合索引的非叶子节点用两个字段的值作为 B+Tree 的 key 值。当在联合索引查询数据时，先按 product_no 字段比较，在 product_no 相同的情况下再按 name 字段比较。</p> <p>也就是说，联合索引查询的 B+Tree 是先按 product_no 进行排序，然后再 product_no 相同的情况再按 name 字段排序。</p> <p>因此，使用联合索引定位数据时，要关注<strong>最左匹配原则</strong>，也就是从最左边的字段开始，连续匹配索引列。跳过最左列后，通常就不能直接按后面的字段定位到一段连续的索引范围。</p> <p>比如，如果创建了一个 (a, b, c) 联合索引，如果查询条件是以下这几种，就可以匹配上联合索引：</p> <ul><li>where a=1；</li> <li>where a=1 and b=2 and c=3；</li> <li>where a=1 and b=2；</li></ul> <p>需要注意的是，因为有查询优化器，所以 a 字段在 where 子句的顺序并不重要。</p> <p>但是，如果查询条件是以下这几种，缺少最左边的 a，通常就不能使用这个索引进行常规的前缀定位：</p> <ul><li>where b=2；</li> <li>where c=3；</li> <li>where b=2 and c=3；</li></ul> <p>原因是 (a, b, c) 联合索引先按 a 排序，a 相同再按 b 排序，b 也相同再按 c 排序。所以，<strong>b 和 c 是全局无序、局部有序的</strong>。</p> <p>这里说的是不能按常规最左前缀快速定位，不代表索引完全不会被读取。覆盖索引时仍可能全索引扫描，MySQL 8.0 在满足条件时还可能采用索引跳跃扫描，最终要看执行计划。</p> <p>联合索引有一些特殊情况，<strong>并不是查询过程使用了联合索引查询，就代表联合索引中的所有字段都用到了联合索引进行索引查询</strong>，也就是可能存在部分字段用到联合索引的 B+Tree，部分字段没有用到联合索引的 B+Tree 的情况。</p> <p>比如对于 <code>WHERE a = 1 AND b &gt; 2 AND c = 3</code>，a、b 可以确定扫描范围，但这个范围里 c 并不是全局有序的，所以不能继续用 c = 3 把整段扫描范围缩成只包含目标记录的区间。</p> <p><strong>后面的字段不能继续缩小扫描范围，不代表完全没用</strong>。它仍可能用于索引下推、覆盖索引等优化。IN 等条件还可能拆成多个等值范围，面试时不要把所有写法都机械地归成「范围之后全部失效」。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/346aa983_composite-index-range-filter.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#讲讲索引的分类是什么"
+ },
+ {
+  "id": "xl-mysql-030",
+  "category": "数据库",
+  "title": "哈希索引使用场景是什么？",
+  "answer": "<p>哈希索引优势是等值查询极快、能直接通过哈希函数定位数据位置，而短板是不支持范围查询、排序和前缀匹配，所以使用场景必然是那些以等值查询为核心，且不需要复杂查询操作的场景。</p> <p>比如 MySQL 的 Memory 存储引擎，默认就用哈希索引。因为内存表本身是基于内存存储的，追求极致的查询速度，而这类场景通常都是简单的等值查询，比如缓存用户登录信息，通过用户 ID 快速查找对应的登录状态、权限信息，这时候哈希索引能直接通过用户 ID 计算哈希值，定位到数据所在的桶，查询效率接近 O(1)，比 B+ 树索引的等值查询更快。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#哈希索引使用场景是什么"
+ },
+ {
+  "id": "xl-mysql-031",
+  "category": "数据库",
+  "title": "MySQL聚簇索引和非聚簇索引的区别是什么？",
+  "answer": "<p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1721709935338-fe01a58d-da89-47b5-9288-0f0e966937ca.png\" alt=\"img\"></p> <ul><li><strong>数据存储</strong>：在聚簇索引中，数据行在 B+ 树中按照索引键值组织，也就是说，索引的叶子节点包含了实际的数据行。这意味着索引结构本身就是数据的物理存储结构。非聚簇索引的叶子节点不包含完整的数据行，而是包含指向数据行的指针或主键值。数据行本身存储在聚簇索引中。</li> <li><strong>索引与数据关系</strong>：由于数据与索引紧密相连，当通过聚簇索引查找数据时，可以直接从索引中获得数据行，而不需要额外的步骤去查找数据所在的位置。当通过非聚簇索引查找数据时，首先在非聚簇索引中找到对应的主键值，然后通过这个主键值回溯到聚簇索引中查找实际的数据行，这个过程称为“回表”。</li> <li><strong>唯一性</strong>：聚簇索引通常是基于主键构建的，因此每个表只能有一个聚簇索引，因为数据只能有一种物理排序方式。一个表可以有多个非聚簇索引，因为它们不直接影响数据的物理存储位置。</li> <li><strong>效率</strong>：对于范围查询和排序查询，聚簇索引通常更有效率，因为它避免了额外的寻址开销。非聚簇索引在使用覆盖索引进行查询时效率更高，因为它不需要读取完整的数据行。但是需要进行回表的操作，使用非聚簇索引效率比较低，因为需要进行额外的回表操作。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "对比",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql聚簇索引和非聚簇索引的区别是什么"
+ },
+ {
+  "id": "xl-mysql-032",
+  "category": "数据库",
+  "title": "如果聚簇索引的数据更新，它的存储要不要变化？",
+  "answer": "<p>要看更新的是哪个字段，以及记录长度有没有变化。</p> <ul><li><strong>更新主键</strong>：记录在聚簇索引中的排序位置会变化，需要调整聚簇索引；二级索引里也保存了主键值，所以也要维护。</li> <li><strong>更新二级索引列</strong>：聚簇索引中的主键顺序不变，但相关二级索引中的记录需要调整。</li> <li><strong>更新普通非索引列</strong>：如果记录长度基本不变，通常可以在原位置更新；如果变长字段增长导致当前页空间不足，仍可能涉及记录迁移、页分裂或页外存储等处理。</li></ul> <p>所以，不能简单说「更新非索引字段，存储结构一定不会变」。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#如果聚簇索引的数据更新-它的存储要不要变化"
+ },
+ {
+  "id": "xl-mysql-033",
+  "category": "数据库",
+  "title": "MySQL主键是聚簇索引吗？",
+  "answer": "<p>在MySQL的InnoDB存储引擎中，主键确实是以聚簇索引的形式存储的。</p> <p>InnoDB将数据存储在B+树的结构中，其中主键索引的B+树就是所谓的聚簇索引。这意味着表中的数据行在 B+ 树中按主键有序组织，聚簇索引的叶节点包含了实际的数据行。但有序说的是索引的逻辑顺序，不代表这些页在磁盘上一定连续存放。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1721710061075-2cc270e3-0324-4856-8d67-bd633a620e06.png\" alt=\"img\"></p> <p>InnoDB 在创建聚簇索引时，会根据不同的场景选择不同的列作为索引：</p> <ul><li>如果有主键，默认会使用主键作为聚簇索引的索引键；</li> <li>如果没有主键，就选择第一个所有索引列都定义为 NOT NULL 的唯一索引作为聚簇索引的索引键；</li> <li>在上面两个都没有的情况下，InnoDB 会生成一个 6 字节的隐藏行 ID，作为聚簇索引的索引键；</li></ul> <p>一张表只能有一个聚簇索引，那为了实现非主键字段的快速搜索，就引出了二级索引（非聚簇索引/辅助索引），它也是利用了 B+ 树的数据结构，不过叶子节点保存的是索引列和主键值，不包含完整的行数据。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql主键是聚簇索引吗"
+ },
+ {
+  "id": "xl-mysql-034",
+  "category": "数据库",
+  "title": "什么字段适合当做主键？",
+  "answer": "<ul><li>字段具有唯一性，且不能为空的特性</li> <li>字段尽量短、稳定、不频繁修改，因为二级索引也要保存主键值，主键越宽，所有二级索引的空间和维护成本也会增加。</li> <li>字段最好有递增的趋势，如果字段的值是随机无序的，可能会引发页分裂的问题，造成性能影响。</li> <li>不建议用业务数据作为主键，比如会员卡号、订单号、学生号之类的，因为我们无法预测未来会不会因为业务需要，而出现业务字段重复或者重用的情况。</li> <li>通常情况下会用自增字段来做主键，对于单机系统来说是没问题的。但是，如果有多台服务器，各自都可以录入数据，那就不一定适用了。因为如果每台机器各自产生的数据需要合并，就可能会出现主键重复的问题，这时候就需要考虑分布式 id 的方案了。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#什么字段适合当做主键"
+ },
+ {
+  "id": "xl-mysql-035",
+  "category": "数据库",
+  "title": "性别字段能加索引么？为啥？",
+  "answer": "<p>能加，但如果只是建立性别的单列索引，通常收益不大。</p> <p>比如有 100 万条数据，男女各 50 万条，执行 <code>SELECT * FROM users WHERE sex = '男'</code>，即使先通过二级索引找到 50 万条记录，还要大量回表读取其他字段，这时可能不如全表扫描，优化器就可能放弃这个索引。</p> <p>不过，<strong>值的种类少，不代表任何场景都不适合索引</strong>：</p> <ul><li>如果数据分布很不均匀，查询的是数量很少的那一类，索引可能有效。</li> <li>如果只统计数量，索引可以覆盖查询，避免为获取其他列而回表。</li> <li>如果和其他字段组成联合索引，例如 <code>(sex, age)</code>，查询某个性别下指定年龄范围的用户，也可能有效。</li></ul> <p>所以，要结合实际查询、命中比例和回表成本判断，不能只看字段有几种取值。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#性别字段能加索引么-为啥"
+ },
+ {
+  "id": "xl-mysql-036",
+  "category": "数据库",
+  "title": "表中十个字段，你主键用自增ID还是UUID，为什么？",
+  "answer": "<p>用的是自增 id。</p> <p>因为常见的随机 UUID 相对顺序的自增 id 来说，生成顺序和索引排序顺序不一致，新行的值不一定要比之前的主键的值要大，所以 innodb 无法做到总是把新行插入到索引的最后，而是需要为新行寻找新的合适的位置从而来分配新的空间。</p> <p>这个过程需要做很多额外的操作，数据的毫无顺序会导致数据分布散乱，将会导致以下的问题：</p> <ul><li>写入的目标页很可能已经刷新到磁盘上并且从缓存上移除，或者还没有被加载到缓存中，innodb 在插入之前不得不先找到并从磁盘读取目标页到内存中，这将导致大量的随机 IO。</li> <li>因为写入是乱序的，innodb 不得不频繁的做页分裂操作，以便为新的行分配空间，页分裂导致移动大量的数据，影响性能。</li> <li>由于频繁的页分裂，页会变得稀疏并被不规则的填充，最终会导致数据会有碎片。</li></ul> <p>所以，单机业务通常优先选择短小、递增的主键。分布式系统还要考虑跨节点唯一性，可以使用合适的分布式 ID。这里主要说的是随机 UUID，不同 UUID 方案的有序性不同，不能把所有 UUID 都当成完全随机。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/ad93b26e_sequential-vs-random-index-inserts.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "对比",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#表中十个字段-你主键用自增id还是uuid-为什么"
+ },
+ {
+  "id": "xl-mysql-037",
+  "category": "数据库",
+  "title": "什么自增ID更快一些，UUID不快吗，它在B+树里面存储是有序的吗?",
+  "answer": "<p><strong>UUID 放进 B+ 树之后也是有序的，问题在于新生成的 UUID 不一定比前一个大</strong>，所以插入位置可能落到树的中间。</p> <p>自增 ID 通常在聚簇索引的右侧追加，新插入的记录更容易集中在已经缓存的页上，减少随机读页、页分裂和空间碎片。随机 UUID 则可能需要访问不同的数据页，写入成本更高。</p> <p>另外，BIGINT 只有 8 字节，常见的 UUID 字符串有 36 个字符。主键越宽，一个索引页能容纳的记录就越少，而且所有二级索引都要保存这个主键值，也会一起变大。</p> <p>UUID 也可以用 <code>BINARY(16)</code> 保存，减少字符串存储和比较的开销；如果采用按时间有序的 UUID 方案，还可以改善插入局部性。不过，自增也不意味着完全没有页分裂或竞争，只是一般更适合 InnoDB 的写入方式。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#什么自增id更快一些-uuid不快吗-它在b-树里面存储是有序的吗"
+ },
+ {
+  "id": "xl-mysql-038",
+  "category": "数据库",
+  "title": "自增主键一定连续吗？",
+  "answer": "<p>不一定。<strong>自增保证的是自动分配 ID，不保证没有空洞</strong>。</p> <p>比如，一个事务拿到了自增 ID，插入后又回滚，这个 ID 通常不会退回；插入失败、并发批量插入预分配 ID，也可能留下空洞。</p> <p>而且，自增 ID 的分配顺序不等于事务提交顺序。事务 A 先拿到 100，事务 B 后拿到 101，但 B 完全可能先提交。所以，不能用「ID 连续」判断数据是否完整，也不能把 ID 顺序直接当成业务完成顺序。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#自增主键一定连续吗"
+ },
+ {
+  "id": "xl-mysql-039",
+  "category": "数据库",
+  "title": "Mysql中的索引是怎么实现的  ？",
+  "answer": "<p>MySQL InnoDB 引擎是用了B+树作为了索引的数据结构。</p> <p>B+Tree 是一种多叉树，叶子节点才存放数据，非叶子节点只存放索引，而且每个节点里的记录都按该索引的键值有序组织：聚簇索引按主键排序，二级索引按索引列及主键值排序。每一层父节点的索引值都会出现在下层子节点的索引值中，因此在叶子节点中，包括了所有的索引值信息，并且每一个叶子节点都有两个指针，分别指向下一个叶子节点和上一个叶子节点，形成一个双向链表。</p> <p>主键索引的 B+Tree 如图所示：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717479903616-831081f3-45bc-4436-a066-2702266abfce.png\" alt=\"img\"></p> <p>比如，我们执行了下面这条查询语句：</p> <pre><code class=\"language-sql\">select * from product where id= 5;\n</code></pre><p>这条语句使用了主键索引查询 id 号为 5 的商品。查询过程是这样的，B+Tree 会自顶向下逐层进行查找：</p> <ul><li>将 5 与根节点的索引数据 (1，10，20) 比较，5 在 1 和 10 之间，所以根据 B+Tree的搜索逻辑，找到第二层的索引数据 (1，4，7)；</li> <li>在第二层的索引数据 (1，4，7)中进行查找，因为 5 在 4 和 7 之间，所以找到第三层的索引数据（4，5，6）；</li> <li>在叶子节点的索引数据（4，5，6）中进行查找，然后我们找到了索引值为 5 的行数据。</li></ul> <p>如果这些索引页都不在 Buffer Pool 中，可以把读取一个节点近似看成一次磁盘 I/O，上面的定位过程就需要读取 3 个页。如果页已经在缓存里，就不需要为它再次读取磁盘。</p> <p>B+Tree 的分叉数很大，千万级数据在很多场景下只需要 3～4 层就能组织起来，所以定位一条记录需要访问的页比较少。具体高度还取决于主键宽度、记录大小和页面填充率；二级索引回表、页外数据和范围扫描也会增加访问量，不能把 3～4 次当成整条查询固定的 I/O 上限。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql中的索引是怎么实现的"
+ },
+ {
+  "id": "xl-mysql-040",
+  "category": "数据库",
+  "title": "查询数据时，到了B+树的叶子节点，之后的查找数据是如何做？",
+  "answer": "<p><strong>聚簇索引数据页中的记录按照「主键」顺序组成单向链表</strong>，单向链表的特点就是插入、删除非常方便，但是检索效率不高，最差的情况下需要遍历链表上的所有节点才能完成检索。</p> <p>因此，数据页中有一个<strong>页目录</strong>，起到记录的索引作用，就像我们书那样，针对书中内容的每个章节设立了一个目录，想看某个章节的时候，可以查看目录，快速找到对应的章节的页数，而数据页中的页目录就是为了能快速找到记录。那 InnoDB 是如何给记录创建页目录的呢？</p> <p>页目录与记录的关系如下图：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//mysql/other/261011d237bec993821aa198b97ae8ce.png\" alt=\"图片\"></p> <p>页目录创建的过程如下：</p> <ol><li>将所有的记录划分成几个组，这些记录包括最小记录和最大记录。被标记删除、但还没有被 purge 物理清理的记录，仍可能留在页内链表中；</li> <li>每个记录组的最后一条记录就是组内最大的那条记录，并且最后一条记录的头信息中会存储该组一共有多少条记录，作为 n_owned 字段（上图中粉红色字段）</li> <li>页目录用来存储每组最后一条记录的地址偏移量，这些地址偏移量会按照先后顺序存储起来，每组的地址偏移量也被称之为槽（slot），每个槽相当于指针指向了不同组的最后一个记录。</li></ol> <p>从图可以看到，<strong>页目录就是由多个槽组成的，槽相当于分组记录的索引</strong>。然后，因为记录是按照「主键值」从小到大排序的，所以<strong>我们通过槽查找记录时，可以使用二分法快速定位要查询的记录在哪个槽（哪个记录分组），定位到槽后，再遍历槽内的所有记录，找到对应的记录</strong>，无需从最小记录开始遍历整个页中的记录链表。以上面那张图举个例子，5 个槽的编号分别为 0，1，2，3，4，我想查找主键为 11 的用户记录：</p> <ul><li>先二分得出槽中间位是 (0+4)/2=2 ，2号槽里最大的记录为 8。因为 11 &gt; 8，所以需要从 2 号槽后继续搜索记录；</li> <li>再使用二分搜索出 2 号和 4 槽的中间位是 (2+4)/2= 3，3 号槽里最大的记录为 12。因为 11 &lt; 12，所以主键为 11 的记录在 3 号槽里；</li> <li>3 号槽实际指向该组最后一条记录，也就是主键为 12 的记录。确定目标属于这一组后，从前一个槽指向的记录（主键为 8）沿单向链表向后遍历 9、10、11，就能找到目标记录。</li></ul> <p>注意区分：<strong>页与页之间是双向链表，页内记录之间是单向链表</strong>。二级索引页也有类似的页目录，不过记录按对应索引键排序，并不是全部按主键排序。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#查询数据时-到了b-树的叶子节点-之后的查找数据是如何做"
+ },
+ {
+  "id": "xl-mysql-041",
+  "category": "数据库",
+  "title": "B+树的特性是什么？",
+  "answer": "<ul><li><strong>所有叶子节点都在同一层</strong>：这是B+树的一个重要特性，使单条记录定位经过的树层数相同，实际 I/O 延迟还要看缓存命中情况，提高了搜索效率。每个叶子节点都包含指向相邻叶子节点的指针，形成一个链表，由于叶子节点之间的链接，B+树非常适合进行范围查询和排序扫描。可以沿着叶子节点的链表顺序访问数据，而无需进行多次随机访问。</li> <li><strong>非叶子节点存储键值</strong>：非叶子节点仅存储键值和指向子节点的指针，不包含数据记录。这些键值用于指导搜索路径，帮助快速定位到正确的叶子节点。并且，由于非叶子节点只存放键值，当数据量比较大时，相对于B树，B+树的层高更少，查找效率也就更高。</li> <li><strong>叶子节点存储数据记录</strong>：与B树不同，B+树的叶子节点存储实际的数据记录或指向数据记录的指针。这意味着每次搜索都会到达叶子节点，才能找到所需数据。</li> <li><strong>自平衡</strong>：B+树在插入、删除和更新操作后会自动重新平衡，确保树的高度保持相对稳定，从而保持良好的搜索性能。每个节点最多可以有M个子节点，最少可以有ceil(M/2)个子节点（除了根节点），这里的M是树的阶数。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#b-树的特性是什么"
+ },
+ {
+  "id": "xl-mysql-042",
+  "category": "数据库",
+  "title": "说说B+树和B树的区别",
+  "answer": "<ul><li>在B+树中，数据都存储在叶子节点上，而非叶子节点只存储索引信息；而B树的非叶子节点既存储索引信息也存储部分数据。</li> <li>B+树的叶子节点使用链表相连，便于范围查询和顺序访问；B树的叶子节点没有链表连接。</li> <li>B+树的查找性能更稳定，每次查找都需要查找到叶子节点；而B树的查找可能会在非叶子节点找到数据，性能相对不稳定。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#说说b-树和b树的区别"
+ },
+ {
+  "id": "xl-mysql-043",
+  "category": "数据库",
+  "title": "B+树的好处是什么？",
+  "answer": "<p>B 树和 B+ 都是通过多叉树的方式，会将树的高度变矮，所以这两个数据结构非常适合检索存于磁盘中的数据。</p> <p>但是 MySQL 默认的存储引擎 InnoDB 采用的是 B+ 作为索引的数据结构，原因有：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719383425822-763f8efe-c2bd-4880-8a48-75b96d4c059e.png\" alt=\"img\"></p> <ul><li>B+ 树的非叶子节点不存放实际的记录数据，仅存放索引，因此数据量相同的情况下，相比存储即存索引又存记录的 B 树，B+树的非叶子节点可以存放更多的索引，因此 B+ 树可以比 B 树更「矮胖」，查询底层节点的磁盘 I/O次数会更少。</li> <li>B+ 树把完整记录集中在叶子节点，非叶子节点只负责导航，比较适合按页组织和缓存。插入、删除仍可能触发页分裂、合并以及父节点调整，不能认为一定比 B 树的每次操作都快；</li> <li>B+ 树叶子节点之间用链表连接了起来，有利于范围查询，而 B 树要实现范围查询，因此只能通过树的遍历来完成范围查询，这会涉及多个节点的磁盘 I/O 操作，范围查询效率不如 B+ 树。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#b-树的好处是什么"
+ },
+ {
+  "id": "xl-mysql-044",
+  "category": "数据库",
+  "title": "B+树的叶子节点链表是单向还是双向？",
+  "answer": "<p>双向的，为了实现倒序遍历或者排序。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725232027951.png\" alt=\"image-20240725232027951\"></p> <p>Innodb 使用的 B+ 树有一些特别的点，比如：</p> <ul><li>B+ 树的叶子节点之间是用「双向链表」进行连接，这样的好处是既能向右遍历，也能向左遍历。</li> <li>B+ 树的节点内容是数据页，数据页里存放了用户的记录以及各种信息，每个数据页默认大小是 16 KB。</li></ul> <p>InnoDB 根据索引类型不同，分为聚簇索引和二级索引。聚簇索引的叶子节点保存行数据，二级索引的叶子节点保存索引列和主键值，不保存完整行。</p> <p>因为表的数据都是存放在聚集索引的叶子节点里，所以 InnoDB 存储引擎一定会为表创建一个聚集索引，且由于数据在物理上只会保存一份，所以聚簇索引只能有一个，而二级索引可以创建多个。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#b-树的叶子节点链表是单向还是双向"
+ },
+ {
+  "id": "xl-mysql-045",
+  "category": "数据库",
+  "title": "MySQL为什么用B+树结构？和其他结构比的优点？",
+  "answer": "<ul><li><strong>B+Tree vs B Tree：</strong> B+Tree 的非叶子节点只保存索引键和子节点指针，而 B 树的非叶子节点还要保存数据。因此同样大小的页里，B+Tree 通常可以容纳更多导航项，让树更矮，定位记录需要访问的页更少。另外，InnoDB 的 B+Tree 叶子节点用双向链表连接，范围查询找到起点后就能顺序扫描；B 树通常需要通过树的遍历获取范围内的数据。</li> <li><strong>B+Tree vs 二叉树：</strong> B+Tree 一个节点可以有很多子节点，而平衡二叉树每个节点最多只有两个子节点。相同数据量下，B+Tree 的高度通常更低，更适合以页为单位读取和缓存的磁盘存储。千万级数据的索引在很多场景下只有 3～4 层，实际磁盘 I/O 还要结合缓存命中、回表和扫描范围判断。</li> <li><strong>B+Tree vs Hash：</strong> Hash 做等值查询很快，平均查找复杂度接近 O(1)，不过需要处理哈希冲突，而且不适合范围查询、排序和前缀匹配。B+Tree 可以同时服务等值和范围查询，所以适用场景更广。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql为什么用b-树结构-和其他结构比的优点"
+ },
+ {
+  "id": "xl-mysql-046",
+  "category": "数据库",
+  "title": "为什么 MySQL 不用跳表？",
+  "answer": "<p>B+树的高度在3层时存储的数据可能已达千万级别，但对于跳表而言同样去维护千万的数据量那么所造成的跳表层数过高而导致的磁盘io次数增多，也就是使用B+树在存储同样的数据下磁盘io次数更少。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#为什么-mysql-不用跳表"
+ },
+ {
+  "id": "xl-mysql-047",
+  "category": "数据库",
+  "title": "联合索引的实现原理？",
+  "answer": "<p>将多个字段组合成一个索引，该索引就被称为联合索引。</p> <p>比如，将商品表中的 product_no 和 name 字段组合成联合索引(product_no, name)，创建联合索引的方式如下：</p> <pre><code class=\"language-sql\">CREATE INDEX index_product_no_name ON product(product_no, name);\n</code></pre><p>联合索引(product_no, name) 的 B+Tree 示意图如下：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719977405693-4cc4e63b-d869-490f-a9fc-a19962a75a87.png\" alt=\"img\"></p> <p>可以看到，联合索引的非叶子节点用两个字段的值作为 B+Tree 的 key 值。当在联合索引查询数据时，先按 product_no 字段比较，在 product_no 相同的情况下再按 name 字段比较。</p> <p>也就是说，联合索引查询的 B+Tree 是先按 product_no 进行排序，然后再 product_no 相同的情况再按 name 字段排序。</p> <p>因此，使用联合索引定位数据时，要关注<strong>最左匹配原则</strong>，也就是从最左边的字段开始，连续匹配索引列。跳过最左列后，通常就不能直接按后面的字段定位到一段连续的索引范围。</p> <p>比如，如果创建了一个 (a, b, c) 联合索引，如果查询条件是以下这几种，就可以匹配上联合索引：</p> <ul><li>where a=1；</li> <li>where a=1 and b=2 and c=3；</li> <li>where a=1 and b=2；</li></ul> <p>需要注意的是，因为有查询优化器，所以 a 字段在 where 子句的顺序并不重要。</p> <p>但是，如果查询条件是以下这几种，缺少最左边的 a，通常就不能使用这个索引进行常规的前缀定位：</p> <ul><li>where b=2；</li> <li>where c=3；</li> <li>where b=2 and c=3；</li></ul> <p>原因是 (a, b, c) 联合索引先按 a 排序，a 相同再按 b 排序，b 也相同再按 c 排序。所以，<strong>b 和 c 是全局无序、局部有序的</strong>。</p> <p>这里说的是不能按常规最左前缀快速定位，不代表索引完全不会被读取。覆盖索引时仍可能全索引扫描，MySQL 8.0 在满足条件时还可能采用索引跳跃扫描，最终要看执行计划。</p> <p>我这里举联合索引（a，b）的例子，该联合索引的 B+ Tree 如下：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719977405675-a650711f-437b-4abf-b4b5-e65e7fbec2bb.png\" alt=\"img\"></p> <p>可以看到，a 是全局有序的（1, 2, 2, 3, 4, 5, 6, 7 ,8），而 b 是全局是无序的（12，7，8，2，3，8，10，5，2）。因此，直接执行 <code>WHERE b = 2</code>，通常不能像 <code>WHERE a = 2 AND b = 2</code> 那样按最左前缀定位。这里要区分「利用索引定位」和「扫描索引后过滤」，两者的查询成本并不一样。</p> <p>只有在 a 相同的情况才，b 才是有序的，比如 a 等于 2 的时候，b 的值为（7，8），这时就是有序的，这个有序状态是局部的，因此，执行where a = 2 and b = 7是 a 和 b 字段能用到联合索引的，也就是联合索引生效了。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#联合索引的实现原理"
+ },
+ {
+  "id": "xl-mysql-048",
+  "category": "数据库",
+  "title": "创建联合索引时需要注意什么？",
+  "answer": "<p><strong>先看常用 SQL 的过滤、排序和返回字段，再决定字段顺序</strong>，不能只背「区分度高的字段放前面」。</p> <p>比如订单表经常执行下面这个查询：</p> <pre><code class=\"language-sql\">SELECT id, created_at\nFROM orders\nWHERE user_id = 100 AND status = 0\nORDER BY created_at DESC\nLIMIT 20;\n</code></pre><p>可以考虑 <code>(user_id, status, created_at)</code>：前两列是等值条件，先缩小候选范围，再按 created_at 的索引顺序获取最近的订单。虽然 status 只有几种值，放在这里仍然有作用。</p> <p>创建时主要考虑这几个方面：</p> <ul><li><strong>最左前缀能否复用</strong>：如果常按 user_id 单独查询，把它放前面就能同时服务这类 SQL。</li> <li><strong>等值、范围和排序怎么配合</strong>：常见做法是先安排等值条件，再结合范围条件和 ORDER BY 决定后续列，避免排序列前面还有未固定的字段。</li> <li><strong>是否能覆盖查询</strong>：二级索引自带主键值，上面的返回字段就可能直接从索引里取得。</li> <li><strong>索引宽度和维护成本</strong>：字段越多、越长，索引越大，写入成本也越高，不是把所有列塞进去就好。</li></ul> <p>区分度可以用下面的方式粗略衡量，但还要结合查询值的数据分布：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1720939575546-c5659e14-45f9-478e-8c91-11a707675a14.png\" alt=\"img\"></p> <p>优化器是否选择索引取决于成本，<strong>没有「命中超过 30% 就一定不走索引」这种固定规则</strong>。最后通过 EXPLAIN 和实际执行情况验证。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#创建联合索引时需要注意什么"
+ },
+ {
+  "id": "xl-mysql-049",
+  "category": "数据库",
+  "title": "联合索引ABC，现在有个执行语句是A = XXX and C < XXX，索引怎么走",
+  "answer": "<p>如果优化器选择 (A, B, C) 这个索引，A 的等值条件可以用于定位，但因为中间缺少 B，通常不能继续用 C 的条件缩小索引扫描范围。</p> <p>不过 C 已经保存在二级索引里。如果查询需要回表，并且满足索引下推的条件，就可以先判断 C 是否符合条件，只有符合的记录才回表。如果查询被索引覆盖，就直接在索引中完成过滤和取值。</p> <p>所以，C 不能用于连续的前缀定位，不代表 C 完全没有参与查询。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#联合索引abc-现在有个执行语句是a-xxx-and-c-xxx-索引怎么走"
+ },
+ {
+  "id": "xl-mysql-050",
+  "category": "数据库",
+  "title": "联合索引(a,b,c) ，查询条件 where b > xxx and a = x 会生效吗",
+  "answer": "<p>a 的等值条件和 b 的范围条件符合最左匹配原则，可以利用联合索引定位扫描范围。WHERE 中先写 b 再写 a 不影响这个判断，优化器会分析条件，不是按 SQL 文本从左往右匹配。不过最终是否选择这个索引，还要看成本估算。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#联合索引-a-b-c-查询条件-where-b-xxx-and-a-x-会生效吗"
+ },
+ {
+  "id": "xl-mysql-051",
+  "category": "数据库",
+  "title": "联合索引 (a, b，c)，where条件是 a=2 and c = 1，能用到联合索引吗？",
+  "answer": "<p>能，a = 2 符合最左前缀，可以用来定位 a 对应的索引范围。但缺少 b，c = 1 通常不能继续缩小扫描范围。</p> <p>如果查询需要回表，c 的条件可能通过索引下推，在读取完整记录前先过滤一部分数据；如果查询被索引覆盖，也可以直接利用索引里的 c 进行判断。具体采用哪种方式要看执行计划。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#联合索引-a-b-c-where条件是-a-2-and-c-1-能用到联合索引吗"
+ },
+ {
+  "id": "xl-mysql-052",
+  "category": "数据库",
+  "title": "索引失效有哪些？",
+  "answer": "<p>面试里说的「索引失效」，通常是指查询条件没办法利用索引快速定位。常见有下面几种情况：</p> <ul><li><strong>左模糊匹配</strong>：<code>LIKE '%小林'</code>、<code>LIKE '%小林%'</code> 不能按普通 B+ 树索引的前缀定位，<code>LIKE '小林%'</code> 则可能使用范围扫描。</li> <li><strong>对索引列使用函数或计算</strong>：比如 <code>YEAR(created_at) = 2024</code>、<code>price + 1 = 10</code>，普通索引通常不能直接用于定位。可以改成时间范围，或者改写为 <code>price = 9</code>；MySQL 8.0 的函数索引也可以服务匹配的表达式。</li> <li><strong>隐式类型转换</strong>：比如 phone 是 VARCHAR，却写 <code>phone = 13800138000</code>，可能需要把索引列转换成数字再比较。应该保持参数类型和列类型一致。</li> <li><strong>缺少联合索引最左列</strong>：例如只有 (a, b, c)，却只按 b 查询，通常不能按最左前缀定位。</li> <li><strong>OR 的某个分支无法利用索引</strong>：比如 a 有索引、b 没有索引，<code>a = 1 OR b = 2</code> 往往需要全表扫描。多个分支都有索引时，也可能使用 index_merge，但是否采用仍取决于成本。</li></ul> <p>另外，<strong>能用索引，但优化器认为全表扫描更便宜，和条件本身无法使用索引是两回事</strong>。比如查询命中大部分记录，还要大量回表，优化器可能主动选择全表扫描。</p> <p>左模糊匹配、缺少最左列也不代表索引绝对不会被读取，仍可能存在覆盖索引全扫描或索引跳跃扫描。判断时要结合 EXPLAIN 的 key、type 和 Extra。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#索引失效有哪些"
+ },
+ {
+  "id": "xl-mysql-053",
+  "category": "数据库",
+  "title": "什么是索引下推？和覆盖索引有什么区别？",
+  "answer": "<p>索引下推，也叫 ICP，是把能够利用索引列判断的条件交给存储引擎，<strong>先过滤，再决定是否回表</strong>，减少完整行的读取次数。</p> <p>举个栗子，用户表有联合索引 <code>(name, age)</code>，现在查询：</p> <pre><code class=\"language-sql\">SELECT * FROM users\nWHERE name LIKE '张%' AND age = 20;\n</code></pre><ul><li>没有索引下推时，先根据 name 找到候选记录，再逐条回表读取整行，之后判断 age 是否等于 20。</li> <li>有索引下推时，在二级索引里就判断 age 是否等于 20，不满足的记录直接跳过，只有满足的记录才回表。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/a716fea0_index-condition-pushdown-before-after.png\" alt=\"\"></p> <p>执行计划中，索引下推通常表现为 <code>Using index condition</code>。对于 InnoDB，它主要用于二级索引，因为聚簇索引本身已经拿到了完整行。</p> <p>覆盖索引则是查询需要的列都在索引里，可以直接从索引获取，通常表现为 <code>Using index</code>。<strong>一个是减少回表次数，一个是直接从索引取得所需字段</strong>，不能把这两个 Extra 当成一个意思。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/a1a15645_icp-vs-covering-index.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#什么是索引下推-和覆盖索引有什么区别"
+ },
+ {
+  "id": "xl-mysql-054",
+  "category": "数据库",
+  "title": "什么情况下会回表查询",
+  "answer": "<p>从物理存储的角度来看，索引分为聚簇索引（主键索引）、二级索引（辅助索引）。</p> <p>它们的主要区别如下：</p> <ul><li>主键索引的 B+Tree 的叶子节点存放的是实际数据，所有完整的用户记录都存放在主键索引的 B+Tree 的叶子节点里；</li> <li>二级索引的 B+Tree 的叶子节点保存索引列的值和主键值，不保存完整的行数据。</li></ul> <p>所以，在查询时使用了二级索引，如果查询的数据能在二级索引里查询的到，那么就不需要回表，这个过程就是覆盖索引。</p> <p><strong>如果查询的数据不在二级索引里，就会先检索二级索引，找到对应的叶子节点，获取到主键值后，然后再检索主键索引，就能查询到数据了，这个过程就是回表</strong>。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#什么情况下会回表查询"
+ },
+ {
+  "id": "xl-mysql-055",
+  "category": "数据库",
+  "title": "什么是覆盖索引？",
+  "answer": "<p>覆盖索引是指一个索引包含了查询所需的所有列，因此不需要访问表中的数据行就能完成查询。</p> <p>换句话说，查询所需的所有数据都能从索引中直接获取，而不需要进行回表查询。覆盖索引能够显著提高查询性能，因为减少了访问数据页的次数，从而减少了I/O操作。</p> <p>假设有一张表 employees，表结构如下：</p> <pre><code class=\"language-sql\">CREATE TABLE employees (\n  id INT PRIMARY KEY,\n  name VARCHAR(100),\n  age INT,\n  department VARCHAR(100),\n  salary DECIMAL(10, 2)\n);\n\nCREATE INDEX idx_name_age_department ON employees(name, age, department);\n</code></pre><p>如果我们有以下查询：</p> <pre><code class=\"language-sql\">SELECT name, age, department FROM employees WHERE name = 'John';\n</code></pre><p>在这种情况下，idx_name_age_department 是一个覆盖索引，因为它包含了查询所需的所有列：name、age 和 department。查询所需字段可以直接从索引取得。</p> <p>对于 InnoDB，二级索引还保存了主键 id，所以查询增加 id 列通常仍然可以覆盖。如果查询增加 salary，就需要回表。覆盖索引说的是索引能提供所需列；锁定读、MVCC 可见性检查等情况仍可能需要访问聚簇索引记录。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#什么是覆盖索引"
+ },
+ {
+  "id": "xl-mysql-056",
+  "category": "数据库",
+  "title": "如果一个列即使单列索引，又是联合索引，单独查它的话先走哪个？",
+  "answer": "<p>没有固定的优先顺序，优化器会估算成本，再选择执行计划。</p> <p>比如同时有单列索引 (a) 和联合索引 (a, b)：</p> <pre><code class=\"language-sql\">SELECT a FROM t WHERE a = 1;\nSELECT a, b FROM t WHERE a = 1;\nSELECT * FROM t WHERE a = 1;\n</code></pre><ul><li>第一条两个索引都能覆盖，单列索引更小，可能成本更低。</li> <li>第二条联合索引可以提供 a、b，通常更有优势。</li> <li>第三条两个索引都可能需要回表，还要看统计信息、命中行数等因素。</li></ul> <p>联合索引已经能服务按 a 查询的场景时，单列索引 (a) 可能冗余，但是否删除要结合其他查询和写入成本评估，不能只看列名重复就直接删除。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#如果一个列即使单列索引-又是联合索引-单独查它的话先走哪个"
+ },
+ {
+  "id": "xl-mysql-057",
+  "category": "数据库",
+  "title": "索引已经建好了，那我再插入一条数据，索引会有哪些变化？",
+  "answer": "<p>插入新数据可能导致B+树结构的调整和索引信息的更新，以保持B+树的平衡性和正确性，这些变化通常由数据库系统自动处理，确保数据的一致性和索引的有效性。</p> <p>如果插入的数据导致叶子节点已满，可能会触发叶子节点的分裂操作，以保持B+树的平衡性。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#索引已经建好了-那我再插入一条数据-索引会有哪些变化"
+ },
+ {
+  "id": "xl-mysql-058",
+  "category": "数据库",
+  "title": "索引字段是不是建的越多越好？",
+  "answer": "<p>不是，建的的越多会占用越多的空间，而且在写入频繁的场景下，对于B+树的维护所付出的性能消耗也会越大</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#索引字段是不是建的越多越好"
+ },
+ {
+  "id": "xl-mysql-059",
+  "category": "数据库",
+  "title": "如果有一个字段是status值为0或者1，适合建索引吗",
+  "answer": "<p>要看数据分布和查询方式，不能只因为只有 0、1 两种值就否定索引。</p> <p>比如订单表里，99.9% 的订单已经处理，只有 0.1% 待处理。后台经常查询 <code>WHERE status = 0</code> 获取少量待处理订单，索引就可能有效。如果经常查询某个用户的订单，可以考虑 <code>(user_id, status)</code>；如果按状态取最近的订单，可以结合查询建立 <code>(status, created_at)</code>。</p> <p>反过来，如果 0、1 各占一半，查询还要 SELECT *，大量回表就可能比全表扫描更贵，这时单列索引通常收益不大。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#如果有一个字段是status值为0或者1-适合建索引吗"
+ },
+ {
+  "id": "xl-mysql-060",
+  "category": "数据库",
+  "title": "索引的优缺点？",
+  "answer": "<p>索引最大的好处是提高查询速度，但是索引也是有缺点的，比如：</p> <ul><li>需要占用物理空间，数量越大，占用空间越大；</li> <li>创建索引和维护索引要耗费时间，这种时间随着数据量的增加而增大；</li> <li>会降低表的增删改的效率，因为每次增删改索引，B+ 树为了维护索引有序性，都需要进行动态维护。</li></ul> <p>所以，索引不是万能钥匙，它也是根据场景来使用的。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#索引的优缺点"
+ },
+ {
+  "id": "xl-mysql-061",
+  "category": "数据库",
+  "title": "怎么决定建立哪些索引?",
+  "answer": "<blockquote><p>什么时候适用索引？</p></blockquote> <ul><li>字段有唯一性限制的，比如商品编码；</li> <li>经常用于 <code>WHERE</code> 查询条件的字段，这样能够提高整个表的查询速度，如果查询条件不是一个字段，可以建立联合索引。</li> <li>经常用于 <code>GROUP BY</code> 和 <code>ORDER BY</code> 的字段，合适的索引顺序有机会减少排序或分组开销，因为我们都已经知道了建立索引之后在 B+Tree 中的记录都是排序好的。</li></ul> <blockquote><p>什么时候不需要创建索引？</p></blockquote> <ul><li><code>WHERE</code> 条件，<code>GROUP BY</code>，<code>ORDER BY</code> 里用不到的字段，索引的价值是快速定位，如果起不到定位的字段通常是不需要创建索引的，因为索引是会占用物理空间的。</li> <li>字段区分度低、查询命中比例高，并且需要大量回表时，单列索引通常收益不大。但查询少数值、覆盖查询或组成合适的联合索引时，仍可能有效。</li> <li>表数据太少的时候，不需要创建索引；</li> <li>经常更新、但很少参与过滤或排序的字段，通常不值得建立索引。频繁更新会增加索引维护和日志开销，不过如果它承担关键查询，也需要权衡读写成本，不能一概不建。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#怎么决定建立哪些索引"
+ },
+ {
+  "id": "xl-mysql-062",
+  "category": "数据库",
+  "title": "索引优化详细讲讲",
+  "answer": "<p>常见的索引优化，可以从下面几个方向回答：</p> <ul><li><strong>根据实际 SQL 设计联合索引</strong>：把过滤条件、排序和返回字段一起考虑，利用最左前缀，不要只按字段区分度排序。</li> <li><strong>覆盖索引优化</strong>：查询只取需要的列，尽量让高频查询从二级索引直接得到所需字段，减少回表。</li> <li><strong>前缀索引优化</strong>：对很长的字符串只建立前缀索引，节省空间，但要在前缀长度和区分度之间做取舍。</li> <li><strong>主键尽量短小、稳定、递增</strong>：减少聚簇索引随机插入的成本，也减少二级索引存储主键的开销。</li> <li><strong>让条件便于使用索引</strong>：避免对普通索引列做不必要的函数、计算和隐式类型转换，时间条件优先写成范围。</li> <li><strong>清理重复和低收益索引</strong>：减少磁盘占用和增删改时的维护成本，删除前需要确认没有影响其他查询。</li></ul> <p>最后用 EXPLAIN 和实际执行情况验证，关注扫描行数、回表次数、排序和耗时。不能只看 key 有值，就认为优化成功了。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#索引优化详细讲讲"
+ },
+ {
+  "id": "xl-mysql-063",
+  "category": "数据库",
+  "title": "了解过前缀索引吗？",
+  "answer": "<p>前缀索引就是只取字符串前面一部分建立索引，比如邮箱比较长，可以先对前 20 个字符建索引：</p> <pre><code class=\"language-sql\">CREATE INDEX idx_email_prefix ON users(email(20));\n</code></pre><p>这样索引更小，一个页里可以放下更多索引项。不过，如果很多邮箱前 20 个字符相同，就需要扫描更多候选记录，再检查完整值，所以前缀长度不能只图短。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/ada5cb88_prefix-index-full-value-check.png\" alt=\"\"></p> <p>可以比较完整值和不同长度前缀的区分度，选择一个尽量接近完整值区分度的长度：</p> <pre><code class=\"language-sql\">SELECT\n    COUNT(DISTINCT email) / COUNT(*) AS full_selectivity,\n    COUNT(DISTINCT LEFT(email, 20)) / COUNT(*) AS prefix_selectivity\nFROM users;\n</code></pre><p>还要注意：<strong>前缀索引不能直接提供完整字符串，也不能保证按完整字符串排序</strong>。如果查询要返回 email 完整值，仍需要读取完整记录；唯一前缀索引限制的也是前缀唯一，可能把前缀相同、完整值不同的两条记录当成冲突。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "索引",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#了解过前缀索引吗"
+ },
+ {
+  "id": "xl-mysql-064",
+  "category": "数据库",
+  "title": "事务的特性是什么？如何实现的？",
+  "answer": "<ul><li><strong>原子性（Atomicity）</strong>：事务中的修改，要么整体提交，要么整体回滚，不会只提交其中一部分。就好比买一件商品，购买成功时，钱付给商家、商品到手；购买失败并回滚时，商品还在商家手中，消费者的钱也没花出去。不过，单条 SQL 报错不一定会自动回滚整个事务，应用仍需要正确处理失败。</li> <li><strong>一致性（Consistency）</strong>：是指事务操作前和操作后，数据满足完整性约束，数据库保持一致性状态。比如，用户 A 和用户 B 在银行分别有 800 元和 600 元，总共 1400 元，用户 A 给用户 B 转账 200 元，分为两个步骤，从 A 的账户扣除 200 元和对 B 的账户增加 200 元。一致性就是要求上述步骤操作后，最后的结果是用户 A 还有 600 元，用户 B 有 800 元，总共 1400 元，而不会出现用户 A 扣除了 200 元，但用户 B 未增加的情况（该情况，用户 A 和 B 均为 600 元，总共 1200 元）。</li> <li><strong>隔离性（Isolation）</strong>：控制并发事务之间能看到哪些数据，以及冲突操作如何执行。实际隔离程度取决于隔离级别，并不是给每个事务分配一份独立数据库。比如多个消费者同时购买最后一件商品，就需要通过锁或条件更新处理竞争。</li> <li><strong>持久性（Durability）</strong>：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</li></ul> <p>MySQL InnoDB 引擎通过什么技术来保证事务的这四个特性的呢？</p> <ul><li>持久性是通过 redo log （重做日志）来保证的；</li> <li>原子性是通过 undo log（回滚日志） 来保证的；</li> <li>隔离性是通过 MVCC（多版本并发控制） 或锁机制来保证的；</li> <li>一致性需要这些机制、数据库约束和正确的业务逻辑一起保证。比如转账时扣款和入账金额写错了，即使事务正常提交，也不能保证业务一致性。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#事务的特性是什么-如何实现的"
+ },
+ {
+  "id": "xl-mysql-065",
+  "category": "数据库",
+  "title": "mysql可能出现什么和并发相关问题？",
+  "answer": "<p>MySQL 服务端是允许多个客户端连接的，这意味着 MySQL 会出现同时处理多个事务的情况。</p> <p>那么<strong>在同时处理多个事务的时候，就可能出现脏读（dirty read）、不可重复读（non-repeatable read）、幻读（phantom read）的问题</strong>。</p> <p>接下来，通过举例子给大家说明，这些问题是如何发生的。</p> <blockquote><p>脏读</p></blockquote> <p><strong>如果一个事务「读到」了另一个「未提交事务修改过的数据」，就意味着发生了「脏读」现象。</strong></p> <p>举个栗子。</p> <p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库中读取小林的余额数据，然后再执行更新操作，如果此时事务 A 还没有提交事务，而此时正好事务 B 也从数据库中读取小林的余额数据，那么事务 B 读取到的余额数据是刚才事务 A 更新后的数据，即使没有提交事务。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717913436378-906c5ccf-b284-4fa8-89ea-3e832afd7cc9.png\" alt=\"img\"></p> <p>因为事务 A 是还没提交事务的，也就是它随时可能发生回滚操作，<strong>如果在上面这种情况事务 A 发生了回滚，那么事务 B 刚才得到的数据就是过期的数据，这种现象就被称为脏读。</strong></p> <blockquote><p>不可重复读</p></blockquote> <p><strong>在一个事务内多次读取同一个数据，如果出现前后两次读到的数据不一样的情况，就意味着发生了「不可重复读」现象。</strong></p> <p>举个栗子。</p> <p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库中读取小林的余额数据，然后继续执行代码逻辑处理，<strong>在这过程中如果事务 B 更新了这条数据，并提交了事务，那么当事务 A 再次读取该数据时，就会发现前后两次读到的数据是不一致的，这种现象就被称为不可重复读。</strong></p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717913436386-ec8e4aa9-6bd9-4555-9802-c18567b762df.png\" alt=\"img\"></p> <blockquote><p>幻读</p></blockquote> <p><strong>一个事务重复查询同一个条件，发现符合条件的记录集合因为其他事务的修改而发生变化，就叫幻读。</strong> 常见表现是多了或少了记录，不过不只是比较 COUNT：即使数量相同，符合条件的记录被换成了另一批，也可能出现问题。</p> <p>举个栗子。</p> <p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库查询账户余额大于 100 万的记录，发现共有 5 条，然后事务 B 也按相同的搜索条件也是查询出了 5 条记录。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717913436123-4db9c815-cc4b-4861-b2ff-3a293e37416d.png\" alt=\"img\"></p> <p>接下来，事务 A 插入了一条余额超过 100 万的账号，并提交了事务，此时数据库超过 100 万余额的账号个数就变为 6。</p> <p>然后事务 B 再次查询账户余额大于 100 万的记录，此时查询到的记录数量有 6 条，<strong>发现和前一次读到的记录数量不一样了，就感觉发生了幻觉一样，这种现象就被称为幻读。</strong></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql可能出现什么和并发相关问题"
+ },
+ {
+  "id": "xl-mysql-066",
+  "category": "数据库",
+  "title": "哪些场景不适合脏读，举个例子？",
+  "answer": "<p>脏读是指一个事务在读取到另一个事务未提交的数据时发生。脏读可能会导致不一致的数据被读取，并可能引起问题。以下是一些不适合脏读的场景：</p> <ul><li><strong>银行系统</strong>：在银行系统中，如果一个账户的余额正在被调整但尚未提交，另一个事务读取了这个临时的余额，可能会导致客户看到不正确的余额。</li> <li><strong>库存管理系统</strong>：在一个库存管理系统中，如果一个商品的数量正在被更新但尚未提交，另一个事务读取了这个临时的数量，可能会导致库存管理错误。</li> <li><strong>在线订单系统</strong>：在一个在线订单系统中，如果一个订单正在被修改但尚未提交，另一个事务读取了这个临时的订单状态，可能导致订单状态显示错误，客户收到不准确的信息。</li></ul> <p>在以上这些场景中，脏读可能导致严重的问题，因此应该避免发生脏读，保证数据的一致性和准确性。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#哪些场景不适合脏读-举个例子"
+ },
+ {
+  "id": "xl-mysql-067",
+  "category": "数据库",
+  "title": "mysql的是怎么解决并发问题的？",
+  "answer": "<ul><li>锁机制：MySQL 提供了多种锁机制来保证数据的一致性，主要包括<strong>行级锁</strong>（InnoDB 支持）和<strong>表级锁</strong>（InnoDB 和 MyISAM 都支持）。注意：网上常提到的&quot;页级锁&quot;是已移除的 BDB 存储引擎的特性，InnoDB / MyISAM 都不提供页级锁。通过锁机制，可以控制冲突操作的执行顺序。多个共享锁可以共存，普通快照读也通常不会被记录的排他锁阻塞，并不是所有访问都只能排队。</li> <li>事务隔离级别：Mysql提供了多种事务隔离级别，包括读未提交、读已提交、可重复读和串行化。通过设置合适的事务隔离级别，可以在多个事务并发执行时，控制事务之间的隔离程度，以避免数据不一致的问题。</li> <li>MVCC（多版本并发控制）：Mysql使用MVCC来管理并发访问，它通过在数据库中保存不同版本的数据来实现不同事务之间的隔离。在读取数据时，Mysql会根据事务的隔离级别来选择合适的数据版本，从而保证数据的一致性。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql的是怎么解决并发问题的"
+ },
+ {
+  "id": "xl-mysql-068",
+  "category": "数据库",
+  "title": "事务的隔离级别有哪些？",
+  "answer": "<ul><li><strong>读未提交（read uncommitted）</strong>，指一个事务还没提交时，它做的变更就能被其他事务看到；</li> <li><strong>读提交（read committed）</strong>，指一个事务提交之后，它做的变更才能被其他事务看到；</li> <li><strong>可重复读（repeatable read）</strong>，指同一个事务中的普通快照读复用同一个快照，通常在第一次快照读时建立，后续不会因为其他事务提交就改变，<strong>MySQL InnoDB 引擎的默认隔离级别</strong>；</li> <li><strong>串行化（serializable）</strong>；会对记录加上读写锁，在多个事务对这条记录进行读写操作时，如果发生了读写冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行；</li></ul> <p>按隔离水平高低排序如下：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.nlark.com/yuque/0/2024/webp/29791029/1719915429467-c898c6a3-b1ed-4cb6-83e3-a669c33a90d5.webp#averageHue=%23f5ece3&amp;clientId=uf0d36b72-0b14-4&amp;from=paste&amp;id=u6640a0ec&amp;originHeight=144&amp;originWidth=962&amp;originalType=url&amp;ratio=1.100000023841858&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=uf49dbf46-7e2a-43f0-910d-4760225a191&amp;title=\" alt=\"\"></p> <p>针对不同的隔离级别，并发事务时可能发生的现象也会不同。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.nlark.com/yuque/0/2024/webp/29791029/1719915429433-f7de575e-083a-4fea-b756-7737ae75c646.webp#averageHue=%23f7f6df&amp;clientId=uf0d36b72-0b14-4&amp;from=paste&amp;id=ubc5e8407&amp;originHeight=464&amp;originWidth=1080&amp;originalType=url&amp;ratio=1.100000023841858&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=uf4d37617-5ee5-4baf-9670-5b8208826c0&amp;title=\" alt=\"\">也就是说：</p> <ul><li>在「读未提交」隔离级别下，可能发生脏读、不可重复读和幻读现象；</li> <li>在「读提交」隔离级别下，可能发生不可重复读和幻读现象，但是不可能发生脏读现象；</li> <li>按 SQL 标准，「可重复读」仍允许幻读；不过 MySQL InnoDB 在普通快照读中通过 MVCC 保持同一快照，在范围锁定读中通过间隙锁、next-key lock 阻止插入。混用快照读与当前读时，还需要区分两种读的可见范围；</li> <li>在「串行化」隔离级别下，脏读、不可重复读和幻读现象都不可能会发生。</li></ul> <p>接下来，举个具体的例子来说明这四种隔离级别，有一张账户余额表，里面有一条账户余额为 100 万的记录。然后有两个并发的事务，事务 A 只负责查询余额，事务 B 则会将我的余额改成 200 万，下面是按照时间顺序执行两个事务的行为：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1720420603198-9b6bd2b1-9c0e-46b5-ae0b-fcc9035c6fbc.webp\" alt=\"img\"></p> <p>在不同隔离级别下，事务 A 执行过程中查询到的余额可能会不同：</p> <ul><li>在「读未提交」隔离级别下，事务 B 修改余额后，虽然没有提交事务，但是此时的余额已经可以被事务 A 看见了，于是事务 A 中余额 V1 查询的值是 200 万，余额 V2、V3 自然也是 200 万了；</li> <li>在「读提交」隔离级别下，事务 B 修改余额后，因为没有提交事务，所以事务 A 中余额 V1 的值还是 100 万，等事务 B 提交完后，最新的余额数据才能被事务 A 看见，因此额 V2、V3 都是 200 万；</li> <li>在「可重复读」隔离级别下，假设事务 A 在 B 修改前已经建立快照，普通查询的 V1、V2 都是 100 万。A 提交后，在新的查询事务中建立新快照，就能看到 B 已提交的 200 万。单独执行 BEGIN 并不意味着马上建立快照；</li> <li>在「串行化」隔离级别下，事务 B 在执行将余额 100 万修改为 200 万时，由于此前事务 A 执行了读操作，这样就发生了读写冲突，于是就会被锁住，直到事务 A 提交后，事务 B 才可以继续执行，所以从 A 的角度看，余额 V1、V2 的值是 100 万，余额 V3 的值是 200万。</li></ul> <p>这四种隔离级别具体是如何实现的呢？</p> <ul><li>对于「读未提交」隔离级别的事务来说，因为可以读到未提交事务修改的数据，所以直接读取最新的数据就好了；</li> <li>对于「串行化」隔离级别的事务来说，通过加锁让冲突的读写互相等待；访问不冲突的数据仍然可以并发；</li> <li>对于「读提交」和「可重复读」隔离级别的事务来说，它们是通过 Read View来实现的，它们的区别在于创建 Read View 的时机不同，<strong>「读提交」通常在每条普通 SELECT 的一致性读开始时创建新 Read View；「可重复读」通常在事务第一次一致性读时创建，后续一致性读复用</strong>。在可重复读下，<code>START TRANSACTION WITH CONSISTENT SNAPSHOT</code> 可以在开启事务时建立快照。这里说的是快照读，UPDATE、DELETE 和锁定读不能套用这个规则。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#事务的隔离级别有哪些"
+ },
+ {
+  "id": "xl-mysql-069",
+  "category": "数据库",
+  "title": "mysql默认级别是什么？",
+  "answer": "<p>MySQL InnoDB 默认是可重复读，也就是 REPEATABLE READ。实际环境可能修改过，可以这样查看当前会话的隔离级别：</p> <pre><code class=\"language-sql\">SELECT @@transaction_isolation;\n</code></pre><p>MySQL 默认还开启 autocommit。如果没有显式开启事务，每条 SQL 通常都是一个独立事务，多次 SELECT 也就不一定共用同一个快照。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql默认级别是什么"
+ },
+ {
+  "id": "xl-mysql-070",
+  "category": "数据库",
+  "title": "可重复读隔离级别下，A事务提交的数据，在B事务能看见吗？",
+  "answer": "<p>要看 B 有没有建立快照，以及使用的是快照读还是当前读。</p> <ul><li><strong>B 已经建立快照，继续普通 SELECT</strong>：如果 A 在快照建立后才提交，B 通常看不到 A 的修改，而是沿 undo 版本链读取快照可见的旧版本。</li> <li><strong>B 只是执行了 BEGIN，还没有快照读</strong>：如果 A 在 B 第一次快照读前已经提交，那么 B 建立快照时就可以看到 A 的数据。</li> <li><strong>B 使用 SELECT ... FOR UPDATE 等当前读</strong>：不会复用普通 SELECT 的旧快照，而是读取并锁定当前记录；遇到未提交事务持有冲突锁时会等待。</li></ul> <p>另外，B 自己修改过的数据对自己可见。所以，不能只根据「B 比 A 先开启事务」，就断言 B 一定看不到 A 的提交。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/bb61525b_repeatable-read-snapshot-timing.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#可重复读隔离级别下-a事务提交的数据-在b事务能看见吗"
+ },
+ {
+  "id": "xl-mysql-071",
+  "category": "数据库",
+  "title": "举个例子说可重复读下的幻读问题",
+  "answer": "<p><strong>普通快照读复用同一个 Read View，可以避免其他事务插入记录导致两次快照查询结果变化；不过混用快照读和当前读，还可能出现看起来像幻读的现象</strong>。</p> <p>我举例一个可重复读隔离级别发生幻读现象的场景。以这张表作为例子：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717913623026-b457c2fd-d09d-4cd7-940a-eec8f2478e79.png\" alt=\"img\"></p> <p>事务 A 执行查询 id = 5 的记录，此时表中是没有该记录的，所以查询不出来。</p> <pre><code class=\"language-sql\"># 事务 A\nmysql&gt; begin;\nQuery OK, 0 rows affected (0.00 sec)\n\nmysql&gt; select * from t_stu where id = 5;\nEmpty set (0.01 sec)\n</code></pre><p>然后事务 B 插入一条 id = 5 的记录，并且提交了事务。</p> <pre><code class=\"language-sql\"># 事务 B\nmysql&gt; begin;\nQuery OK, 0 rows affected (0.00 sec)\n\nmysql&gt; insert into t_stu values(5, '小美', 18);\nQuery OK, 1 row affected (0.00 sec)\n\nmysql&gt; commit;\nQuery OK, 0 rows affected (0.00 sec)\n</code></pre><p>此时，<strong>事务 A 虽然在旧快照里看不到 id = 5，但 UPDATE 使用的是当前读，所以能更新 B 已经提交的记录</strong>。更新后，这个新版本属于 A 自己，后续普通 SELECT 就可以看到，于是出现了前一次查询没有、后一次却有的现象。</p> <pre><code class=\"language-sql\"># 事务 A\nmysql&gt; update t_stu set name = '小林coding' where id = 5;\nQuery OK, 1 row affected (0.01 sec)\nRows matched: 1  Changed: 1  Warnings: 0\n\nmysql&gt; select * from t_stu where id = 5;\n+----+--------------+------+\n| id | name         | age  |\n+----+--------------+------+\n|  5 | 小林coding   |   18 |\n+----+--------------+------+\n1 row in set (0.00 sec)\n</code></pre><p>整个发生幻读的时序图如下：</p> <p>在可重复读隔离级别下，事务 A 第一次执行普通的 select 语句时生成了一个 ReadView，之后事务 B 向表中新插入了一条 id = 5 的记录并提交。接着，事务 A 对 id = 5 这条记录进行了更新操作，在这个时刻，这条新记录的 trx_id 隐藏列的值就变成了事务 A 的事务 id，之后事务 A 再使用普通 select 语句去查询这条记录时就可以看到这条记录了，于是就发生了幻读。</p> <p>这个例子的关键是 <strong>UPDATE 使用当前读，而且事务始终能看到自己的修改</strong>，不是 Read View 在中途自动更新了。如果 A 不执行 UPDATE，只是再次做相同的普通 SELECT，仍然看不到 B 后插入的记录。</p> <p>同样，如果第一次是普通 SELECT，第二次改成 SELECT ... FOR UPDATE，也可能因为两种读的语义不同而看到不同的记录集合。需要先查询、再依据结果修改的业务，通常应从一开始就使用合适的锁定读或条件更新。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#举个例子说可重复读下的幻读问题"
+ },
+ {
+  "id": "xl-mysql-072",
+  "category": "数据库",
+  "title": "Mysql 设置了可重读隔离级后，怎么保证不发生幻读？",
+  "answer": "<p>要先区分业务是在做一致性查询，还是要根据查询结果继续修改。</p> <ul><li><strong>只做普通快照读</strong>：在同一个可重复读事务里复用 Read View，就不会因为其他事务插入记录，让相同条件的快照查询突然多出记录。</li> <li><strong>先查后改，需要阻止条件范围内出现新记录</strong>：在显式事务中，从第一次查询就使用 <code>SELECT ... FOR UPDATE</code> 等锁定读。InnoDB 会根据索引扫描范围加记录锁、间隙锁或 next-key lock，锁一直持有到事务结束。</li></ul> <p>比如，要查询并处理余额在一个区间内的账户，可以给 balance 建索引，再执行：</p> <pre><code class=\"language-sql\">BEGIN;\nSELECT id, balance FROM accounts\nWHERE balance &gt;= 1000000 AND balance &lt; 2000000\nFOR UPDATE;\n-- 根据查询结果执行后续操作\nCOMMIT;\n</code></pre><p>这里锁的是实际扫描的索引范围，有时比 WHERE 表达的范围更大。如果是唯一索引的等值查询，并且记录存在，就可能退化成记录锁，并不是所有 FOR UPDATE 都加 next-key lock。缺少合适索引时，加锁范围还可能明显扩大。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql-设置了可重读隔离级后-怎么保证不发生幻读"
+ },
+ {
+  "id": "xl-mysql-073",
+  "category": "数据库",
+  "title": "串行化隔离级别是通过什么实现的？",
+  "answer": "<p>对于 InnoDB，在 SERIALIZABLE 隔离级别下，如果是显式多语句事务，普通 SELECT 会隐式变成类似 <code>SELECT ... FOR SHARE</code> 的锁定读，通过共享记录锁或 next-key lock 与其他事务的写操作形成互斥。</p> <p>比如事务 A 读了一段记录，事务 B 想修改这些记录，或者向被锁住的间隙插入，就需要等待 A 结束。这种方式可以阻止不可重复读和幻读，但锁竞争也会更多。</p> <p>如果开启 autocommit，并且 SELECT 自己就是一个只读事务，InnoDB 可以用非锁定一致性读完成。串行化也不等于整个数据库只能执行一个事务，不冲突的数据操作仍然可以并发。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#串行化隔离级别是通过什么实现的"
+ },
+ {
+  "id": "xl-mysql-074",
+  "category": "数据库",
+  "title": "介绍MVCC实现原理",
+  "answer": "<p>MVCC 通过数据的多个版本，让普通快照读和写操作尽量不互相阻塞。读取时不一定取最新版本，而是根据 Read View 判断哪个版本对当前事务可见。</p> <p><strong>MVCC 的核心是「隐藏字段 + undo 版本链 + Read View」</strong>，不是在开启事务时把整张表复制一份。读提交和可重复读都用到 MVCC，不过快照的创建时机不同。</p> <p>对于「读提交」和「可重复读」隔离级别的事务来说，它们是通过 Read View 来实现的，它们的区别在于创建 Read View 的时机不同，大家可以把 Read View 理解成一个数据快照，就像相机拍照那样，定格某一时刻的风景。</p> <ul><li>「读提交」隔离级别是每条普通 SELECT 的一致性读开始时创建新的 Read View；</li> <li>「可重复读」隔离级别通常在第一次一致性读时创建 Read View，后续快照读复用；锁定读不复用这个快照。</li></ul> <p>Read View 有四个重要的字段：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/mysql/%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB/readview%E7%BB%93%E6%9E%84.drawio.png\" alt=\"img\"></p> <ul><li>m_ids ：指的是在创建 Read View 时，当前数据库中「活跃事务」的<strong>事务 id 列表</strong>，注意是一个列表，<strong>这里关注的是已经分配事务 ID、但还没提交的读写事务</strong>，只读事务不一定会分配这种事务 ID。</li> <li>min_trx_id ：指的是在创建 Read View 时，当前数据库中「活跃事务」中事务 <strong>id 最小的事务</strong>，通常是 m_ids 的最小值；如果没有其他活跃读写事务，这个边界与 max_trx_id 相同。</li> <li>max_trx_id ：这个并不是 m_ids 的最大值，而是<strong>创建 Read View 时当前数据库中应该给下一个事务的 id 值</strong>，也就是全局事务中最大的事务 id 值 + 1；</li> <li>creator_trx_id ：指的是<strong>创建该 Read View 的事务的事务 id</strong>。</li></ul> <p>对于使用 InnoDB 存储引擎的数据库表，它的聚簇索引记录中都包含下面两个隐藏列：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/f595d13450878acd04affa82731f76c5.png\" alt=\"图片\"></p> <ul><li>trx_id，当一个事务对某条聚簇索引记录进行改动时，就会<strong>把该事务的事务 id 记录在 trx_id 隐藏列里</strong>；</li> <li>roll_pointer，每次对某条聚簇索引记录进行改动时，都会把旧版本的记录写入到 undo 日志中，然后<strong>这个隐藏列是个指针，指向每一个旧版本记录</strong>，于是就可以通过它找到修改前的记录。这里的旧版本通常是通过 undo 中的回滚信息重建出来的，不一定是每次修改都复制一份完整行。</li></ul> <p>在创建 Read View 后，我们可以将记录中的 trx_id 划分这三种情况：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719905850875-89fa5b61-e48c-4171-9248-c966c8d474ce.webp\" alt=\"\"></p> <p>一个事务去访问记录的时候，除了自己的更新记录总是可见之外，还有这几种情况：</p> <ul><li><p>如果记录的 trx_id 值小于 Read View 中的 min_trx_id 值，表示这个版本的记录是在创建 Read View <strong>前</strong>已经提交的事务生成的，所以该版本的记录对当前事务<strong>可见</strong>。</p></li> <li><p>如果记录的 trx_id 值大于等于 Read View 中的 max_trx_id 值，表示这个版本来自创建 Read View 后才分配事务 ID 的事务，所以该版本对当前事务<strong>不可见</strong>。</p></li> <li><p>如果记录的 trx_id 值在 Read View 的 min_trx_id 和 max_trx_id 之间，需要判断 trx_id 是否在 m_ids 列表中：</p> <ul><li>如果记录的 trx_id <strong>在</strong> m_ids 列表中，表示这个事务在创建 Read View 时还没有提交，所以该版本<strong>不可见</strong>。即使它后来提交了，也不会改变这个旧 Read View 的判断。</li> <li>如果记录的 trx_id <strong>不在</strong> m_ids 列表中，表示这个事务在创建 Read View 前已经提交，所以该版本<strong>可见</strong>。</li></ul></li></ul> <p>如果当前版本不可见，就沿 roll_pointer 找到 undo 中的旧版本，再按相同规则判断，直到找到可见版本或确认这条记录对当前快照不存在。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/14a70588_mvcc-read-view-version-chain.png\" alt=\"\"></p> <p><strong>这种通过「版本链」来控制并发事务访问同一个记录时的行为就叫 MVCC（多版本并发控制）。</strong></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#介绍mvcc实现原理"
+ },
+ {
+  "id": "xl-mysql-075",
+  "category": "数据库",
+  "title": "快照读和当前读有什么区别？",
+  "answer": "<p><strong>快照读读取的是 Read View 可见的数据版本，当前读读取的是当前记录，并根据操作加锁</strong>。</p> <ul><li>在读提交、可重复读下，普通 <code>SELECT</code> 通常是快照读，通过 MVCC 获取可见版本，不会因为别的事务给记录加了排他锁就一定等待。</li> <li><code>SELECT ... FOR UPDATE</code>、<code>SELECT ... FOR SHARE</code>，以及 UPDATE、DELETE 等属于当前读相关操作。如果遇到其他事务持有冲突锁，需要等待，不能直接绕过锁读未提交的修改。</li></ul> <p>举个栗子，A 在可重复读事务中通过普通 SELECT 读到余额 100，B 把余额改成 200 并提交。A 再做普通 SELECT，仍然可能看到 100；但 A 执行 <code>UPDATE accounts SET balance = balance + 10 WHERE id = 1</code>，是基于当前的 200 更新，结果是 210，不是 110。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/e9da8259_snapshot-vs-current-read.png\" alt=\"\"></p> <p>所以，判断可重复读下的查询和更新行为时，一定要先说明用的是哪一种读。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "对比",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#快照读和当前读有什么区别"
+ },
+ {
+  "id": "xl-mysql-076",
+  "category": "数据库",
+  "title": "有了事务，为什么还会出现丢失更新？",
+  "answer": "<p>因为单条 UPDATE 虽然会加锁，但是 <strong>「先读到应用里，再计算，最后写回」不一定是一个受保护的整体</strong>。</p> <p>比如库存原来是 10，两个请求都用普通 SELECT 读到 10，各自在应用里减 1，然后执行 <code>UPDATE products SET stock = 9 WHERE id = 1</code>。两次 UPDATE 可以先后成功，但最终库存还是 9，相当于丢了一次扣减。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/e92388e8_lost-update-stale-value.png\" alt=\"\"></p> <p>常见的处理方式有三种：</p> <ul><li><strong>原子条件更新</strong>：直接让数据库基于当前值计算，比如 <code>SET stock = stock - 1 WHERE stock &gt; 0</code>。</li> <li><strong>悲观锁</strong>：在同一个事务里先 <code>SELECT ... FOR UPDATE</code>，拿到锁后再计算和更新。</li> <li><strong>乐观锁</strong>：增加 version 字段，更新时同时检查原版本：</li></ul> <pre><code class=\"language-sql\">UPDATE products\nSET stock = stock - 1, version = version + 1\nWHERE id = 1 AND version = 5 AND stock &gt; 0;\n</code></pre><p>影响行数为 1，说明更新成功；为 0，说明版本变化或库存条件不满足，应用需要重新判断。不能把 UPDATE 执行时的行锁，理解成之前普通 SELECT 的结果也自动受到了保护。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#有了事务-为什么还会出现丢失更新"
+ },
+ {
+  "id": "xl-mysql-077",
+  "category": "数据库",
+  "title": "如何用 MySQL 扣减库存，避免超卖？",
+  "answer": "<p>对于单个商品的库存，可以用一条带条件的 UPDATE：</p> <pre><code class=\"language-sql\">UPDATE products\nSET stock = stock - 1\nWHERE id = 100 AND stock &gt; 0;\n</code></pre><p>InnoDB 更新时会锁住对应记录，多个事务的扣减会按锁的顺序执行，并根据当前库存判断是否满足 stock &gt; 0。库存只剩 1 时，第一个事务扣成 0，后面的事务就不能再满足条件。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/d6ff2445_atomic-inventory-deduction.png\" alt=\"\"></p> <p>应用需要检查影响行数：<strong>1 表示扣减成功，0 表示库存不足或商品不存在</strong>。不能只看 SQL 有没有报错。如果扣减数量是 n，还要保证 n 大于 0，并写成 <code>stock = stock - n WHERE stock &gt;= n</code>。</p> <p>如果还需要创建订单，就把库存扣减和订单写入放到同一个事务，任一步失败都回滚。同时给业务请求或订单号建立唯一约束，避免请求重试重复扣库存。数据库的条件更新能防止库存变负数，业务幂等还需要单独保证。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#如何用-mysql-扣减库存-避免超卖"
+ },
+ {
+  "id": "xl-mysql-078",
+  "category": "数据库",
+  "title": "一条update是不是原子性的？为什么？",
+  "answer": "<p>对于 InnoDB，普通的一条 UPDATE 是事务中的原子操作，即使影响多行，也不能只提交其中一部分修改。</p> <ul><li><strong>undo log 负责回滚</strong>：如果语句执行失败需要撤销修改，可以通过 undo 恢复更新前的状态，这是原子性的核心。</li> <li><strong>锁负责并发控制</strong>：更新时加排他锁，让其他冲突的更新等待，但锁本身不是实现回滚的机制。</li></ul> <p>开启 autocommit 时，一条 UPDATE 通常就是一个独立事务；在显式事务中，UPDATE 执行成功还不等于整个事务已经提交。</p> <p>还要注意，<strong>一条语句报错，不代表整个多语句事务已经自动回滚</strong>。比如普通重复键错误通常只回滚当前语句；死锁会回滚被选中的整个事务；锁等待超时默认通常只回滚当前语句。应用要根据错误处理，必要时主动 ROLLBACK，不能失败后继续提交前面的修改。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#一条update是不是原子性的-为什么"
+ },
+ {
+  "id": "xl-mysql-079",
+  "category": "数据库",
+  "title": "滥用事务，或者一个事务里有特别多sql的弊端？",
+  "answer": "<p>问题主要在于事务持有锁和旧版本的时间太长，不只是 SQL 数量多。</p> <ul><li><strong>锁竞争加重</strong>：写事务长时间占有记录锁，其他更新容易等待、超时，交叉加锁还可能出现死锁。</li> <li><strong>undo 积累</strong>：大量修改产生很多 undo；长时间持有旧快照的读事务，即使自己不更新，也可能阻碍旧版本清理，增加空间和版本链遍历成本。</li> <li><strong>提交、回滚成本高</strong>：大事务的 binlog 和 undo 较多，出错后回滚也可能耗时很长。</li> <li><strong>主从延迟增加</strong>：从库需要应用已经提交的事务，大事务提交后可能产生大量回放工作，也会影响并行复制的效率。</li> <li><strong>DDL 被阻塞</strong>：事务访问过的表可能一直持有 MDL 读锁，让 ALTER TABLE 等结构变更等待。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/c6314d03_long-transaction-undo-purge.png\" alt=\"\"></p> <p>所以，尽量把事务范围控制在必要的数据库操作里，不要在事务中长时间调用外部接口、等待用户输入。批量任务可以结合业务一致性要求分批提交，但不能为了缩短事务，把必须原子完成的业务步骤随意拆开。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "事务",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#滥用事务-或者一个事务里有特别多sql的弊端"
+ },
+ {
+  "id": "xl-mysql-080",
+  "category": "数据库",
+  "title": "讲一下mysql里有哪些锁？",
+  "answer": "<p>在 MySQL 里，根据加锁的范围，可以分为<strong>全局锁、表级锁和行锁</strong>三类。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1720433609532-38aec7fc-734e-4b35-a802-4e6ba3339ffa.png\" alt=\"\"></p> <ul><li><p><strong>全局锁</strong>：通过flush tables with read lock 语句会将整个数据库就处于只读状态了，这时其他线程执行以下操作，增删改或者表结构修改都会阻塞。全局锁主要应用于做<strong>全库逻辑备份</strong>，这样在备份数据库期间，不会因为数据或表结构的更新，而出现备份文件的数据与预期的不一样。</p></li> <li><p><strong>表级锁</strong>：MySQL 里面表级别的锁有这几种：</p> <ul><li><p>表锁：通过lock tables 语句可以对表加表锁，表锁除了会限制别的线程的读写外，也会限制本线程接下来的读写操作。</p></li> <li><p>元数据锁：当我们对数据库表进行操作时，会自动给这个表加上 MDL，对一张表进行 CRUD 操作时，加的是 <strong>MDL 读锁</strong>；对一张表做结构变更操作的时候，加的是 <strong>MDL 写锁</strong>；MDL 是为了保证当用户对表执行 CRUD 操作时，防止其他线程对这个表结构做了变更。</p></li> <li><p>意向锁：当执行插入、更新、删除操作，需要先对表加上「意向独占锁」，然后对该记录加独占锁。<strong>意向锁的目的是为了快速判断表里是否有记录被加锁</strong>。</p></li></ul></li> <li><p><strong>行级锁</strong>：InnoDB 引擎是支持行级锁的，而 MyISAM 引擎并不支持行级锁。</p></li> <li><p>记录锁，锁住的是一条记录。而且记录锁是有 S 锁和 X 锁之分的，满足读写互斥，写写互斥</p></li> <li><p>间隙锁，锁住两条索引记录之间的间隙，主要用于阻止其他事务向间隙插入。可重复读的范围查询中经常使用，串行化下也可能使用；读提交下通常不为普通搜索加间隙锁，但外键检查、重复键检查等仍可能使用。</p></li> <li><p>Next-Key Lock 称为临键锁，是 Record Lock + Gap Lock 的组合，通常表示「前一个索引值到当前索引值」的左开右闭区间，比如 (5, 10]。</p></li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/520114e8_record-gap-next-key-locks.png\" alt=\"\"></p> <p>另外还有插入意向锁，插入记录前需要申请对应间隙的插入意向锁。它属于间隙锁的一种，不要和表级的意向锁混淆；向同一间隙的不同位置插入，通常可以并发。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "锁",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#讲一下mysql里有哪些锁"
+ },
+ {
+  "id": "xl-mysql-081",
+  "category": "数据库",
+  "title": "数据库的表锁和行锁有什么作用？",
+  "answer": "<p>表锁的作用：</p> <ul><li><strong>整体控制</strong>：表锁按共享、排他等兼容关系控制整张表的访问。比如显式 READ 表锁允许其他会话读、阻止写；显式 WRITE 表锁会阻止其他会话读写，不能把所有表级锁都理解成禁止任何访问。</li> <li><strong>粒度大</strong>：表锁的粒度比较大，在锁定表的情况下，可能会影响到整个表的其他操作，可能会引起锁竞争和性能问题。</li> <li><strong>适用于大批量操作</strong>：表锁适合于需要大批量操作表中数据的场景，例如表的重建、大量数据的加载等。</li></ul> <p>行锁的作用：</p> <ul><li><strong>细粒度控制</strong>：行锁可以精确控制对表中某行数据的访问，使得其他事务可以同时访问表中的其他行数据，在并发量大的系统中能够提高并发性能。</li> <li><strong>减少锁冲突</strong>：行锁不会像表锁那样造成整个表的锁冲突，减少了锁竞争的可能性，提高了并发访问的效率。</li> <li><strong>适用于频繁单行操作</strong>：行锁适合于需要频繁对表中单独行进行操作的场景，例如订单系统中的订单修改、删除等操作。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "锁",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#数据库的表锁和行锁有什么作用"
+ },
+ {
+  "id": "xl-mysql-082",
+  "category": "数据库",
+  "title": "MySQL两个线程的update语句同时处理一条数据，会不会有阻塞？",
+  "answer": "<p>如果是两个事务同时更新了 id = 1，比如 update ... where id = 1，那么是会阻塞的。因为 InnoDB 存储引擎实现了行级锁。</p> <p>当A事务对 id =1  这行记录进行更新时，会对主键 id 为 1 的记录加X类型的记录锁，这样第二事务对 id = 1 进行更新时，发现已经有记录锁了，就会陷入阻塞状态。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "锁",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql两个线程的update语句同时处理一条数据-会不会有阻塞"
+ },
+ {
+  "id": "xl-mysql-083",
+  "category": "数据库",
+  "title": "两条update语句处理一张表的不同的主键范围的记录，一个<10，一个>15，会不会遇到阻塞？底层是为什么的？",
+  "answer": "<p>如果两条语句都按主键做范围扫描，没有其他关联操作，实际加的记录锁互不冲突，通常可以并发执行。</p> <p>不过，<strong>不能只把 WHERE 的数字范围画出来，就当成实际加锁范围</strong>。在可重复读下，范围更新通常还涉及间隙锁或 next-key lock，边界取决于真实索引记录和扫描过程。例如 id &lt; 10 扫描到边界时，可能还会锁住最后一条符合条件记录之后的间隙，而不是只锁所有 id &lt; 10 的现有行。</p> <p>还要注意两点：</p> <ul><li>间隙锁之间可以共存，所以间隙有重叠，也不等于两个 UPDATE 一定互相阻塞；插入意向锁遇到相应间隙锁才可能等待。</li> <li>UPDATE 如果还要维护其他索引、检查唯一键或外键，也可能产生额外锁冲突。</li></ul> <p>因此，普通主键范围更新能否并发，要看实际访问的索引和锁是否冲突，不能仅凭条件范围一概判断。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/c8c318ba_gap-lock-compatibility.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "锁",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#两条update语句处理一张表的不同的主键范围的记录-一个-10-一个-15-会不会遇到阻塞-底层是为什么的"
+ },
+ {
+  "id": "xl-mysql-084",
+  "category": "数据库",
+  "title": "如果2个范围不是主键或索引？还会阻塞吗？",
+  "answer": "<p>如果过滤字段没有可用索引，UPDATE 可能需要扫描聚簇索引上的所有记录，加锁范围就会明显扩大，即使两条语句在业务上更新的是不同记录，也可能互相等待。</p> <p>在可重复读下，全表扫描通常会对扫描到的记录和间隙加锁，效果可能接近锁住整张表。下面这张图只是一个小表的例子，所以具体有几个记录锁、几个间隙锁，要结合表中的记录来看：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1711526947543-96b555cc-646f-4194-b2b3-343b3b6dd769.png\" alt=\"img\"></p> <p>在读提交下，UPDATE 可以在判断条件后释放不匹配记录的锁，普通搜索也通常不加间隙锁，所以不能把可重复读下的结论原样套过去。不过扫描量仍然很大，锁等待也仍可能发生。</p> <p><strong>这里不是把行锁升级成了表锁</strong>，而是由于扫描范围变大，加了很多行级锁。给更新条件建立合适索引，既能减少扫描，也能减少锁冲突。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "锁",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#如果2个范围不是主键或索引-还会阻塞吗"
+ },
+ {
+  "id": "xl-mysql-085",
+  "category": "数据库",
+  "title": "InnoDB 的行锁锁的是行，还是索引？",
+  "answer": "<p><strong>InnoDB 的行级锁是加在索引记录上的</strong>，不是给磁盘里的某一行地址单独挂一把锁。</p> <p>比如按主键更新，锁住的是主键索引记录；按二级索引更新，通常既会对扫描到的二级索引记录加锁，也会锁住对应的聚簇索引记录。没有显式主键时，InnoDB 也会有聚簇索引，并不是没有索引就无法加行锁。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/2baacccb_secondary-and-clustered-record-locks.png\" alt=\"\"></p> <p>所以，「没有用索引就会升级成表锁」这个说法不准确。真正的问题是扫描和加锁范围扩大，可能让整个表的大量操作都受到影响。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "锁",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#innodb-的行锁锁的是行-还是索引"
+ },
+ {
+  "id": "xl-mysql-086",
+  "category": "数据库",
+  "title": "MySQL 为什么会死锁？怎么处理？",
+  "answer": "<p>死锁就是多个事务各自持有对方需要的锁，又都在等待对方释放，形成循环等待。</p> <p>举个栗子：</p> <pre><code class=\"language-sql\">-- 事务 A\nBEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\n-- 接着尝试更新 id = 2\n\n-- 事务 B，在另一个连接中执行\nBEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 2;\n-- 接着尝试更新 id = 1\n</code></pre><p>A 持有 id = 1 的锁、等待 id = 2；B 持有 id = 2 的锁、等待 id = 1，就形成死锁。不是只有跨表才会死锁，同一张表的多行、索引记录和间隙之间也可能形成循环等待。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/96becfa8_deadlock-wait-cycle.png\" alt=\"\"></p> <p>InnoDB 默认开启死锁检测，发现死锁后会选择一个事务回滚，通常倾向于修改记录较少、回滚代价较小的事务，应用需要对整个事务做有限次数重试。</p> <p>减少死锁可以从这些方向入手：</p> <ul><li>多个事务按相同顺序访问记录，比如转账时统一先锁较小的账户 ID。</li> <li>缩短事务，避免拿着数据库锁调用耗时的外部接口。</li> <li>为条件建立合适索引，减少扫描和加锁范围。</li> <li>通过 <code>SHOW ENGINE INNODB STATUS</code> 查看最近一次死锁；MySQL 8.0 还可以结合 <code>performance_schema.data_locks</code> 和 <code>data_lock_waits</code> 分析当前锁等待。</li></ul> <p>死锁回滚通常针对整个事务，而锁等待超时默认通常只回滚当前语句。业务重试前要确认事务状态，必要时先主动回滚，再重新执行完整业务流程。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "锁",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql-为什么会死锁-怎么处理"
+ },
+ {
+  "id": "xl-mysql-087",
+  "category": "数据库",
+  "title": "为什么执行 ALTER TABLE 会把后续查询也堵住？",
+  "answer": "<p>常见原因是 MDL，也就是元数据锁。</p> <p>比如事务 A 查询过一张表，但一直没有提交，它持有这张表的 MDL 读锁。此时 B 执行 ALTER TABLE，需要 MDL 写锁，就要等待 A 结束。</p> <p>后续新的查询也需要 MDL 读锁，但在有写锁请求排队时，也可能继续排队，避免结构变更一直抢不到锁。这样就会出现「一个长事务阻塞 ALTER TABLE，ALTER TABLE 又挡住后续查询」的情况。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/3d42e6ab_metadata-lock-wait-chain.png\" alt=\"\"></p> <p>排查时可以查看进程状态是否有 <code>Waiting for table metadata lock</code>，再结合 <code>performance_schema.metadata_locks</code>、<code>information_schema.innodb_trx</code> 找到未结束的事务。即使使用在线 DDL，开始或结束等阶段也仍需要元数据锁，不能理解成全程不阻塞。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "锁",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#为什么执行-alter-table-会把后续查询也堵住"
+ },
+ {
+  "id": "xl-mysql-088",
+  "category": "数据库",
+  "title": "日志文件是分成了哪几种？",
+  "answer": "<ul><li>redo log 重做日志，是 Innodb 存储引擎层生成的日志，实现了事务中的<strong>持久性</strong>，主要<strong>用于掉电等故障恢复</strong>；</li> <li>undo log 回滚日志，是 Innodb 存储引擎层生成的日志，实现了事务中的<strong>原子性</strong>，主要<strong>用于事务回滚和 MVCC</strong>。</li> <li>bin log 二进制日志，是 Server 层生成的日志，主要<strong>用于主从复制，以及配合全量备份做时间点恢复</strong>；</li> <li>relay log 中继日志，用于主从复制场景下，slave通过io线程拷贝master的bin log后本地生成的日志</li> <li>慢查询日志，用于记录执行时间过长的sql，需要设置阈值后手动开启</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#日志文件是分成了哪几种"
+ },
+ {
+  "id": "xl-mysql-089",
+  "category": "数据库",
+  "title": "讲一下binlog",
+  "answer": "<p>MySQL 在完成一条更新操作后，Server 层还会生成一条 binlog，等之后事务提交的时候，会将该事务执行过程中产生的 binlog 从事务缓存写入 binlog 文件，binlog 是 MySQL 的 Server 层实现的日志，所有存储引擎都可以使用。</p> <p>binlog 是追加写，写满一个文件，就创建一个新的文件继续写，不会像 redo log 那样循环覆盖，不过旧文件会根据保留策略清理。它保存的是数据库变更事件，不是数据库的全量备份，通常用于主从复制，以及配合全量备份做时间点恢复；</p> <p>binlog 文件是记录了所有数据库表结构变更和表数据修改的日志，不会记录查询类的操作，比如 SELECT 和 SHOW 操作。</p> <p>binlog 有 3 种格式类型，分别是 STATEMENT、<strong>ROW（MySQL 5.7.7 及之后的默认格式）</strong>、MIXED，区别如下：</p> <ul><li>STATEMENT：主要记录修改数据的 SQL，从库重新执行这些语句。日志通常较小，但 UUID() 等不确定性函数、部分依赖执行顺序的语句可能导致主从结果不同。不能把所有时间函数都归为不安全，比如 NOW() 可以结合日志中的时间信息保持一致。</li> <li>ROW：记录行的变更，例如更新前后的行信息，具体记录哪些列还受到 binlog_row_image 等配置影响。从库根据行事件应用变化，不需要重新计算主库的表达式，因此一致性更好；不过大批量修改会生成较多日志。ROW 属于行级逻辑日志，不能因为它不记录原 SQL，就把它当成 redo 那样的数据页物理日志。MySQL 5.7.7 起默认格式是 ROW。</li> <li>MIXED：包含了 STATEMENT 和 ROW 模式，它会根据不同的情况自动使用 ROW 模式和 STATEMENT 模式；</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#讲一下binlog"
+ },
+ {
+  "id": "xl-mysql-090",
+  "category": "数据库",
+  "title": "UndoLog日志的作用是什么？",
+  "answer": "<p>undo log 是一种用于撤销回退的日志，<strong>它保证了事务的</strong> <strong>ACID 特性中的原子性</strong>（Atomicity）。</p> <p>在事务没提交之前，MySQL 会先记录更新前的数据到 undo log 日志文件里面，当事务回滚时，可以利用 undo log 来进行回滚。如下图：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717920811388-2146eb90-98bd-4b2d-b6a8-9c207fbdacc4.png\" alt=\"img\"></p> <p>每当 InnoDB 引擎对一条记录进行操作（修改、删除、新增）时，要把回滚时需要的信息都记录到 undo log 里，比如：</p> <ul><li>在<strong>插入</strong>一条记录时，要把这条记录的主键值记下来，这样之后回滚时只需要把这个主键值对应的记录<strong>删掉</strong>就好了；</li> <li>在<strong>删除</strong>一条记录时，要把这条记录中的内容都记下来，这样之后回滚时再把由这些内容组成的记录<strong>插入</strong>到表中就好了；</li> <li>在<strong>更新</strong>一条记录时，要把被更新的列的旧值记下来，这样之后回滚时再把这些列<strong>更新为旧值</strong>就好了。</li></ul> <p>回滚时，InnoDB 根据 undo 记录撤销修改，效果可以理解成做反向操作，但并不是给客户端重新执行一条相反的 SQL。</p> <p>undo 的另一个作用是支持 MVCC：当最新版本对当前 Read View 不可见时，可以沿 undo 版本链重建旧版本。因此，更新或删除产生的 undo 不是事务一提交就全部删除，还需要等不再被旧快照使用后，由 purge 清理。undo 页本身的修改也受到 redo 保护。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#undolog日志的作用是什么"
+ },
+ {
+  "id": "xl-mysql-091",
+  "category": "数据库",
+  "title": "有了undolog为啥还需要redolog呢？",
+  "answer": "<p>Buffer Pool 是提高了读写效率没错，但是问题来了，Buffer Pool 是基于内存的，而内存总是不可靠，万一断电重启，还没来得及落盘的脏页数据就会丢失。</p> <p>为了防止断电导致数据丢失的问题，当有一条记录需要更新的时候，InnoDB 引擎就会先更新内存（同时标记为脏页），并把页的修改记录到 redo log 中。此时完成的是内存里的修改，不等于事务已经持久化提交。</p> <p>后续，InnoDB 引擎会在适当的时候，由后台线程将缓存在 Buffer Pool 的脏页刷新到磁盘里，这就是 <strong>WAL （Write-Ahead Logging）技术</strong>。</p> <p><strong>WAL 的关键是：数据页写回磁盘之前，对应的 redo 必须先持久化</strong>。事务提交是否需要等待 redo 刷盘，则取决于刷盘配置；内存里的数据页可以先修改，不需要等日志刷盘后才修改内存。</p> <p>过程如下图：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717920899043-30125c0d-bd83-4ca7-9784-07b70c362168.png\" alt=\"img\"></p> <p>redo log 是物理日志，记录了某个数据页做了什么修改，比如<strong>对 XXX 表空间中的 YYY 数据页 ZZZ 偏移量的地方做了AAA 更新</strong>，每当执行一个事务就会产生这样的一条或者多条物理日志。</p> <p>在事务提交时，只要先将 redo log 持久化到磁盘即可，可以不需要等到将缓存在 Buffer Pool 里的脏页数据持久化到磁盘。</p> <p>当系统崩溃时，如果对应 redo 已经持久化，就可以重放日志恢复数据页。不过，redo 中也可能有未提交事务的修改，恢复过程中还需要通过 undo 回滚这些事务，不能把重放出来的所有变化都直接当成已提交数据。</p> <p>redo log 和 undo log 这两种日志是属于 InnoDB 存储引擎的日志，它们的区别在于：</p> <ul><li>redo log 记录数据页发生的修改，用来重做这些修改，主要解决崩溃恢复和持久性问题；</li> <li>undo log 记录撤销某次修改所需的信息，用来回滚和重建旧版本，主要解决原子性和 MVCC 问题；</li></ul> <p>可以把恢复过程理解为：先利用 redo 恢复数据页，再根据事务最终状态，利用 undo 撤销未提交事务。已提交事务的修改保留下来，未提交事务的修改被回滚，如下图：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717920935536-45ceca35-c79c-48eb-a240-96d580e399b5.png\" alt=\"img\"></p> <p>所以，在 redo 按要求持久化的前提下，再通过 WAL 技术，InnoDB 才能保证异常重启后恢复之前已提交的修改，这个能力称为 <strong>crash-safe</strong>（崩溃恢复）。可以看出来， <strong>redo log 保证了事务四大特性中的持久性</strong>。</p> <p>写入 redo log 的方式使用了追加操作， 所以磁盘操作是<strong>顺序写</strong>，而写入数据需要先找到写入位置，然后才写到磁盘，所以磁盘操作是<strong>随机写</strong>。</p> <p>磁盘的「顺序写 」比「随机写」 高效的多，因此 redo log 写入磁盘的开销更小。</p> <p>针对「顺序写」为什么比「随机写」更快这个问题，可以比喻为你有一个本子，按照顺序一页一页写肯定比写一个字都要找到对应页写快得多。</p> <p>可以说这是 WAL 技术的另外一个优点：<strong>把事务提交时的大量数据页随机写，转成较小的 redo 顺序写</strong>，提升语句的执行性能。数据页后续仍然需要刷盘，不是完全没有随机写了。这是因为 MySQL 的写操作并不是立刻更新到磁盘上，而是先记录在日志上，然后在合适的时间再更新到磁盘上 。</p> <p>至此， 针对为什么需要 redo log 这个问题我们有两个答案：</p> <ul><li><strong>实现事务的持久性，让 MySQL 有 crash-safe 的能力</strong>，在日志按要求持久化的前提下，异常重启后可以恢复已提交的修改；</li> <li><strong>将写操作从「随机写」变成了「顺序写」</strong>，提升 MySQL 写入磁盘的性能。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#有了undolog为啥还需要redolog呢"
+ },
+ {
+  "id": "xl-mysql-092",
+  "category": "数据库",
+  "title": "redo log怎么保证持久性的？",
+  "answer": "<p>核心是 <strong>WAL + redo 持久化 + 崩溃恢复</strong>，不是因为日志顺序写，就自动保证不会丢数据。</p> <ol><li>修改数据页时生成 redo，数据页刷盘前，相关 redo 必须先持久化。</li> <li>当 <code>innodb_flush_log_at_trx_commit = 1</code> 时，事务提交需要等待相关 redo 刷到持久化存储，而不用等所有脏页都刷盘。</li> <li>崩溃重启后，从 checkpoint 对应的位置开始恢复，通过页的 LSN 判断哪些修改需要重放，再回滚未提交事务。</li></ol> <p>redo 顺序写和组提交主要是为了减少 I/O 成本；真正决定提交后故障时能否保住数据的，是日志有没有按要求持久化。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#redo-log怎么保证持久性的"
+ },
+ {
+  "id": "xl-mysql-093",
+  "category": "数据库",
+  "title": "能不能只用binlog不用redo log？",
+  "answer": "<p>对于 InnoDB，不能直接用 binlog 替代 redo log 完成崩溃恢复。</p> <p>binlog 记录的是数据库的逻辑变更，主要用于复制和时间点恢复，并不负责记录 InnoDB 数据页的具体修改、刷盘进度和 checkpoint。崩溃时，不同数据页可能处于不同的刷盘状态，不能简单再执行一遍 binlog 就修复这些页。</p> <p>redo 则服务于存储引擎的数据页恢复。两者可以这样区分：<strong>redo 帮助数据库恢复自身，binlog 帮助复制变更或配合备份恢复历史数据</strong>。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#能不能只用binlog不用redo-log"
+ },
+ {
+  "id": "xl-mysql-094",
+  "category": "数据库",
+  "title": "binlog 两阶段提交过程是怎么样的？",
+  "answer": "<p>事务提交涉及 redo log 和 binlog 两套日志。如果没有协调机制，一份日志已经确认提交，另一份还没完成，数据库又突然崩溃，就可能让主库恢复出来的数据和从库根据 binlog 复制的数据不一致。</p> <p>在 MySQL 的 InnoDB 存储引擎中，开启 binlog 的情况下，MySQL 会同时维护 binlog 日志与 InnoDB 的 redo log，为了保证这两个日志的一致性，MySQL 使用了<strong>内部 XA 事务</strong>（是的，也有外部 XA 事务，跟本文不太相关，我就不介绍了），内部 XA 事务由 binlog 作为协调者，存储引擎是参与者。</p> <p>当客户端执行 COMMIT，或者自动提交事务时，MySQL 通过内部事务协调机制，<strong>分两阶段完成 redo 与 binlog 的提交</strong>，如下图：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725231904598.png\" alt=\"image-20240725231904598\"></p> <p>从图中可看出，事务的提交过程有两个阶段，就是<strong>将 redo log 的写入拆成了两个步骤：prepare 和 commit，中间再穿插写入binlog</strong>，具体如下：</p> <ul><li><strong>prepare 阶段</strong>：将 XID（内部 XA 事务的 ID） 写入到 redo log，同时将 redo log 对应的事务状态设置为 prepare，然后将 redo log 持久化到磁盘（innodb_flush_log_at_trx_commit = 1 的作用）；</li> <li><strong>commit 阶段</strong>：把 XID 写入到 binlog，然后将 binlog 持久化到磁盘（sync_binlog = 1 的作用），接着调用引擎的提交事务接口，将 redo log 状态设置为 commit，commit 标记不必再为这个事务单独同步刷盘，因为只要 binlog 写磁盘成功，就算 redo log 的状态还是 prepare 也没有关系，一样会被认为事务已经执行成功；</li></ul> <p>我们来看看在两阶段提交的不同时刻，MySQL 异常重启会出现什么现象？下图中有时刻 A 和时刻 B 都有可能发生崩溃：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725231850469.png\" alt=\"image-20240725231850469\"></p> <p>不管是时刻 A（redo log 已经写入磁盘， binlog 还没写入磁盘），还是时刻 B （redo log 和 binlog 都已经写入磁盘，还没写入 commit 标识）崩溃，<strong>此时的 redo log 都处于 prepare 状态</strong>。</p> <p>在 MySQL 重启后会按顺序扫描 redo log 文件，碰到处于 prepare 状态的 redo log，就拿着 redo log 中的 XID 去 binlog 查看是否存在此 XID：</p> <ul><li><strong>如果 binlog 中没有当前内部 XA 事务的 XID，说明 redolog 完成刷盘，但是 binlog 还没有刷盘，则回滚事务</strong>。对应时刻 A 崩溃恢复的情况。</li> <li><strong>如果 binlog 中存在这个 XID 对应的完整、有效事务，说明可以确认提交，则完成引擎提交</strong>。对应时刻 B 崩溃恢复的情况。</li></ul> <p>可以看到，<strong>对于处于 prepare 阶段的 redo log，即可以提交事务，也可以回滚事务，这取决于是否能在 binlog 中查找到与 redo log 相同的 XID</strong>，如果有就提交事务，如果没有就回滚事务。这样就可以保证 redo log 和 binlog 这两份日志的一致性了。</p> <p>所以说，<strong>在 redo prepare 已持久化的前提下，完整事务的 binlog 持久化成功，是恢复时决定提交的重要依据</strong>。不能把仅写入 binlog cache，或者只写到操作系统缓存、还没有按要求刷盘，直接当成严格的持久化保证。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#binlog-两阶段提交过程是怎么样的"
+ },
+ {
+  "id": "xl-mysql-095",
+  "category": "数据库",
+  "title": "update语句的具体执行过程是怎样的？",
+  "answer": "<p>以 <code>UPDATE t_user SET name = 'xiaolin' WHERE id = 1</code> 为例，可以按下面这个过程回答。这里假设使用 InnoDB、开启 binlog，刷盘配置为 <code>innodb_flush_log_at_trx_commit = 1</code>、<code>sync_binlog = 1</code>，先不展开组提交。</p> <ol><li>SQL 经过连接器、解析器、预处理和优化器，执行器选择按主键查找的计划。事务如果已经显式开启就沿用，否则在自动提交模式下作为语句事务执行。</li> <li>InnoDB 按主键定位记录，页不在 Buffer Pool 中就从磁盘加载，并在读取待更新记录时申请相应的排他锁。即使新旧值相同，没有真正修改，也不代表查询过程一定没加锁。</li> <li>如果需要修改，先生成 undo，记录撤销本次更新所需的信息。</li> <li>修改 Buffer Pool 中的记录，把页标记为脏页，同时生成相应 redo；undo 页的修改也会生成 redo。数据页不需要此时就刷回磁盘。</li> <li>Server 层生成对应 binlog 事件，暂存在事务的 binlog cache 中。具体事件内容取决于 binlog 格式，大事务缓存不足时还可能使用临时文件。</li> <li>提交事务时，先让 InnoDB 进入 prepare 阶段，并按配置持久化 redo；再写入并持久化 binlog；最后完成 InnoDB 的 commit，释放事务锁。</li> <li>返回执行结果。脏页后续由后台线程等机制刷回磁盘，刷页前必须保证相关 redo 已经持久化。</li></ol> <p>如果这条 UPDATE 位于显式事务中，执行成功只是其中一个步骤，提交阶段要等客户端执行 COMMIT 才发生。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/2722cfa5_update-transaction-log-pipeline.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#update语句的具体执行过程是怎样的"
+ },
+ {
+  "id": "xl-mysql-096",
+  "category": "数据库",
+  "title": "MySQL是如何保障数据不丢失的？",
+  "answer": "<p>主要通过 redo、WAL 和正确的刷盘配置保障已提交事务的持久性；开启 binlog 时，还要保证两份日志的提交一致。</p> <ul><li><code>innodb_flush_log_at_trx_commit = 1</code>：事务提交时等待相关 redo 持久化。</li> <li><code>sync_binlog = 1</code>：binlog 提交组需要同步到持久化存储。</li> <li>两阶段提交：保证崩溃恢复时 redo 和 binlog 对事务的提交判断一致。</li> <li>doublewrite：在数据页发生部分写入时，提供完整页副本帮助恢复。</li></ul> <p>面试里常说的「双 1」，就是前面两个刷盘参数都设为 1。它依赖操作系统和存储设备正确兑现持久化请求，也不能替代备份和复制。单机掉电后的事务恢复、主库磁盘彻底损坏后的恢复、主从切换时是否丢事务，是不同的问题，需要分别考虑。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql是如何保障数据不丢失的"
+ },
+ {
+  "id": "xl-mysql-097",
+  "category": "数据库",
+  "title": "RedoLog是在内存里吗？",
+  "answer": "<p>内存和磁盘里都有对应部分。</p> <p>事务执行时，生成的 redo 先进入内存中的 redo log buffer，再写入磁盘上的 redo 文件。写到文件还可能只到操作系统缓存，要真正持久化，需要完成相应的同步刷盘。</p> <p>redo 也不只在提交时才写出。后台线程、日志缓冲区空间不足等情况都可能触发写出或刷盘，所以磁盘上的 redo 可以包含尚未提交事务的修改。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#redolog是在内存里吗"
+ },
+ {
+  "id": "xl-mysql-098",
+  "category": "数据库",
+  "title": "innodb_flush_log_at_trx_commit 的 0、1、2 有什么区别？",
+  "answer": "<p>这三个值主要控制事务提交时，redo 要写到哪一步：</p> <ul><li><strong>0</strong>：提交时不要求立即写出或刷盘，通常由后台线程周期性把 redo 从内存写到文件，再同步到磁盘。mysqld 进程崩溃就可能丢失尚未写出的 redo。</li> <li><strong>1</strong>：提交时要求相关 redo 写入并刷盘，持久性保障最强，也是默认值。组提交可以让多个事务共用一次刷盘。</li> <li><strong>2</strong>：提交时要求写入文件，但不要求马上同步到磁盘，通常由后台周期性刷盘。单独的 mysqld 进程崩溃一般能保住已写入操作系统缓存的部分，操作系统崩溃或掉电仍可能丢失。</li></ul> <p>后台刷盘周期默认通常是 1 秒，也受 <code>innodb_flush_log_at_timeout</code> 和调度影响，<strong>不能把 0、2 理解成严格最多只丢 1 秒数据</strong>。要在性能和持久性之间根据业务做取舍。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/2092d50e_redo-flush-policies.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#innodb-flush-log-at-trx-commit-的-0、1、2-有什么区别"
+ },
+ {
+  "id": "xl-mysql-099",
+  "category": "数据库",
+  "title": "redo log 写满了怎么办？checkpoint 是什么？",
+  "answer": "<p>redo 的容量有限，会循环使用。已经写入的位置不断向前推进，checkpoint 表示恢复需要保留的日志起点，其之前的修改已经有相应的数据页持久化保障，可以逐步回收日志空间。</p> <p>如果新的 redo 快追上不能覆盖的旧日志，就需要加快刷脏页、推进 checkpoint；空间仍然不足时，写入会受到阻塞。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/03753729_redo-checkpoint-capacity.png\" alt=\"\"></p> <p>所以，<strong>redo 空间太小可能导致频繁刷脏页，磁盘刷页太慢也可能让写入出现抖动</strong>。扩大 redo 容量可以增加缓冲余地，但不能解决持续写入速度超过磁盘刷页能力的问题。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "原理",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#redo-log-写满了怎么办-checkpoint-是什么"
+ },
+ {
+  "id": "xl-mysql-100",
+  "category": "数据库",
+  "title": "什么是组提交？为什么能提高性能？",
+  "answer": "<p>如果每个事务都单独对 redo、binlog 做一次同步刷盘，磁盘同步开销会很大。组提交就是把一批事务的日志写入和刷盘工作合并，让多个事务共享一次或较少次数的同步操作。</p> <p>比如 10 个事务接近同时提交，不必机械地分别执行 10 次相同的 fsync，可以在符合提交顺序和两阶段提交要求的前提下成批处理。</p> <p><strong>组提交主要减少的是同步次数，不是取消持久化保证</strong>。所以，使用「双 1」也不代表每个事务都必须各自触发一次独立的刷盘。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/4c5d0719_transaction-group-commit.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "原理",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#什么是组提交-为什么能提高性能"
+ },
+ {
+  "id": "xl-mysql-101",
+  "category": "数据库",
+  "title": "为什么要写RedoLog，而不是直接写到B+树里面？",
+  "answer": "<p>因为 redolog 写入磁盘是顺序写，而 b+树里数据页写入磁盘是随机写，顺序写的性能会比随机写好，这样可以提升事务提交的效率。</p> <p>最重要的是redolog具备故障恢复的能力，Redo Log 记录的是物理级别的修改，包括页的修改，如插入、更新、删除操作在磁盘上的物理位置和修改内容。例如，当执行一个更新操作时，Redo Log 会记录修改的数据页的地址和更新后的数据，而不是 SQL 语句本身。</p> <p>在脏页实际写回磁盘之前，相关 redo 必须先持久化。重启时利用 redo 恢复数据页，再根据事务状态回滚未提交事务、保留已提交修改。内存中的页可以先修改，这和 WAL 的要求并不矛盾。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#为什么要写redolog-而不是直接写到b-树里面"
+ },
+ {
+  "id": "xl-mysql-102",
+  "category": "数据库",
+  "title": "mysql 两次写（double write buffer）了解吗？",
+  "answer": "<p>doublewrite 主要解决的是<strong>数据页的部分写入问题</strong>，不是用来代替 redo。</p> <p>InnoDB 的页默认是 16 KB，但一次刷页并不天然是原子的。如果写到一半突然断电，磁盘上的页就可能一部分是旧内容、一部分是新内容，这叫部分写入，也叫 torn page。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737301125998-6ecd9068-6603-4932-81c4-b54cf2984fb6.png\" alt=\"img\"></p> <p>图里用多个小块表示一页被分段写入，这是帮助理解，并不是说所有系统都固定按 4 个 4 KB 块完成刷页。关键是底层不一定保证整页原子写入。</p> <p>doublewrite 的过程可以理解成先保存一份完整副本，再写最终位置：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737302055987-847a5e01-f883-4b5c-8c36-26ffad1f6f69.png\" alt=\"img\"></p> <ol><li>先把准备刷出的脏页成批写入磁盘上的双写区域，并按要求持久化。</li> <li>再把这些页写到各自的数据文件位置。</li> <li>如果写数据文件期间崩溃，恢复时先从双写区域找完整页副本修复损坏页，再利用 redo 重放后续修改。</li></ol> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737301211946-81988282-fb5d-44f9-b8d8-94f7396db723.png\" alt=\"img\"></p> <p>老版本的双写区域位于系统表空间，常见实现有约 2 MB 的区域；从 MySQL 8.0.20 开始，改用独立的 doublewrite 文件。面试时说明机制就好，不要把某个老版本的大小和位置当成所有版本都固定的配置。</p> <p>这里的「两次写」是<strong>先写双写副本，再写最终数据页</strong>，不是保证一批页面要么全部写入、要么全部没写。它保证的是发生部分写入时，有机会找到完整的页来恢复。</p> <blockquote><p>为什么 redo log 无法代替 doublewrite？</p></blockquote> <p>redo 主要记录对页的修改，并不是每次都保存完整页镜像。页的基础结构如果已经损坏，只靠增量修改不能可靠地修复，所以需要先从 doublewrite 找到完整副本，再进行 redo 恢复。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "日志",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql-两次写-double-write-buffer-了解吗"
+ },
+ {
+  "id": "xl-mysql-103",
+  "category": "数据库",
+  "title": "mysql的explain有什么作用？",
+  "answer": "<p>explain 是查看 sql 的执行计划，主要用来分析 sql 语句的执行过程，比如有没有走索引，有没有额外排序，有没有索引覆盖等等。</p> <p>如下图，就是一个没有使用索引，并且是一个全表扫描的查询语句。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1720420604941-9fafd933-6a90-4f02-a23c-0e577790f040.webp\" alt=\"img\"></p> <p>对于执行计划，参数有：</p> <ul><li>possible_keys 字段表示可能用到的索引；</li> <li>key 字段表示实际用的索引，如果这一项为 NULL，说明没有使用索引；</li> <li>key_len 表示本次访问使用的索引键长度，单位是字节，可以辅助判断用了联合索引的哪些前缀列，但也受字符集、NULL 标记等影响；</li> <li>rows 表示优化器估算需要扫描的行数，不是实际扫描行数；</li> <li>filtered 表示估算经过条件过滤后保留的百分比，rows × filtered / 100 可以辅助估算传递给下一步的行数。</li> <li>type 表示数据扫描类型，我们需要重点看这个。</li></ul> <p>type 字段就是描述了找到所需数据时使用的扫描方式是什么，常见扫描类型按定位范围从大到小，可以大致这样理解，但<strong>不能仅根据 type 就断言整条 SQL 谁快谁慢</strong>：</p> <ul><li>ALL（全表扫描）：扫描整张表。对于少量记录的点查，大表全扫描通常成本很高；不过小表，或者需要读取大部分数据的查询，全表扫描也可能是合理选择。</li> <li>index（全索引扫描）：扫描整棵选中的索引。它仍可能扫描很多记录，不过索引通常比完整表窄，如果能够覆盖查询或提供所需顺序，也可能比全表扫描更划算，不能一概认为应该避免。</li> <li>range（索引范围扫描）：通过索引访问一个或多个范围，常见于 &lt;、&gt;、IN、BETWEEN 等条件。它比扫描整个索引更有针对性，不过范围过大时仍然可能读取很多记录。</li> <li>ref（非唯一索引查找）：通过非唯一索引，或者唯一索引的非唯一前缀做等值查找，可能匹配多条记录。匹配数量取决于数据分布，重复值很多时也可能扫描大量记录。</li> <li>eq_ref（唯一索引扫描）：eq_ref 类型是使用主键或唯一索引时产生的访问方式，通常使用在多表联查中。比如，对两张表进行联查，关联条件是两张表的 user_id 相等，且 user_id 是唯一索引，那么使用 EXPLAIN 进行执行计划查看的时候，type 就会显示 eq_ref。</li> <li>const（常量表访问）：通过完整主键或非空唯一键与常量比较，最多匹配一行，比如 <code>SELECT name FROM product WHERE id = 1</code>。eq_ref 则通常是在关联查询中，针对前面每一行组合做一次唯一键查找。</li></ul> <p>extra 显示的结果，这里说几个重要的参考指标：</p> <ul><li>Using filesort：需要额外排序，没能直接利用索引取得目标顺序，常见于 ORDER BY。名字里虽然有 file，但排序可能完全在内存里完成，不代表一定发生磁盘排序；结果集较小时，额外排序也不一定是瓶颈。</li> <li>Using temporary：需要临时表保存中间结果，常见于部分 GROUP BY、DISTINCT 等操作。临时表可能在内存中，也可能落到磁盘，要结合数据量和实际耗时判断。</li> <li>Using index：索引可以提供查询所需的列，也就是覆盖索引。它和 Using index condition 不同，后者表示索引下推，查询仍可能需要回表。</li></ul> <p><strong>普通 EXPLAIN 主要展示估算计划，不会真正执行查询来统计耗时</strong>。MySQL 8.0.18 及之后可以用 EXPLAIN ANALYZE 查看实际执行时间、行数和循环次数，但它会真的执行被分析的查询，使用时要考虑查询本身的开销。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "性能调优",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql的explain有什么作用"
+ },
+ {
+  "id": "xl-mysql-104",
+  "category": "数据库",
+  "title": "怎么查看是否有走索引？",
+  "answer": "<p>在 SQL 语句前加 EXPLAIN 关键字，执行后会返回一张执行计划表，重点看几个关键字段就能判断是否走索引。比如要查询用户表中 id 为 100 的用户，先写 EXPLAIN + 目标 SQL：</p> <pre><code>EXPLAIN SELECT * FROM user WHERE id = 100;\n</code></pre><p>执行后看 type、key 和 Extra：key 显示实际选择的索引名，比如 PRIMARY；type 为 const、eq_ref、ref、range，通常说明通过索引定位或范围扫描，type 为 index 则是全索引扫描，虽然读了索引，也可能扫描很多记录。</p> <p>如果 type 为 ALL，且 key 为 NULL，通常是全表扫描。不过 key 为 NULL 本身不能直接推出一定扫描了整张表，还可能是优化器判断无需访问表。分析性能时还要看 rows、filtered，不能只看是否「走索引」。</p> <p>再比如如果查询条件是 name 字段，且 name 建了普通索引，执行：</p> <pre><code>EXPLAIN SELECT * FROM user WHERE name = '张三';\n</code></pre><p>如果 key 字段显示 name 对应的索引名，type 是 ref，就说明走了索引；如果 key 是 NULL，可能是因为 name 字段的索引选择性太差（比如大部分值都相同），或者查询条件导致索引失效（比如用了函数操作 name 字段，像 <code>WHERE SUBSTR (name,1,1) = ' 张 '</code>）。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "性能调优",
+   "工具命令"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#怎么查看是否有走索引"
+ },
+ {
+  "id": "xl-mysql-105",
+  "category": "数据库",
+  "title": "怎么查看表的索引？",
+  "answer": "<p>最直接的是<code>SHOW INDEX</code>命令，语法简单，能清晰列出表的所有索引信息，包括索引名、索引类型、对应字段、是否主键等。比如查看 user 表的索引，执行：</p> <pre><code>SHOW INDEX FROM user;\n</code></pre><p>执行后会返回多列结果，关键信息很直观：Key_name 是索引名称（主键索引默认叫 PRIMARY），Column_name 是索引对应的字段，Index_type 是索引类型（比如 BTREE、HASH），Non_unique 字段为 0 表示唯一索引（主键索引也是唯一索引），为 1 表示普通非唯一索引。</p> <p>如果想更简洁地查看索引名称和对应字段，也可以用<code>SHOW KEYS</code>，它和<code>SHOW INDEX</code>功能完全一致，只是写法不同：</p> <pre><code>SHOW KEYS FROM user;\n</code></pre><p>另外，MySQL 的信息_schema 数据库中存储了所有表的元数据，通过查询<code>STATISTICS</code>表能获取更详细的索引信息，适合需要筛选或批量查询的场景。比如查询 user 表的索引，执行：</p> <pre><code>SELECT INDEX_NAME, COLUMN_NAME, INDEX_TYPE, NON_UNIQUE \nFROM information_schema.STATISTICS \nWHERE TABLE_SCHEMA = '你的数据库名' AND TABLE_NAME = 'user';\n</code></pre><p>这里需要替换成实际的数据库名，结果会和<code>SHOW INDEX</code>一致，但支持更灵活的条件查询，比如只查唯一索引（加<code>AND NON_UNIQUE = 0</code>）。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "性能调优",
+   "工具命令"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#怎么查看表的索引"
+ },
+ {
+  "id": "xl-mysql-106",
+  "category": "数据库",
+  "title": "给你张表，发现查询速度很慢，你有那些解决方案",
+  "answer": "<p>我会先定位耗时在哪，再决定优化方式，不会一上来就加索引或者分库分表。</p> <blockquote><p>先确认慢在哪里</p></blockquote> <ul><li>通过慢查询日志、Performance Schema 等找到具体 SQL，记录实际参数、执行频率、耗时和扫描行数，避免只拿一个命中数据很少的参数做判断。</li> <li>看是不是锁等待，结合进程状态、事务和锁等待信息排查。SQL 等锁很久，和执行计划扫描很慢，需要不同的处理方式。</li> <li>检查数据库当时的 CPU、I/O、连接数和 Buffer Pool 等情况，判断是个别 SQL 问题，还是整体资源已经接近瓶颈。</li></ul> <blockquote><p>再分析执行计划和 SQL</p></blockquote> <ul><li>用 EXPLAIN 看扫描方式、实际索引、估算行数、回表、排序和临时表；必要时用 EXPLAIN ANALYZE 对比实际行数与估算，注意它会真正执行查询。</li> <li>根据 WHERE、JOIN、ORDER BY 设计合适的联合索引，尽量使用覆盖索引，避免对普通索引列做不必要的函数和类型转换。</li> <li>只查询需要的列和行，避免无条件 SELECT *。联表查询要关注过滤后的数据量、连接算法和关联字段索引，不能只根据表的总行数背「小表驱动大表」。</li> <li>深分页可以使用游标分页，或者先通过覆盖索引定位少量主键再回表；大批量更新可以在业务允许时分批处理。</li> <li>如果估算明显失真，可以评估更新统计信息，再对比计划和实际效果。</li></ul> <blockquote><p>最后考虑结构和架构</p></blockquote> <ul><li>高频热点查询可以考虑缓存或汇总表，同时设计缓存一致性、失效和热点保护方案。</li> <li>大字段和低频字段可以结合访问模式拆分，减少常用查询读取的数据量。</li> <li>明确单机资源或写入吞吐已经成为瓶颈后，再评估读写分离、数据归档、分库分表。不能仅因为「超过千万行」就认为必须拆表。</li></ul> <p>优化后要用接近真实的数据和参数验证耗时、扫描量以及写入影响，防止一个查询变快，却把其他高频查询或更新拖慢。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "性能调优",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#给你张表-发现查询速度很慢-你有那些解决方案"
+ },
+ {
+  "id": "xl-mysql-107",
+  "category": "数据库",
+  "title": "深分页为什么慢？怎么优化？",
+  "answer": "<p>比如这条 SQL：</p> <pre><code class=\"language-sql\">SELECT * FROM orders ORDER BY id LIMIT 1000000, 20;\n</code></pre><p>即使按主键扫描，MySQL 也通常要读过前面的 100 万条候选记录，再丢弃它们，最后返回 20 条。偏移量越大，白做的扫描越多；如果还涉及回表和排序，成本可能更高。</p> <blockquote><p>方式一：游标分页</p></blockquote> <p>把上一页最后一条记录的 ID 传回来，从这个位置继续查：</p> <pre><code class=\"language-sql\">SELECT * FROM orders\nWHERE id &gt; 1000000\nORDER BY id\nLIMIT 20;\n</code></pre><p>这里的 1000000 是上一页末尾的实际 ID，<strong>不能把第 100 万条记录直接当成 id = 1000000</strong>，因为自增 ID 可能不连续。游标分页适合顺序翻页，不适合直接跳到任意页。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/ecc12db6_offset-vs-cursor-pagination.png\" alt=\"\"></p> <p>如果按创建时间倒序，要加唯一字段处理同一时间的多条记录，比如建 <code>(created_at, id)</code> 索引，游标同时带上这两个值：</p> <pre><code class=\"language-sql\">SELECT * FROM orders\nWHERE created_at &lt; '2024-08-01 12:00:00'\n   OR (created_at = '2024-08-01 12:00:00' AND id &lt; 1000000)\nORDER BY created_at DESC, id DESC\nLIMIT 20;\n</code></pre><blockquote><p>方式二：先查主键，再回表</p></blockquote> <p>如果必须按页码跳页，可以先用较窄的索引扫描得到目标主键，再关联获取完整记录：</p> <pre><code class=\"language-sql\">SELECT o.*\nFROM orders o\nJOIN (\n    SELECT id FROM orders\n    ORDER BY created_at DESC, id DESC\n    LIMIT 1000000, 20\n) page ON o.id = page.id\nORDER BY o.created_at DESC, o.id DESC;\n</code></pre><p>这个方案仍然要扫描前面的偏移量，只是可以通过 <code>(created_at, id)</code> 的覆盖扫描减少中间过程读取完整行的成本，不能把它当成完全消除了深分页开销。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/59455854_deferred-join-pagination.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "性能调优",
+   "原理",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#深分页为什么慢-怎么优化"
+ },
+ {
+  "id": "xl-mysql-108",
+  "category": "数据库",
+  "title": "ORDER BY 怎么利用索引避免排序？",
+  "answer": "<p>关键是<strong>索引中的顺序能不能直接提供查询要求的顺序</strong>。</p> <p>比如联合索引 <code>(user_id, status, created_at)</code>：</p> <pre><code class=\"language-sql\">SELECT id, created_at FROM orders\nWHERE user_id = 100 AND status = 0\nORDER BY created_at DESC\nLIMIT 20;\n</code></pre><p>user_id 和 status 都固定后，这一段索引就按 created_at 有序，可以反向扫描取得最近的记录，避免额外排序。</p> <p>如果只固定 user_id，却直接按 created_at 排序，索引中还隔着一个没有固定的 status，各个状态内部虽然按时间有序，但合起来并不是全局时间有序，通常就不能直接提供这个排序。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/d4ff7bea_composite-index-ordering.png\" alt=\"\"></p> <p>多个排序字段的方向也要和索引顺序配合，全正序或全倒序通常可以正向、反向扫描；混合 ASC、DESC 时，要结合 MySQL 8.0 的降序索引等方案判断。即使索引能够提供顺序，优化器也会比较扫描、过滤、回表和排序的总成本，不一定总选它。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "性能调优",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#order-by-怎么利用索引避免排序"
+ },
+ {
+  "id": "xl-mysql-109",
+  "category": "数据库",
+  "title": "如果Explain用到的索引不正确的话，有什么办法干预吗？",
+  "answer": "<p>先确认优化器是不是估算错了。比如数据分布变化后，可以评估执行 <code>ANALYZE TABLE</code> 更新统计信息，再比较计划和实际耗时；也可以结合查询重写、索引设计解决问题。</p> <p>如果仍需要干预，可以使用 USE INDEX、IGNORE INDEX 或 FORCE INDEX。FORCE INDEX 会把全表扫描视为成本很高，并限制候选索引，但指定索引不可用时也不是绝对不会全表扫描。</p> <p>比如：</p> <pre><code class=\"language-sql\">EXPLAIN SELECT \n    productName, buyPrice\nFROM\n    products \nFORCE INDEX (idx_buyprice)\nWHERE\n    buyPrice BETWEEN 10 AND 80\nORDER BY buyPrice; \n</code></pre><p>输出：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1715425169012-fcd6a89d-c073-4f3c-a395-c70d8045eec7.png\" alt=\"img\"></p> <p>提示指定的是索引名称，不是列名。使用前后要对比不同参数下的实际效果，数据量和分布变化后，强制使用的索引也可能变差。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "性能调优",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#如果explain用到的索引不正确的话-有什么办法干预吗"
+ },
+ {
+  "id": "xl-mysql-110",
+  "category": "数据库",
+  "title": "MySQL主从复制了解吗",
+  "answer": "<p>MySQL 的主从复制依赖于 binlog ，也就是把需要复制的数据库变更记录为二进制日志事件。复制的过程就是将 binlog 中的数据从主库传输到从库上。</p> <p>这个过程一般是<strong>异步</strong>的，也就是主库上执行事务操作的线程不会等待复制 binlog 的线程同步完成。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1721631517714-ff2f274c-763c-40ac-a80f-7d33872ca9a4.png\" alt=\"img\"></p> <p>MySQL 集群的主从复制过程梳理成 3 个阶段：</p> <ul><li><strong>写入 Binlog</strong>：主库执行数据修改，在提交阶段记录并提交相应 binlog 事务。</li> <li><strong>同步 Binlog</strong>：把 binlog 复制到所有从库上，每个从库把 binlog 写到暂存日志中。</li> <li><strong>回放 Binlog</strong>：回放 binlog，并更新存储引擎中的数据。</li></ul> <p>具体详细过程如下：</p> <ul><li>主库在事务执行过程中已经修改内存中的数据，提交时协调 redo 和 binlog，完成本地提交后即可返回客户端。普通异步复制不需要等待从库接收或执行完成。</li> <li>从库的接收线程连接主库的 binlog dump 线程，获取日志事件并写入本地 relay log。接收到日志不等于已经应用到从库数据，也不能把这个过程当成主库提交必须等待的确认。</li> <li>从库的应用线程读取 relay log，再更新自己的存储引擎数据。开启并行复制后，可以由协调线程分配给多个 worker 应用事务，不过并行程度受到事务依赖等因素限制。</li></ul> <p>主从复制可以用来做读写分离，写入走主库，允许读取稍旧数据的查询走从库。不过，普通 InnoDB 快照读本身就不一定被主库行锁阻塞，读写分离主要是分担负载。<strong>主库提交成功不代表从库马上能读到</strong>，业务必须考虑复制延迟。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "架构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#mysql主从复制了解吗"
+ },
+ {
+  "id": "xl-mysql-111",
+  "category": "数据库",
+  "title": "主从延迟都有什么处理方法？",
+  "answer": "<p>先分清两个问题：一是为什么复制追不上，二是业务怎么避免读到旧数据。</p> <blockquote><p>先定位延迟原因</p></blockquote> <ul><li><strong>主库大事务或批量修改</strong>：从库接收到已提交事务后，需要较长时间应用。</li> <li><strong>从库资源不足</strong>：CPU、磁盘 I/O 或 Buffer Pool 不够，回放比主库写入慢。</li> <li><strong>从库查询或锁等待</strong>：重查询争抢资源，或者应用线程被长事务、DDL 阻塞。</li> <li><strong>网络或复制线程异常</strong>：日志传输变慢，或者复制报错停止，不能只当成正常延迟等待。</li> <li><strong>并行复制能力不足</strong>：事务可以并行的程度低，增加 worker 也不一定能线性提速。</li></ul> <p>可以通过 <code>SHOW REPLICA STATUS</code> 和复制相关的 Performance Schema 信息，区分日志是否还没接收到，还是已经收到、但应用不完。旧版本对应 <code>SHOW SLAVE STATUS</code>。Seconds_Behind_Source 等时间指标适合辅助监控，但显示为 0 也不能单独证明从库已经应用了某个指定业务事务。</p> <p>处理时，可以拆分允许拆分的大事务、优化从库 SQL 和硬件、排查锁等待、合理配置并行复制。<strong>把大事务继续放到主库执行，并不能消除它在从库上的回放成本</strong>。</p> <blockquote><p>业务怎么避免读旧数据</p></blockquote> <ul><li><strong>关键查询走主库</strong>：支付状态、下单后的订单确认等需要读到最新提交的查询，可以直接路由到主库。</li> <li><strong>写后短时间读主库</strong>：对刚完成写入的用户或请求，临时把相关读取切到主库，降低读旧数据的概率，不过固定时间窗口不是严格保证。</li> <li><strong>等待指定事务应用</strong>：使用 GTID 时，可以获取本次写入事务的 GTID，在从库执行 <code>WAIT_FOR_EXECUTED_GTID_SET()</code> 等待，成功后再建立新的读取快照；超时就回退主库或返回可重试结果。</li> <li><strong>接受最终一致性</strong>：报表、非关键列表等允许短暂延迟的场景，可以继续读从库，配合延迟监控和异常从库摘除。</li></ul> <p>不能靠「写完 sleep 一秒」就断言数据同步完成，要按业务的一致性要求选择方案。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/cfacca49_gtid-write-read-consistency.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "架构",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#主从延迟都有什么处理方法"
+ },
+ {
+  "id": "xl-mysql-112",
+  "category": "数据库",
+  "title": "异步复制和半同步复制有什么区别？",
+  "answer": "<ul><li><strong>异步复制</strong>：主库本地提交成功就可以响应客户端，不需要等从库。延迟较低，但主库发生故障时，已经返回成功的事务可能还没复制到从库，切换后可能丢失。</li> <li><strong>半同步复制</strong>：主库在返回提交成功前，通常需要等至少一个半同步从库确认已接收事务日志，并写入、刷盘到 relay log。</li></ul> <p>半同步等待的是日志接收和持久化确认，<strong>不是等待从库把事务应用到数据表</strong>，所以它仍不能保证提交后立即在从库读到新值。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/c7481cff_asynchronous-vs-semisync.png\" alt=\"\"></p> <p>另外，半同步等待超过配置的超时时间后，可能退化成异步复制。故障切换时还要选择包含目标事务的从库，并确认日志应用进度，不能仅凭「开启了半同步」就认为任何切换都绝对不会丢数据。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "架构",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#异步复制和半同步复制有什么区别"
+ },
+ {
+  "id": "xl-mysql-113",
+  "category": "数据库",
+  "title": "GTID 是什么？有什么作用？",
+  "answer": "<p>GTID 是全局事务标识，可以把它理解成每个复制事务的唯一编号，常见形式是「源服务器 UUID:事务序号」。事务复制到其他节点后，仍然携带同一个 GTID。</p> <p>传统复制需要指定从某个 binlog 文件的哪个位置开始；GTID 复制可以根据从库已经执行过的事务集合，判断还缺哪些事务，让切换主库和恢复复制位置更方便，也能帮助避免重复应用同一个复制事务。</p> <p>GTID 还可以用于判断某笔事务是否已经在从库执行。例如在从库等待本次写入对应的 GTID，等待成功后再读取，就可以处理一部分写后读一致性需求。</p> <p>不过，GTID 只是标识和跟踪事务，<strong>不会自动消除主从延迟，也不是应用业务请求的幂等键</strong>。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "架构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#gtid-是什么-有什么作用"
+ },
+ {
+  "id": "xl-mysql-114",
+  "category": "数据库",
+  "title": "分表和分库是什么？有什么区别？",
+  "answer": "<p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717920650227-a78d5de2-96dc-4927-ba70-c0d14279aef3.png\" alt=\"img\"></p> <ul><li><strong>分库</strong>是把业务表或数据分散到多个数据库中，可以按业务拆，也可以按数据分片拆。如果落到不同实例或服务器上，就能分担存储、连接和读写压力；如果只是同一实例里多建几个库，仍然共享同一套物理资源。</li> <li><strong>分表</strong>是把一张表拆成多张表。按行拆叫水平分表，每张子表保存部分记录；按列拆叫垂直分表，各表通过主键关联。它们主要解决单表访问和存储方面的问题，但如果仍在同一个实例，并不会自动突破单机 CPU、I/O 等资源上限。</li></ul> <p>分库与分表可以从：垂直（纵向）和 水平（横向）两种纬度进行拆分。下边我们以经典的订单业务举例，看看如何拆分。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1717920503725-07b59f85-0928-4f27-b1d1-68a93ba8730c.png\" alt=\"img\"></p> <ul><li><strong>垂直分库</strong>：一般来说按照业务和功能的维度进行拆分，将不同业务数据分别放到不同的数据库中，核心理念 专库专用。按业务类型对数据分离，剥离为多个数据库，像订单、支付、会员、积分相关等表放在对应的订单库、支付库、会员库、积分库。垂直分库把一个库的压力分摊到多个库，提升了一些数据库性能，但并没有解决由于单表数据量过大导致的性能问题，所以就需要配合后边的分表来解决。</li> <li><strong>垂直分表</strong>：针对业务上字段比较多的大表进行的，一般是把业务宽表中比较独立的字段，或者不常用的字段拆分到单独的数据表中，是一种大表拆小表的模式。InnoDB 主要以页为单位读取和缓存数据，这样拆分以后核心表大多是访问频率较高的字段，而且字段长度也都较短，因而可以加载更多数据到内存中，减少磁盘IO，增加索引查询的命中率，进一步提升数据库性能。</li> <li><strong>水平分库</strong>：是把同一个表按一定规则拆分到不同的数据库中，每个库可以位于不同的服务器上，以此实现水平扩展，是一种常见的提升数据库性能的方式。这种方案往往能解决单库存储量及性能瓶颈问题，但由于同一个表被分配在不同的数据库中，数据的访问需要额外的路由工作，因此系统的复杂度也被提升了。</li> <li><strong>水平分表</strong>：是在<strong>同一个数据库内</strong>，把一张大数据量的表按一定规则，切分成多个结构完全相同表，而每个表只存原表的一部分数据。水平分表尽管拆分了表，但子表都还是在同一个数据库实例中，只是解决了单一表数据量过大的问题，并没有将拆分后的表分散到不同的机器上，还在竞争同一个物理机的CPU、内存、网络IO等。要想进一步提升性能，就需要将拆分后的表分散到不同的数据库中，达到分布式的效果。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "架构",
+   "对比",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#分表和分库是什么-有什么区别"
+ },
+ {
+  "id": "xl-mysql-115",
+  "category": "数据库",
+  "title": "分库分表后会遇到哪些问题？怎么选分片键？",
+  "answer": "<p>分库分表把单机压力分散了，但也把原来一个数据库里能直接完成的操作变复杂了。</p> <ul><li><strong>跨分片查询</strong>：没有分片键的查询可能需要访问多个分片，再合并、排序或聚合结果。</li> <li><strong>跨分片事务</strong>：一次操作涉及多个数据库时，单库事务不能直接保证全部成功，需要结合业务采用分布式事务或补偿等方案。</li> <li><strong>全局唯一性</strong>：各分片独立自增可能重复，跨分片唯一约束也不能靠某一个库的 UNIQUE 保证，需要分布式 ID 或额外的唯一性设计。</li> <li><strong>分页和统计</strong>：全局排序、COUNT 和深分页可能需要从多个分片取数据再汇总，成本和实现难度都会增加。</li> <li><strong>扩容和迁移</strong>：分片规则变化时，需要迁移数据、切换路由，并处理迁移期间的新写入与校验。</li></ul> <p>分片键通常要看三个方面：<strong>高频查询能不能带上它、数据能不能均匀分布、相关业务数据能不能尽量落到同一分片</strong>。</p> <p>比如订单主要按用户查询，可以考虑按 user_id 分片，让同一用户的订单集中在一起。不过，大客户可能产生热点，按订单号查询又可能需要额外路由；按时间拆分便于归档，却可能让最新分片承受大部分写入。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/mysql/61b13e6c_user-shard-routing.png\" alt=\"\"></p> <p>所以，分片键没有通用答案，要从主要访问路径出发，再权衡热点、事务边界和扩容方式。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "架构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/mysql.html#分库分表后会遇到哪些问题-怎么选分片键"
+ }
+]

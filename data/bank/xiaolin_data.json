@@ -1,0 +1,700 @@
+[
+ {
+  "id": "xl-data-001",
+  "category": "数据结构与算法",
+  "title": "了解哪些数据结构？",
+  "answer": "<ul><li>数组：数组的内存空间是连续的，随机访问的时间复杂度是 O(1)，适用于需要按索引访问元素的场景；但是插入和删除元素较慢，时间复杂度是 O(n)，因为可能需要移动后续元素。</li> <li>链表：链表是由节点组成，节点之间是分散存储的，内存不连续，每个节点存储数据和指向下一个节点的指针。适用于频繁插入和删除元素的场景，随机访问元素较慢。</li> <li>栈：栈是一种后进先出的数据结构，只允许在栈顶进行插入和删除操作。</li> <li>队列：队列是一种先进先出（FIFO）的数据结构，允许在队尾插入元素，在队首删除元素。</li> <li>树：树是一种非线性数据结构，由节点和边组成，每个节点可以有多个子节点。树适用于表示层次关系的场景，例如文件系统、组织结构等。</li> <li>哈希表：通过哈希函数把键映射到桶，在哈希分布合理、负载因子受控的情况下，查找、插入和删除的平均时间复杂度为 O(1)，适合快速判断元素是否存在、统计频次等场景。</li> <li>堆：常见的二叉堆是一棵完全二叉树，堆顶保存最大值或最小值，适合优先级队列、Top K 等场景。</li> <li>图：由顶点和边组成，可以表示多对多的关系，适合社交关系、路径规划、任务依赖等场景。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#了解哪些数据结构"
+ },
+ {
+  "id": "xl-data-002",
+  "category": "数据结构与算法",
+  "title": "数组和链表区别是什么？",
+  "answer": "<ul><li><strong>访问效率</strong>：数组可以通过索引直接访问任何位置的元素，访问效率高，时间复杂度为O(1)，而链表需要从头节点开始遍历到目标位置，访问效率较低，时间复杂度为O(n)。</li> <li><strong>插入和删除操作效率</strong>：数组插入和删除操作可能需要移动其他元素，时间复杂度为 O(n)。链表在<strong>已经找到需要修改的节点及相关指针</strong>时，只需要修改指针，时间复杂度为 O(1)。比如单链表删除一个节点，通常还需要知道它的前驱节点；双向链表则可以通过节点本身找到前驱和后继。如果要按某个值或某个位置插入、删除，仍然需要先遍历定位，整体时间复杂度是 O(n)。</li> <li>**缓存命中率：**由于数组元素在内存中连续存储，可以提高CPU缓存的命中率，而链表节点不连续存储，可能导致CPU缓存的命中率较低，频繁的缓存失效会影响性能。</li> <li><strong>应用场景</strong>：数组适合频繁按下标访问、顺序遍历的场景；链表适合已经定位到节点后，频繁插入、删除的场景。数组也可以通过扩容实现动态大小，所以选择时不能只看是否需要动态增长。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "对比",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#数组和链表区别是什么"
+ },
+ {
+  "id": "xl-data-003",
+  "category": "数据结构与算法",
+  "title": "为什么数组查询的复杂度为O(1)？",
+  "answer": "<p>这里的「查询」指的是<strong>根据下标访问元素</strong>，不是根据值查找元素。无序数组按值查找，通常还需要遍历，时间复杂度是 O(n)。</p> <p>数组在内存中占据一块<strong>连续</strong>的空间，并且每个元素占用的存储单元大小相同。对象数组连续存储的通常是对象引用，对象本身不一定连续。</p> <p>比如我们创建一个长度为 10，数据类型为整型的数组，在内存中的地址是从 1000 开始，那么它在内存中的存储格式如下。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1713860272001-4eb23e67-48aa-41a0-b507-054620c4bf7c.png\" alt=\"img\"></p> <p>由于每个整型数据占据 4 个字节的内存空间，因此整个数组的内存空间地址是 1000～1039，根据这个，我们就可以轻易算出数组中每个数据的内存下标地址。</p> <p>利用这个特性，我们只要知道了数组下标，也就是数据在数组中的位置，比如下标 2，就可以计算得到这个数据在内存中的位置 1008，从而对这个位置的数据 241 进行快速读写访问，时间复杂度为 O(1)。</p> <p>地址计算公式是：<code>元素地址 = 数组首地址 + 下标 × 每个元素占用的字节数</code>。计算次数不会随着数组长度增长，所以按下标访问的时间复杂度是 O(1)。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#为什么数组查询的复杂度为o-1"
+ },
+ {
+  "id": "xl-data-004",
+  "category": "数据结构与算法",
+  "title": "动态数组怎么扩容？为什么尾部插入的均摊时间复杂度是 O(1)？",
+  "answer": "<p>动态数组底层仍然是连续的数组，只是把<strong>实际元素个数 size</strong> 和<strong>底层数组容量 capacity</strong> 分开管理。</p> <ul><li>容量还有空位时，尾部插入只需要写入元素并更新 size，时间复杂度是 O(1)。</li> <li>容量不足时，申请一个更大的数组，把原数组的元素复制过去，再插入新元素。这次操作的时间复杂度是 O(n)。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/edf9d15d_dynamic-array-growth.png\" alt=\"\"></p> <p>比如每次容量翻倍，容量会从 <code>1 → 2 → 4 → 8……</code> 增长。连续插入 n 个元素时，扩容复制的元素总数大致为：</p> <pre><code class=\"language-plain\">1 + 2 + 4 + … &lt; 2n\n</code></pre><p>加上 n 次写入，总成本是 O(n)，分摊到每次尾部插入就是 O(1)。这里说的是<strong>均摊复杂度</strong>，某一次触发扩容的插入仍然可能是 O(n)。实际实现也可以按其他固定比例扩容，不一定翻倍。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/82156408_dynamic-array-amortized-cost.png\" alt=\"\"></p> <p>如果每次只增加一个固定数量的容量，就会频繁复制已有元素，连续插入 n 个元素的总成本可能达到 O(n²)。在中间位置插入、删除还要移动后续元素，即使不用扩容，通常也是 O(n)。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#动态数组怎么扩容-为什么尾部插入的均摊时间复杂度是-o-1"
+ },
+ {
+  "id": "xl-data-005",
+  "category": "数据结构与算法",
+  "title": "说一下队列和栈的区别",
+  "answer": "<p>主要区别在于元素的插入和删除方式以及元素的访问顺序。</p> <p>插入和删除方式：</p> <ul><li>队列：队列采用先进先出（FIFO）的方式，即新元素插入队尾，删除操作发生在队首。</li> <li>栈：栈采用后进先出（LIFO）的方式，即新元素插入栈顶，删除操作也发生在栈顶。</li></ul> <p>元素的访问顺序：</p> <ul><li>队列：队列的元素按照插入的顺序进行访问，先插入的元素先被访问到。</li> <li>栈：栈的元素按照插入的顺序进行访问，但是最后插入的元素先被访问到。</li></ul> <p>队列适用于需要按照插入顺序进行处理的场景，例如任务调度；</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233440159.png\" alt=\"image-20240725233440159\"></p> <p>而栈适用于需要维护最近操作状态的场景，例如函数调用。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233451930.png\" alt=\"image-20240725233451930\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#说一下队列和栈的区别"
+ },
+ {
+  "id": "xl-data-006",
+  "category": "数据结构与算法",
+  "title": "介绍一下数据结构中的栈？怎么用 java 实现？",
+  "answer": "<p>栈（stack）是一种特殊的线性数据结构，只能够在一端（即栈顶）进行插入和删除操作，采用后进先出原则（LIFO，Last In First Out），基本操作有加入数据（push）和输出数据（pop）两种。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737531077874-0c9886d2-fb94-45ab-b487-b1443a2513ca.webp\" alt=\"img\"></p> <p>在Java中，可以通过多种方式实现栈：</p> <ul><li><strong>数组实现</strong>：固定容量的数组需要处理栈满的情况，也可以通过扩容实现动态栈。</li> <li><strong>链表实现</strong>：可以动态增加节点，但需要额外的指针空间，也受到可用内存的限制。</li> <li><strong>内置 Stack 类</strong>：继承自 <code>Vector</code>，主要操作带有同步开销。单个方法的同步，并不意味着多个方法组合起来的操作也具备原子性。</li> <li><strong>Deque 接口配合 ArrayDeque</strong>：日常开发中实现栈的常用选择，支持 <code>push</code>、<code>pop</code>、<code>peek</code>，但不允许存入 <code>null</code>，也不是线程安全的。</li></ul> <p>1、使用数组实现栈</p> <pre><code class=\"language-plain\">class ArrayStack {\n    private int maxSize;\n    private int[] stackArray;\n    private int top;\n\n    public ArrayStack(int size) {\n        maxSize = size;\n        stackArray = new int[maxSize];\n        top = -1; // 栈顶指针，初始化为-1表示栈空\n    }\n\n    public void push(int value) {\n        if (top == maxSize - 1) {\n            throw new RuntimeException(&quot;Stack is full&quot;);\n        }\n        stackArray[++top] = value;\n    }\n\n    public int pop() {\n        if (isEmpty()) {\n            throw new RuntimeException(&quot;Stack is empty&quot;);\n        }\n        return stackArray[top--];\n    }\n\n    public int peek() {\n        if (isEmpty()) {\n            throw new RuntimeException(&quot;Stack is empty&quot;);\n        }\n        return stackArray[top];\n    }\n\n    public boolean isEmpty() {\n        return (top == -1);\n    }\n\n    public int size() {\n        return top + 1; // 返回栈中当前元素的数量\n    }\n}\n</code></pre><p>2、使用链表实现栈</p> <pre><code class=\"language-plain\">class Node {\n    int data;\n    Node next;\n\n    public Node(int data) {\n        this.data = data;\n    }\n}\n\nclass LinkedListStack {\n    private Node top;\n\n    public void push(int value) {\n        Node newNode = new Node(value);\n        newNode.next = top;\n        top = newNode;\n    }\n\n    public int pop() {\n        if (isEmpty()) {\n            throw new RuntimeException(&quot;Stack is empty&quot;);\n        }\n        int value = top.data;\n        top = top.next;\n        return value;\n    }\n\n    public int peek() {\n        if (isEmpty()) {\n            throw new RuntimeException(&quot;Stack is empty&quot;);\n        }\n        return top.data;\n    }\n\n    public boolean isEmpty() {\n        return (top == null);\n    }\n}\n</code></pre><p>3、使用 Java 内置的 Stack 类</p> <pre><code class=\"language-plain\">import java.util.Stack;\n\npublic class Main {\n    public static void main(String[] args) {\n        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();\n\n        stack.push(1);\n        stack.push(2);\n        stack.push(3);\n\n        System.out.println(&quot;Top element: &quot; + stack.peek()); // 输出 3\n        System.out.println(&quot;Popped element: &quot; + stack.pop()); // 输出 3\n        System.out.println(&quot;Is stack empty? &quot; + stack.isEmpty()); // 输出 false\n    }\n}\n</code></pre><p>4、使用 Deque 实现栈</p> <pre><code class=\"language-java\">Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();\nstack.push(1);\nstack.push(2);\nSystem.out.println(stack.peek()); // 输出 2，不删除\nSystem.out.println(stack.pop());  // 输出 2，删除栈顶\n</code></pre><p>这里需要导入 <code>java.util.Deque</code> 和 <code>java.util.ArrayDeque</code>。<code>pop()</code> 在栈为空时会抛出异常，<code>peek()</code> 则返回 <code>null</code>，使用前要注意判空。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#介绍一下数据结构中的栈-怎么用-java-实现"
+ },
+ {
+  "id": "xl-data-007",
+  "category": "数据结构与算法",
+  "title": "如何使用两个栈实现队列？",
+  "answer": "<p>使用两个栈实现队列的方法如下：</p> <ol><li>准备两个栈，分别称为<code>stackPush</code>和<code>stackPop</code>。</li> <li>当需要入队时，将元素压入<code>stackPush</code>栈。</li> <li>当需要出队时，先判断<code>stackPop</code>是否为空，如果不为空，则直接弹出栈顶元素；如果为空，则将<code>stackPush</code>中的所有元素依次弹出并压入<code>stackPop</code>中，然后再从<code>stackPop</code>中弹出栈顶元素作为出队元素。</li> <li>当需要查询队首元素时，也只有在 <code>stackPop</code> 为空时才转移元素，然后查看 <code>stackPop</code> 的栈顶元素。<strong>不能在 <code>stackPop</code> 非空时继续转移</strong>，否则新入队的元素会跑到原有队首前面，破坏先进先出的顺序。</li> <li>通过上述方法，可以实现用两个栈来模拟队列的先进先出（FIFO）特性。</li></ol> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/3db55247_two-stacks-fifo-queue.png\" alt=\"\"></p> <p>入队的时间复杂度是 O(1)，出队和查询队首元素的<strong>均摊时间复杂度是 O(1)，单次最坏是 O(n)</strong>。因为每个元素只会进入 <code>stackPush</code> 一次、转移到 <code>stackPop</code> 一次，再从 <code>stackPop</code> 弹出一次，把一系列操作合起来看，每个元素只经过常数次栈操作。</p> <p>如果两个栈都为空，下面代码中的 <code>pop()</code> 和 <code>peek()</code> 会抛出异常，需要根据业务要求处理空队列。</p> <p>以下是使用两个栈实现队列的Java代码示例：</p> <pre><code class=\"language-java\">import java.util.Stack;\n\nclass MyQueue {\n    private Stack&lt;Integer&gt; stackPush;\n    private Stack&lt;Integer&gt; stackPop;\n\n    public MyQueue() {\n        stackPush = new Stack&lt;&gt;();\n        stackPop = new Stack&lt;&gt;();\n    }\n\n    public void push(int x) {\n        stackPush.push(x);\n    }\n\n    public int pop() {\n        if (stackPop.isEmpty()) {\n            while (!stackPush.isEmpty()) {\n                stackPop.push(stackPush.pop());\n            }\n        }\n        return stackPop.pop();\n    }\n\n    public int peek() {\n        if (stackPop.isEmpty()) {\n            while (!stackPush.isEmpty()) {\n                stackPop.push(stackPush.pop());\n            }\n        }\n        return stackPop.peek();\n    }\n\n    public boolean empty() {\n        return stackPush.isEmpty() &amp;&amp; stackPop.isEmpty();\n    }\n}\n\n// 测试代码\npublic class Main {\n    public static void main(String[] args) {\n        MyQueue queue = new MyQueue();\n        queue.push(1);\n        queue.push(2);\n        System.out.println(queue.peek());  // 输出 1\n        System.out.println(queue.pop());   // 输出 1\n        System.out.println(queue.empty()); // 输出 false\n    }\n}\n</code></pre>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#如何使用两个栈实现队列"
+ },
+ {
+  "id": "xl-data-008",
+  "category": "数据结构与算法",
+  "title": "常见的队列有哪些及应用场景？",
+  "answer": "<ul><li><strong>顺序队列</strong>是利用一组连续的存储单元依次存放从队头到队尾的元素，同时设置两个指针，一个指向队头元素的位置，称为队头指针；另一个指向队尾元素的下一个位置，称为队尾指针。实现简单，空间利用率低，当队尾指针到达数组末尾时，即使前面有空闲空间，也可能无法继续插入元素，造成假溢出。一些简单的、对队列操作不太频繁且数据量相对较小的场景，如学校食堂打饭排队系统，可简单模拟学生排队打饭的过程，新学生在队尾加入，打到饭的学生从队头离开。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737440034493-a9a87ce7-4f6c-456b-8f3a-f38fec86cec8.png\" alt=\"img\"></p> <ul><li><strong>链式队列</strong>是通过链表来实现的队列，每个节点包含数据域和指针域，指针域指向下一个节点。队头指针指向链表的头节点，队尾指针指向链表的尾节点。插入和删除操作在链表的两端进行，不需要移动元素，操作效率高，可动态分配内存，不会因为固定数组容量而发生假溢出，但仍然受到可用内存的限制，也需要额外的指针空间来存储节点之间的链接关系。常用于处理数据量不确定、需要频繁进行插入和删除操作的场景，如操作系统中的进程调度，新进程可以随时在队尾加入等待队列，就绪的进程从队头取出执行。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737440055678-a355ed56-7c4c-446a-a517-96500343e925.png\" alt=\"img\"></p> <ul><li><strong>循环队列</strong>是把顺序队列的存储空间想象成一个首尾相接的圆环，当队尾指针到达数组末尾时，若数组头部还有空闲空间，则将队尾指针重新指向数组头部，继续插入元素。充分利用了数组的空间，避免了顺序队列中的假溢出问题，提高了空间利用率，但实现相对复杂一些，需要处理队头和队尾指针在循环时的特殊情况。常用于数据缓冲区的管理，如音频、视频数据的缓冲，数据以循环的方式存入缓冲区，消费端从队头取出数据进行处理，保证数据的连续和稳定。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737440199465-cb43692a-1f6f-42f2-8066-5cb04bb295ef.png\" alt=\"img\"></p> <ul><li><strong>双端队列</strong>是一种特殊的队列，它允许在队列的两端进行插入和删除操作，既有队头指针又有队尾指针，两端都可以作为队头或队尾进行操作。具有很高的灵活性，可在两端快速插入和删除元素，支持多种操作模式，但实现相对复杂，需要更多的代码来维护两端的操作逻辑。在一些需要频繁在两端进行数据操作的场景中非常有用，如在浏览器的页面浏览历史记录中，用户可以向前和向后浏览页面，新访问的页面可以从队头或队尾插入，浏览过的页面可以从两端删除。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737440258144-5d5bb20e-1f6d-4eb6-a22f-f6b676ddce3c.png\" alt=\"img\"></p> <ul><li><strong>优先级队列</strong>中的每个元素都有一个优先级，在插入和删除元素时，会根据元素的优先级来进行操作，优先级高的元素先出队。通常使用堆等数据结构来实现，以保证高效的插入和删除操作。能够快速获取优先级最高（或最低）的元素并进行处理，插入和删除操作的时间复杂度通常为 O (log n)，其中 n 是队列中的元素个数。在任务调度系统中，不同任务可能具有不同的优先级，优先级高的任务需要优先执行，如操作系统中的进程调度，实时性要求高的进程具有较高的优先级，会优先被调度执行。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1737440282522-50448cef-f9fa-46ce-98bd-abbd766c9b07.png\" alt=\"img\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#常见的队列有哪些及应用场景"
+ },
+ {
+  "id": "xl-data-009",
+  "category": "数据结构与算法",
+  "title": "循环队列怎么判断队空和队满？",
+  "answer": "<p>循环队列通常使用数组，<code>head</code> 指向队首元素，<code>tail</code> 指向下一次入队的位置。指针前进时通过取模回到数组开头：</p> <pre><code class=\"language-plain\">head = (head + 1) % capacity\ntail = (tail + 1) % capacity\n</code></pre><p>问题在于，如果只用 <code>head == tail</code>，既可能表示队列为空，也可能表示队列已经绕了一圈装满了，所以需要额外区分。</p> <p>常用的做法有两种：</p> <ul><li><strong>预留一个空位</strong>：队空是 <code>head == tail</code>，队满是 <code>(tail + 1) % capacity == head</code>。数组容量为 capacity 时，最多只能放 capacity - 1 个元素。</li> <li><strong>维护元素数量 size</strong>：队空是 <code>size == 0</code>，队满是 <code>size == capacity</code>，每次入队、出队都更新 size，可以使用整个数组容量。</li></ul> <p>比如长度为 5 的数组，采用预留空位的方式时只能保存 4 个元素。出队后，head 前进，腾出的空间可以等 tail 绕回数组开头后继续使用，不需要移动其他元素。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/85e439fb_circular-queue-empty-full.png\" alt=\"\"></p> <p>固定容量循环队列的入队、出队时间复杂度都是 O(1)，空间复杂度是 O(capacity)。实现时还要先检查队空、队满，并保证数组容量大于 0。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#循环队列怎么判断队空和队满"
+ },
+ {
+  "id": "xl-data-010",
+  "category": "数据结构与算法",
+  "title": "平衡二叉树结构是怎么样的？",
+  "answer": "<p>使用二叉搜索树的目的之一是缩短插入、删除、修改和查找（插入、删除、修改都包括查找操作）节点的时间。</p> <p>关于查找效率，如果一棵树的高度为h，在最坏的情况，查找一个关键字需要对比 h 次，查找时间复杂度不超过 O(h)。一棵理想的二叉搜索树所有操作的时间可以缩短到 O(logn)（n 是节点总数)。</p> <p>O(h) 描述的是一般情况下的查找上界，只有当树高 h 为 O(log n) 时，才能保证查找是 O(log n)。在最坏情况下，搜索树有可能退化为链表。想象一棵每个结点只有右孩子的二叉搜索树，那么它的性质就和链表一样，所有操作（增删改查）的时间是O(n)。</p> <p>可以发现操作的复杂度与树的高度 h 有关。由此引出了平衡树，通过一定操作维持树的高度（平衡性）来降低操作的复杂度。</p> <p>所谓的平衡树是指一种改进的二叉查找树，顾名思义平衡树就是将二叉查找树平衡均匀地分布，这样的好处就是可以减少二叉查找树的深度。</p> <p>一般情况下二叉查找树的查询复杂度取决于目标节点到树根的距离（即深度），当节点的深度普遍较大时，查询的平均复杂度就会上升，因此为了实现更高效的查询就有了平衡树。</p> <p>这里介绍的是 <strong>AVL 树</strong>，它是严格平衡的二叉搜索树。红黑树也是自平衡二叉搜索树，但不要求每个节点的左右子树高度差都不超过 1。</p> <p>AVL 树平衡的特性：</p> <ul><li>左右两个子树的高度差（平衡因子）的绝对值不超过1</li> <li>左右两个子树都是一棵平衡二叉树</li></ul> <p>非平衡二叉树(左)和平衡二叉树(右)如下图所示：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1735743-20201108165847587-114546797.png\" alt=\"img\"></p> <p>通过平衡的特性，可以有效的减少二叉树的深度，从而提高了查询的效率。</p> <p>再来看看下图：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233509111.png\" alt=\"image-20240725233509111\"></p> <p>分析：</p> <ul><li>图一是一个平衡二叉树，它满足平衡二叉树的定义。</li> <li>图二不是平衡二叉树，其原因并不是不满足平衡因子的条件，而是因为它不满足二叉搜索树的构成条件，这提醒我们平衡二叉树首先要是一棵二叉搜索树。</li> <li>图三满足平衡二叉树的构成条件。</li> <li>图 4 中的节点 (8) 平衡因子为 3，不满足平衡二叉树的要求。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#平衡二叉树结构是怎么样的"
+ },
+ {
+  "id": "xl-data-011",
+  "category": "数据结构与算法",
+  "title": "红黑树说一下，跳表说一下？",
+  "answer": "<p>红黑树（Red-Black Tree）是一种自平衡的二叉搜索树，它在插入和删除操作后能够通过旋转和重新着色来保持树的平衡。红黑树的特点如下：</p> <ol><li>每个节点都有一个颜色，红色或黑色。</li> <li>根节点是黑色的。</li> <li>每个叶子节点（NIL节点）都是黑色的。</li> <li>如果一个节点是红色的，则它的两个子节点都是黑色的。</li> <li>从任一节点到它的各个后代 NIL 节点的路径上，黑色节点的数量都相同。</li></ol> <p>红黑树通过这些特性来保持树的平衡，确保最长路径不超过最短路径的两倍，从而保证了在最坏情况下的搜索、插入和删除操作的时间复杂度都为O(logN)。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233526166.png\" alt=\"image-20240725233526166\"></p> <p>跳表（Skip List）是一种基于链表的数据结构，它通过添加多层索引来加速搜索操作。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233537853.png\" alt=\"image-20240725233537853\"></p> <p>跳表的特点如下：</p> <ol><li>跳表中的数据是有序的。</li> <li>上层索引可以跳过底层的多个节点，节点的层数通常通过随机方式确定。实现时可以用向右、向下的指针，也可以在一个节点中保存多层前进指针。</li></ol> <p>跳表通过多层索引的方式来加速搜索操作。最底层是一个普通的有序链表，而上面的每一层都是前一层的子集，每个节点在上一层都有一个指针指向它在下一层的对应节点。这样，在搜索时可以通过跳过一些节点，直接进入目标区域，从而减少搜索的时间复杂度。</p> <p>随机跳表的搜索、插入和删除操作的<strong>期望时间复杂度是 O(log n)</strong>，最坏情况下仍可能退化到 O(n)。合理设置随机晋升概率后，总的期望空间复杂度是 O(n)，但需要额外的索引指针。与红黑树相比，跳表不需要旋转，查找过程也更直观，常用于有序集合和范围查询。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#红黑树说一下-跳表说一下"
+ },
+ {
+  "id": "xl-data-012",
+  "category": "数据结构与算法",
+  "title": "你知道什么地方用了红黑树和跳表吗？",
+  "answer": "<ul><li>epoll 使用红黑树管理注册的监听项，事件就绪后再放入就绪链表，获取就绪事件时不需要遍历整棵红黑树。</li> <li>Java 的 <code>TreeMap</code>、<code>TreeSet</code> 使用红黑树，支持有序遍历和范围查询。</li> <li>Redis 的 zset 在使用跳表编码时，通过跳表维护成员的顺序，同时配合哈希表按成员查询分数。小规模 zset 也可以使用紧凑编码，并不是所有 zset 都使用跳表。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#你知道什么地方用了红黑树和跳表吗"
+ },
+ {
+  "id": "xl-data-013",
+  "category": "数据结构与算法",
+  "title": "跳表时间复杂度？",
+  "answer": "<p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233553870.png\" alt=\"image-20240725233553870\"></p> <ul><li><strong>搜索、插入、删除</strong>：对于采用随机层高的跳表，期望时间复杂度都是 O(log n)。查找时从高层开始，向右跳过一段数据，不能继续向右时再下降一层；插入和删除也要先通过这个过程找到位置。</li> <li><strong>最坏情况</strong>：如果索引层数和分布很不理想，跳表可能退化成普通链表，时间复杂度变成 O(n)。所以不能把期望 O(log n) 说成最坏 O(log n)。</li> <li><strong>空间复杂度</strong>：期望为 O(n)。比如每个节点以 1/2 的概率晋升到上一层，各层节点数大致为 <code>n、n/2、n/4……</code>，加起来仍然是 O(n)。</li> <li><strong>范围查询</strong>：先定位范围起点，再沿底层链表遍历。如果需要返回 m 个元素，期望时间复杂度是 O(log n + m)。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#跳表时间复杂度"
+ },
+ {
+  "id": "xl-data-014",
+  "category": "数据结构与算法",
+  "title": "红黑树的数据结构介绍一下？",
+  "answer": "<p>红黑树是一种自平衡的二叉查找树，</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1716015879195-fb9dc798-dfe8-4bf5-99d0-33c92a26bf8b.webp\" alt=\"img\"></p> <p>具有以下特点：</p> <ol><li>每个节点要么是红色，要么是黑色。</li> <li>根节点是黑色。</li> <li>每个叶子节点（NIL节点）是黑色。</li> <li>如果一个节点是红色，则其子节点必须是黑色。</li> <li>从任一节点到其每个叶子节点的所有路径都包含相同数目的黑色节点。</li></ol> <p>红黑树的自平衡性质可以保证在进行插入、删除等操作后，树的高度保持在O(log n)内，从而保持了较高的查找、插入和删除效率。下面是红黑树插入节点的过程，这左旋右旋的操作，就是为了自平衡。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1716015879219-fb418c32-57d7-461a-908e-cb4b5f1feff7.gif\" alt=\"img\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#红黑树的数据结构介绍一下"
+ },
+ {
+  "id": "xl-data-015",
+  "category": "数据结构与算法",
+  "title": "红黑树和AVL树相比查询性能好还是插入性能好一些？",
+  "answer": "<p>一般来说，<strong>AVL 树更偏向查询，红黑树更偏向兼顾查询和更新</strong>，不过两者的查找、插入、删除在最坏情况下都是 O(log n)，不能简单认为某一种树在所有场景下都更快。</p> <table><thead><tr><th><strong>对比项</strong></th> <th><strong>AVL 树</strong></th> <th><strong>红黑树</strong></th></tr></thead> <tbody><tr><td><strong>平衡要求</strong></td> <td>每个节点左右子树高度差不超过 1</td> <td>通过颜色规则维持平衡，要求更宽松</td></tr> <tr><td><strong>查询</strong></td> <td>树高通常更低，比较次数可能更少</td> <td>树高上限更宽松，但仍为 O(log n)</td></tr> <tr><td><strong>插入调整</strong></td> <td>最多一次单旋或双旋，还要维护高度</td> <td>可能向上重新着色，经典实现最多两次旋转</td></tr> <tr><td><strong>删除调整</strong></td> <td>可能沿祖先路径多次调整，旋转次数最坏 O(log n)</td> <td>经典实现旋转次数有常数上界，重新着色和查找仍可能 O(log n)</td></tr></tbody></table> <p>1、查询性能的对比：</p> <p>AVL 树的平衡要求更严格，所以通常能把树高控制得更低。红黑树的高度上限为 <code>2log₂(n + 1)</code>，也是对数级别，但可能比 AVL 树多比较几次。因此，查询为主的场景可以考虑 AVL 树，实际差距还和数据分布、内存布局、实现方式有关。</p> <p>2、插入和删除性能的对比：</p> <p><strong>AVL 插入并不会因为树高而不断旋转</strong>。找到最低的失衡节点后，一次单旋或双旋就能恢复平衡，也就是最多两次基本旋转。不过，沿插入路径检查平衡、维护高度仍然需要 O(log n) 的时间。</p> <p>两者在删除上的差别更明显。AVL 删除后，子树高度可能继续降低，导致更高层的祖先也需要调整；红黑树的约束更宽松，更新时通常能减少结构调整。所以频繁增删的场景，常会选择红黑树。</p> <p>比如 Java 的 <code>TreeMap</code> 和 <code>TreeSet</code> 使用红黑树，就是为了兼顾有序查询、插入和删除的性能。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "对比",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#红黑树和avl树相比查询性能好还是插入性能好一些"
+ },
+ {
+  "id": "xl-data-016",
+  "category": "数据结构与算法",
+  "title": "二叉搜索树查找最坏的时间复杂度是多少，为什么会这样？用什么结构解决？",
+  "answer": "<p><strong>当每次插入的元素都是二叉查找树中最大的元素，二叉查找树就会退化成了一条链表，查找数据的时间复杂度变成了 O(n)</strong>，如下动图演示：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719298326342-05359c13-7dc9-473d-9b7c-035bc044c2c9.gif\" alt=\"img\"></p> <p>二叉查找树由于存在退化成链表的可能性，会使得查询操作的时间复杂度从 O(logn) 升为 O(n)。</p> <p>为了解决二叉查找树会在极端情况下退化成链表的问题，后面就有人提出<strong>平衡二叉查找树（AVL 树）</strong>。</p> <p>主要是在二叉查找树的基础上增加了一些条件约束：<strong>每个节点的左子树和右子树的高度差不能超过 1</strong>。也就是说节点的左子树和右子树仍然为平衡二叉树，这样查询操作的时间复杂度就会一直维持在 O(logn) 。</p> <p>下图是每次插入的元素都是平衡二叉查找树中最大的元素，可以看到，它会维持自平衡：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719298358056-6b32c38a-32df-429c-a4c5-6c3e07cbd360.gif\" alt=\"img\"></p> <p>除了平衡二叉查找树，还有很多自平衡的二叉树，比如红黑树，它也是通过一些约束条件来达到自平衡，不过红黑树的约束条件比较复杂。下面是红黑树插入节点的过程，这左旋右旋的操作，就是为了自平衡。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719298358403-d3be5886-1cd9-4b07-888d-4476e42f8fcc.gif\" alt=\"img\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#二叉搜索树查找最坏的时间复杂度是多少-为什么会这样-用什么结构解决"
+ },
+ {
+  "id": "xl-data-017",
+  "category": "数据结构与算法",
+  "title": "B+树的特点是什么？",
+  "answer": "<ul><li>B+ 树是一种自平衡的多路查找树，所有叶节点都位于同一层，保证了树的平衡，使得搜索、插入和删除操作的时间复杂度为对数级别。</li> <li>非叶节点存储用于导航的关键字和子节点指针，不存储完整的数据记录。每个子节点负责一个关键字区间，因此一次可以排除大量不相关的数据。具体的键数和子指针数关系取决于实现，重点是理解多路分支如何降低树高。</li> <li>所有数据记录都存储在叶节点中，且叶节点中的数据是按关键字排序的。叶节点包含实际的数据和关键字，是数据存储和检索的实体单元。叶节点之间通过指针相互链接（通常是双向链表），便于范围查询和顺序遍历。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#b-树的特点是什么"
+ },
+ {
+  "id": "xl-data-018",
+  "category": "数据结构与算法",
+  "title": "B+树和B树有什么不一样，B+树的叶子节点和非叶子节点有什么不一样，非叶子节点会不会存数据？",
+  "answer": "<ul><li><strong>检索路径</strong>：B树在查找数据时，可能在非叶子节点找到目标数据，路径长度不固定。即查找时可以在任意一个节点终止。B+树中所有数据都在叶子节点，查找数据时必须走到叶子节点，路径长度固定（均等）。即查找总是要到叶子节点结束。</li> <li><strong>叶子节点结构</strong>：B树中叶子节点之间没有特别的链接，彼此独立。B+树中叶子节点通过指针连接，形成一个有序链表，便于范围查询和顺序访问。</li> <li><strong>非叶子节点内容</strong>：B树中非叶子节点存储数据和索引。B+树中非叶子节点只存储用于导航的关键字和子节点指针，不存储完整记录。在页大小相同、记录较大的情况下，非叶子页能容纳更多索引项，分支数更大，树通常也更矮。</li> <li>**高效地范围查询：**B+树的叶子节点有序链接，找到范围起点后就可以沿叶子链表扫描。B 树也能做范围查询，但通常需要在树中遍历并访问不同层的节点，顺序读取不如 B+ 树方便。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/54dea140_btree-bplus-query-path.png\" alt=\"\"></p> <p>以 InnoDB 为例，聚簇索引的叶子节点保存完整行记录，二级索引的叶子节点保存索引列和主键值。如果查询的列不能由二级索引覆盖，还需要根据主键回表查询，不能把所有 B+ 树的叶子节点都理解成完整的一行数据。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/e4217339_innodb-secondary-index-lookup.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#b-树和b树有什么不一样-b-树的叶子节点和非叶子节点有什么不一样-非叶子节点会不会存数据"
+ },
+ {
+  "id": "xl-data-019",
+  "category": "数据结构与算法",
+  "title": "红黑树，b树，b+树有什么区别？",
+  "answer": "<table><thead><tr><th><strong>特性</strong></th> <th><strong>红黑树</strong></th> <th><strong>B树</strong></th> <th><strong>B+树</strong></th></tr></thead> <tbody><tr><td><strong>节点容量</strong></td> <td>每个节点存1个键值对</td> <td>每个节点存多个键值对</td> <td>非叶节点存多个键，仅叶节点存值</td></tr> <tr><td><strong>分支数</strong></td> <td>二分叉（二叉树）</td> <td>多分叉（多路树）</td> <td>多分叉，叶节点额外链表连接</td></tr> <tr><td><strong>数据存储位置</strong></td> <td>所有节点均存数据</td> <td>所有节点均存数据</td> <td>数据仅存于叶节点</td></tr> <tr><td><strong>平衡维护方式</strong></td> <td>颜色标记与旋转</td> <td>节点分裂/合并</td> <td>节点分裂/合并</td></tr> <tr><td><strong>查找稳定性</strong></td> <td>查到即返回</td> <td>查到即返回</td> <td>必须查至叶节点</td></tr></tbody></table> <p>核心区别：</p> <ul><li><p><strong>查询效率</strong>：红黑树每个节点最多有两个子节点，树高为 O(log n)。B 树和 B+ 树每个节点可以有很多子节点，同样的数据量下通常更矮。磁盘场景中一个节点往往对应一个页，减少树高就有机会减少页读取次数；实际 I/O 次数还取决于缓存命中情况。</p></li> <li><p><strong>范围查询</strong>：B+ 树可以定位起点后沿叶子链表顺序扫描。红黑树和 B 树也支持范围查询，区别主要在访问方式和数据局部性，不能说只有 B+ 树才能高效地查询范围。</p></li> <li><p><strong>插入/删除维护成本</strong>：红黑树通过旋转和重新着色保持平衡；B 树和 B+ 树通过节点内移动、分裂、借用或合并保持平衡。后者也可能把调整传播到根节点，优势主要是适应页存储，不能简单认为分裂、合并一定比旋转更便宜。</p></li> <li><p><strong>场景选择</strong>：如果数据在内存中 + 高频增删 ，选择红黑树更合适，如果数据在磁盘 + 随机/范围查询均需 ，选择B+树更合适。</p></li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#红黑树-b树-b-树有什么区别"
+ },
+ {
+  "id": "xl-data-020",
+  "category": "数据结构与算法",
+  "title": "堆是什么？",
+  "answer": "<p>堆是一棵完全二叉树，这样实现的堆也被称为<strong>二叉堆</strong>。堆中节点的值都大于等于（或小于等于）其子节点的值，堆中如果节点的值都大于等于其子节点的值，我们把它称为<strong>大顶堆</strong>，如果都小于等于其子节点的值，我们将其称为<strong>小顶堆</strong>。</p> <p>下图中，1，2 是大顶堆，3 是小顶堆， 4 不是堆（不是完全二叉树）</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233642091.png\" alt=\"image-20240725233642091\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#堆是什么"
+ },
+ {
+  "id": "xl-data-021",
+  "category": "数据结构与算法",
+  "title": "堆的常见操作复杂度是多少？为什么建堆是 O(n)？",
+  "answer": "<p>以小顶堆为例，父节点的值不大于子节点，所以最小值一定在堆顶，但<strong>堆并不是整体有序的</strong>，左右子树之间也没有固定大小关系。</p> <p>常见操作的时间复杂度如下：</p> <ul><li><strong>查看堆顶</strong>：直接读取根节点，O(1)。</li> <li><strong>插入元素</strong>：先放到数组末尾，再向上调整，最坏 O(log n)。如果底层动态数组触发扩容，这一次还可能需要 O(n) 的复制时间。</li> <li><strong>删除堆顶</strong>：把末尾元素移到堆顶，缩小有效范围，再向下调整，最坏 O(log n)。</li> <li><strong>查找任意值</strong>：不能像二叉搜索树那样确定只走哪一边，最坏需要 O(n)。</li></ul> <p>建堆有两种方式，要注意区分：</p> <ol><li><strong>逐个插入</strong>：每次最多向上调整 O(log n)，总时间复杂度为 O(n log n)。</li> <li><strong>自底向上建堆</strong>：从最后一个非叶子节点开始向下调整，总时间复杂度为 O(n)。</li></ol> <p>为什么第二种不是 O(n log n)？因为大部分节点都靠近叶子，只能向下移动很少的层数。大致有 n/2 个节点是叶子，不需要调整；n/4 个节点最多调整 1 层；n/8 个节点最多调整 2 层，以此类推。</p> <p>总工作量可以估算为：</p> <pre><code class=\"language-plain\">n/4 × 1 + n/8 × 2 + n/16 × 3 + … = O(n)\n</code></pre><p>不能把每个节点都按树高 log n 来计算，那样忽略了不同节点实际能调整的层数。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/7165bccf_bottom-up-heap-construction.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#堆的常见操作复杂度是多少-为什么建堆是-o-n"
+ },
+ {
+  "id": "xl-data-022",
+  "category": "数据结构与算法",
+  "title": "前缀树是什么？有什么应用？",
+  "answer": "<p>前缀树（Trie Tree），也称为字典树、单词查找树或键树，是一种树形数据结构。它的核心思想是利用字符串的公共前缀来减少查询时间，最大限度地减少无谓的字符串比较，从而提高查询效率。</p> <p>前缀树的特点是：</p> <ul><li><strong>根节点不包含字符</strong>：除根节点外的每一个节点都包含一个字符。</li> <li><strong>从根节点到某一节点</strong>：路径上经过的字符连接起来，即为该节点对应的字符串。</li> <li><strong>每个节点的所有子节点包含的字符都不相同</strong>。</li></ul> <p>假设我们有字符串集合 <code>{&quot;apple&quot;, &quot;apricot&quot;, &quot;banana&quot;, &quot;cherry&quot;}</code>，构建的前缀树结构大致如下：</p> <pre><code class=\"language-plain\">root\n├── a\n│   └── p\n│       ├── p → l → e（结束）\n│       └── r → i → c → o → t（结束）\n├── b → a → n → a → n → a（结束）\n└── c → h → e → r → r → y（结束）\n</code></pre><p><strong>每个节点还需要记录是否是单词的结束位置</strong>。比如同时存储 <code>app</code> 和 <code>apple</code> 时，第三个字符 <code>p</code> 和最后的 <code>e</code> 都要标记为结束。否则只能判断前缀是否存在，无法区分 <code>app</code> 是一个完整单词，还是 <code>apple</code> 的前缀。</p> <p>如果字符串长度为 L，且查找子节点的操作是 O(1)，插入、查找一个单词的时间复杂度都是 O(L)。查询前缀也是 O(L)，但返回所有匹配词还需要遍历相应子树。前缀树的代价是空间占用可能较大，尤其是每个节点都预分配整个字符集大小的子节点数组时。</p> <p>前缀树的应用场景：</p> <ul><li>**字符串检索：**比如在搜索引擎的搜索框中，当用户输入部分关键词时，搜索引擎可以利用前缀树快速找到以该关键词为前缀的所有相关词条，实现自动补全功能。又比如将所有正确的单词存储在前缀树中，当用户输入一个单词时，通过在前缀树中查找该单词是否存在，来判断其拼写是否正确。</li> <li><strong>路由表匹配</strong>：在网络路由中，路由器需要根据 IP 地址的前缀来选择合适的路由。前缀树可以高效地实现 IP 地址的最长前缀匹配，从而快速确定数据包的转发路径。</li> <li>**词频统计：**可以将文本中的所有单词插入到前缀树中，同时在节点中记录每个单词的出现次数。通过遍历前缀树，可以统计出文本中每个单词的词频。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#前缀树是什么-有什么应用"
+ },
+ {
+  "id": "xl-data-023",
+  "category": "数据结构与算法",
+  "title": "LRU是什么？如何实现？",
+  "answer": "<p>LRU 是一种缓存淘汰算法，当缓存空间已满时，优先淘汰最长时间未被访问的数据。</p> <p>实现的方式是哈希表+双向链表结合。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233704781.png\" alt=\"image-20240725233704781\"></p> <p>具体实现步骤如下：</p> <ul><li>使用哈希表存储数据的键值对，键为缓存的键，值为对应的节点。</li> <li>使用双向链表存储数据节点，链表头部为最近访问的节点，链表尾部为最久未访问的节点。</li> <li><strong>查询 get</strong>：命中时，把节点移动到链表头部；未命中时返回未找到。是否加载数据并写入缓存，是业务层的逻辑，LRU 本身不要求查询未命中就自动插入。</li> <li><strong>写入 put</strong>：如果 key 已存在，更新值并移到头部；如果不存在，创建节点并插到头部，同时加入哈希表。</li> <li><strong>淘汰</strong>：插入新节点后，如果容量超限，移除链表尾部的节点，并删除哈希表中的对应 key。更新已有 key 时，元素数量没增加，不需要淘汰其他节点。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/caeae0c2_lru-access-and-eviction.png\" alt=\"\"></p> <p>这里选择双向链表，是因为哈希表能直接找到节点，通过节点的前驱和后继就能在 O(1) 时间内摘除它；如果使用单链表，找到前驱还可能需要遍历。实现时也常用虚拟头尾节点，减少处理边界的分支。</p> <p>在哈希表操作平均为 O(1) 的前提下，这种实现的 get、put 平均时间复杂度都是 O(1)，容量为 C 时空间复杂度是 O(C)。每次访问数据时，都会将对应的节点移动到链表头部，保证链表头部的节点是最近访问的数据，而链表尾部的节点是最久未访问的数据。当缓存空间不足时，淘汰链表尾部的节点即可。</p> <p>Java 中也可以借助 <code>LinkedHashMap</code> 实现简单的 LRU，关键是启用<strong>访问顺序</strong>：</p> <pre><code class=\"language-java\">import java.util.LinkedHashMap;\nimport java.util.Map;\n\nclass LRUCache&lt;K, V&gt; extends LinkedHashMap&lt;K, V&gt; {\n    private final int capacity;\n\n    public LRUCache(int capacity) {\n        super(16, 0.75f, true); // true 表示按访问顺序维护链表\n        if (capacity &lt; 0) throw new IllegalArgumentException(&quot;Invalid capacity&quot;);\n        this.capacity = capacity;\n    }\n\n    @Override\n    protected boolean removeEldestEntry(Map.Entry&lt;K, V&gt; eldest) {\n        return size() &gt; capacity;\n    }\n}\n</code></pre><p>成功的 <code>get</code> 和 <code>put</code> 会更新访问顺序，超过容量时淘汰最久未访问的条目。如果使用默认的插入顺序，就不能达到相同的 LRU 效果。这个示例不是线程安全的，多线程使用时还需要保证整个缓存操作的同步。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#lru是什么-如何实现"
+ },
+ {
+  "id": "xl-data-024",
+  "category": "数据结构与算法",
+  "title": "布隆过滤器怎么设计？时间复杂度？",
+  "answer": "<p>在开发过程中，经常要判断一个元素是否在一个集合中。假设你现在要给项目添加IP黑名单功能，此时你手上有大约 1亿个恶意IP的数据集，有一个IP发起请求，你如何判断这个IP在不在你的黑名单中？</p> <p>如果直接用 Java 的 HashSet 或 HashMap 保存这些 IP，就要存储元素本身以及相关的对象、桶和指针，内存开销可能很大。如果只是想先快速过滤「肯定不存在」的元素，可以考虑更节省空间的方案。</p> <p>「<strong>布隆过滤器</strong>」可以用来解决类似的问题，具有运行快速，内存占用小的特点，它使用一个很长的二进制位数组，同时结合多个 Hash 函数实现。高效插入和查询的代价是可能误判：<strong>返回不存在，说明元素肯定没有加入；返回存在，只能说明可能存在，因为没有加入的元素也可能被误判为存在</strong>。</p> <p>这种把未加入元素判断为存在的错误，称为「<strong>假阳性</strong>」，对应的概率叫 <strong>False Positive Probability</strong>，简称 fpp。设计时通常先确定预计元素数量和目标误判率，例如 1%，再计算位数组长度和哈希函数数量。这里的 1% 指查询未加入元素时，误判为存在的概率，不是已加入元素有 1% 的概率丢失。</p> <p>下图表示向布隆过滤器中添加元素 <code>www.123.com</code> 和 <code>www.456.com</code> 的过程，它使用了 func1 和 func2 两个简单的哈希函数。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240820113041030.png\" alt=\"image-20240820113041030\"></p> <p>其基本原理如下：</p> <ol><li><strong>初始化</strong>：当我们创建一个布隆过滤器时，我们首先创建一个全由0组成的位数组（bit array)。同时，我们还需选择几个独立的哈希函数，每个函数都可以将集合中的元素映射到这个位数组的某个位置。</li> <li><strong>添加元素</strong>：在布隆过滤器中添加一个元素时，我们会将此元素通过所有的哈希函数进行映射，得到在位数组中的几个位置，然后将这些位置标记为1。</li> <li><strong>查询元素</strong>：如果我们要检查一个元素是否在集合中，我们同样使用这些哈希函数将元素映射到位数组中的几个位置，<strong>如果所有的位置都被标记为1，那么我们就可以说该元素可能在集合中。如果有任何一个位置不为1，那么该元素肯定不在集合中</strong>。</li></ol> <p>通过其原理可以知道，在元素数量相同的情况下，增加位数组长度通常可以降低误判率，但<strong>哈希函数并不是越多越好</strong>。函数太多会把更多位设成 1，超过合适的数量后反而可能增加误判率，同时增加计算开销。因此，布隆过滤器的使用需要在误判率和性能之间进行权衡。布隆过滤器有以下两个特点：</p> <ul><li><strong>只要返回数据不存在，则肯定不存在。</strong></li> <li><strong>返回数据存在，不一定存在</strong>。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/e0af90dc_bloom-filter-false-positive.png\" alt=\"\"></p> <p>布隆过滤器的误判率主要来源于「<strong>哈希碰撞</strong>」。因为位数组的大小有限，不同的元素可能会被哈希到相同的位置，导致即使某个元素并未真正被加入过滤器，也可能因为其他已经存在的元素而让所有哈希函数映射的位都变为了1，从而误判为存在。这就是布隆过滤器的“假阳性”错误。在有限的数组长度中存放大量的数据，即便是再完美的 Hash 算法也会有冲突，所以有可能两个完全不同的 A、B 两个数据最后定位到的位置是一模一样的。这时拿 B 进行查询时那自然就是误报了。</p> <p>**布隆过滤器的时间复杂度和空间复杂度：**对于一个 m（比特位个数）和 k（哈希函数个数）值确定的布隆过滤器，添加和判断操作的时间复杂度都是 O(k)，这意味着每次你想要插入一个元素或者查询一个元素是否在集合中，只需要使用 k 个哈希函数对该元素求值，然后将对应的比特位标记或者检查对应的比特位即可。k 为固定常数时，可以视为 O(1)；这里假设一次哈希计算的成本固定，长字符串的哈希还要考虑字符串长度。空间复杂度是 O(m) 比特。</p> <p>如果预计插入 n 个元素，目标误判率为 p，在哈希分布均匀等假设下，常用的参数估算公式是：</p> <ul><li>位数组长度：<code>m ≈ -n × ln(p) / (ln 2)²</code>。</li> <li>哈希函数数量：<code>k ≈ (m / n) × ln 2</code>，实际使用时取合适的整数。</li></ul> <p>比如预计存储 100 万个元素，目标误判率为 1%，大约需要 959 万个比特，也就是约 1.2 MB，哈希函数数量约为 7。实际插入数量如果远超预估，误判率也会升高。</p> <p><strong>普通布隆过滤器不能直接删除元素</strong>，因为多个元素可能共用同一个比特位。删除时直接把位清零，可能让其他已加入的元素被判断为不存在。如果需要删除，可以考虑计数布隆过滤器，用计数器代替比特位，但也会增加空间开销。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/89223964_bloom-filter-deletion-counters.png\" alt=\"\"></p> <p>「返回不存在就一定不存在」的前提是元素已正确加入，且过滤器没有被错误删除或丢失更新。实际使用中，布隆过滤器返回「可能存在」后，通常还要查询真实集合确认。比如 IP 黑名单不能只凭布隆过滤器的阳性结果就拦截，否则会误伤正常 IP。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "数据结构",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#布隆过滤器怎么设计-时间复杂度"
+ },
+ {
+  "id": "xl-data-025",
+  "category": "数据结构与算法",
+  "title": "说几个你懂的排序算法，并说明其时间空间复杂度",
+  "answer": "<p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233717608.png\" alt=\"image-20240725233717608\"></p> <ul><li><strong>冒泡排序</strong>：通过相邻元素的比较和交换，每次将最大（或最小）的元素逐步“冒泡”到最后（或最前）。增加「本轮没有交换就提前结束」的判断后，时间复杂度：最好情况下O(n)，最坏情况下O(n^2)，平均情况下O(n^2)，空间复杂度：O(1)。</li> <li><strong>插入排序</strong>：将待排序元素逐个插入到已排序序列的合适位置，形成有序序列。时间复杂度：最好情况下O(n)，最坏情况下O(n^2)，平均情况下O(n^2)，空间复杂度：O(1)。</li> <li><strong>选择排序</strong>（Selection Sort）：通过不断选择未排序部分的最小（或最大）元素，并将其放置在已排序部分的末尾（或开头）。时间复杂度：最好情况下O(n^2)，最坏情况下O(n^2)，平均情况下O(n^2)，空间复杂度：O(1)。</li> <li><strong>快速排序</strong>（Quick Sort）：通过选择一个基准元素，将数组划分为两个子数组，使得左子数组的元素都小于（或等于）基准元素，右子数组的元素都大于（或等于）基准元素，然后对子数组进行递归排序。时间复杂度：最好情况下O(nlogn)，最坏情况下O(n^2)，平均情况下O(nlogn)，空间复杂度：最好情况下O(logn)，最坏情况下O(n)。</li> <li><strong>归并排序</strong>（Merge Sort）：将数组不断分割为更小的子数组，然后将子数组进行合并，合并过程中进行排序。时间复杂度：最好情况下O(nlogn)，最坏情况下O(nlogn)，平均情况下O(nlogn)。空间复杂度：O(n)。</li> <li><strong>堆排序</strong>（Heap Sort）：通过将待排序元素构建成一个最大堆（或最小堆），然后将堆顶元素与末尾元素交换，再重新调整堆，重复该过程直到排序完成。自底向上建堆的时间复杂度是 O(n)，整个排序的平均和最坏时间复杂度是 O(nlogn)，使用迭代堆调整时，空间复杂度是 O(1)。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#说几个你懂的排序算法-并说明其时间空间复杂度"
+ },
+ {
+  "id": "xl-data-026",
+  "category": "数据结构与算法",
+  "title": "讲一下冒泡排序算法",
+  "answer": "<p>冒泡排序：通过相邻元素的比较和交换，每次将最大（或最小）的元素逐步“冒泡”到最后（或最前）</p> <ul><li>对于下面的升序排序，已经有序是指前一个元素小于等于后一个元素。<strong>只有增加「一轮没有交换就提前结束」的判断，最好时间复杂度才是 O(n)</strong>；如果仍然固定执行所有轮次，即使数组有序也需要 O(n²) 次比较。</li> <li>冒泡排序的时间复杂度为O(n^2)。因为在排序过程中，需要进行多次遍历和元素交换，而每次遍历都需要比较相邻的元素并决定是否进行交换，这种操作需要花费O(n)的时间。因此，冒泡排序的时间复杂度通常为O(n^2)。</li></ul> <pre><code class=\"language-java\">public class BubbleSort {\n    // 冒泡排序算法\n    public void bubbleSort(int[] arr) {\n        int n = arr.length;\n\n        // 外层循环控制比较轮数\n        for (int i = 0; i &lt; n - 1; i++) {\n            boolean swapped = false;\n            // 内层循环进行两两比较并交换\n            for (int j = 0; j &lt; n - i - 1; j++) {\n                if (arr[j] &gt; arr[j + 1]) {\n                    // 交换两个元素\n                    int temp = arr[j];\n                    arr[j] = arr[j + 1];\n                    arr[j + 1] = temp;\n                    swapped = true;\n                }\n            }\n            if (!swapped) break; // 本轮没有交换，说明已经有序\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] arr = {64, 34, 25, 12, 22, 11, 90};\n        BubbleSort bubbleSort = new BubbleSort();\n        bubbleSort.bubbleSort(arr);\n        System.out.println(&quot;Sorted array:&quot;);\n        for (int value : arr) {\n            System.out.print(value + &quot; &quot;);\n        }\n    }\n}\n</code></pre>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#讲一下冒泡排序算法"
+ },
+ {
+  "id": "xl-data-027",
+  "category": "数据结构与算法",
+  "title": "讲一下快排原理",
+  "answer": "<p>快排使用了分治策略的思想，所谓分治，顾名思义，就是分而治之，将一个复杂的问题，分成两个或多个相似的子问题，在把子问题分成更小的子问题，直到更小的子问题可以简单求解，求解子问题，则原问题的解则为子问题解的合并。</p> <p>快排的过程简单的说只有三步：</p> <ul><li>首先从序列中选取一个数作为基准数</li> <li>通过一次划分（<code>partition</code>），把较小的元素放到左边、较大的元素放到右边，等于基准的元素如何处理取决于具体划分方式</li> <li>然后分别对基准的左右两边重复以上的操作，直到数组完全排序</li></ul> <p>常见的划分方式有双指针划分和单向扫描划分。下面代码使用的是<strong>单向扫描（Lomuto 划分）</strong>，过程如下：</p> <ol><li>选择最后一个元素作为基准 <code>pivot</code>。</li> <li>用 <code>i</code> 表示「小于基准的区域」的最后一个位置，初始为 <code>low - 1</code>。</li> <li>用 <code>j</code> 从左到右扫描，不包含最后的基准元素。遇到小于基准的元素，就让 <code>i</code> 前进，并把该元素交换到小于基准的区域。</li> <li>扫描结束后，将基准和 <code>arr[i + 1]</code> 交换，此时基准就到了最终位置。</li> <li>递归排序基准两侧的区间，不再把基准本身包含进去。</li></ol> <p>注意这里的基准该如何选择？最简单的一种做法是每次都是选择最左边的元素作为基准，但这对几乎已经有序的序列来说，并不是最好的选择，它可能导致每次划分都极不均衡，从而退化到 O(n²)。还有一种做法，就是选择中间的数或通过 <code>Math.random()</code> 来随机选取一个数作为基准。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/640.gif\" alt=\"图片\"></p> <p>下面保留固定选择末尾元素的基础实现，方便理解划分过程。它在有序数组或大量重复元素上可能退化；实际优化时可以随机选择基准，重复值较多时采用三路划分，把等于基准的一段直接排除在递归之外。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/fd224350_quicksort-lomuto-partition.png\" alt=\"\"></p> <p>代码实现：</p> <pre><code class=\"language-java\">public class QuickSort {\n    // 快速排序算法\n    public void quickSort(int[] arr, int low, int high) {\n        if (low &lt; high) {\n            int pi = partition(arr, low, high);\n\n            // 递归排序左半部分\n            quickSort(arr, low, pi - 1);\n            // 递归排序右半部分\n            quickSort(arr, pi + 1, high);\n        }\n    }\n\n    // 划分函数，用于找到基准元素的正确位置\n    int partition(int[] arr, int low, int high) {\n        int pivot = arr[high]; // 选择最后一个元素作为基准\n        int i = low - 1; // 初始化较小元素的索引\n\n        for (int j = low; j &lt; high; j++) {\n            if (arr[j] &lt; pivot) {\n                i++;\n                // 交换元素\n                int temp = arr[i];\n                arr[i] = arr[j];\n                arr[j] = temp;\n            }\n        }\n\n        // 将基准元素放到正确的位置\n        int temp = arr[i + 1];\n        arr[i + 1] = arr[high];\n        arr[high] = temp;\n\n        return i + 1; // 返回基准元素的位置\n    }\n\n    public static void main(String[] args) {\n        int[] arr = {10, 7, 8, 9, 1, 5};\n        QuickSort quickSort = new QuickSort();\n        quickSort.quickSort(arr, 0, arr.length - 1);\n        System.out.println(&quot;Sorted array:&quot;);\n        for (int value : arr) {\n            System.out.print(value + &quot; &quot;);\n        }\n    }\n}\n</code></pre>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "原理",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#讲一下快排原理"
+ },
+ {
+  "id": "xl-data-028",
+  "category": "数据结构与算法",
+  "title": "堆排序算法原理，稳定吗？",
+  "answer": "<p>如果每个节点大于等于子树中的每个节点，我们称之为大顶堆，小于等于子树中的每个节点，我们则称之为小顶堆。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719984315347-b887765d-bf9d-4781-9951-a9fc1e10490c.png\" alt=\"img\"></p> <p>堆的要求：</p> <ul><li>必须是完全二叉树</li> <li>堆中的每一个节点，都必须大于等于（或小于等于）其子树中每个节点的值。</li></ul> <p>堆通常是使用一维数组进行保存，节省空间，不需要存左右子节点的指针，通过下标就可定位左右节点和父节点。在起始位置为0的数组中：</p> <ul><li>父节点 i 的左子节点在(2i+1)的位置</li> <li>父节点 i 的右子节点在(2i+2)的位置</li> <li>子节点 i 的父节点在(i-1)/2向下取整的位置（i &gt; 0，根节点没有父节点）</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/1719985997397-ca423f41-4362-4a18-8611-91b8112d096c.png\" alt=\"img\"></p> <p>我们可以把堆排序的过程大致分为两大步骤，分别是建堆和排序。</p> <ul><li>建堆：建堆操作就是将一个无序的数组转化为最大堆的操作，首先将数组原地建一个堆。“原地”的含义就是不借助另一个数组，就在原数组上操作。从最后一个非叶子节点 <code>n / 2 - 1</code> 开始，依次向前处理，每个节点都通过向下调整恢复堆性质。叶子节点本来就满足堆性质，不需要调整。</li> <li>排序：建堆结束后，数组中的数据已经按照大顶堆的特性进行组织了，数组中的第一个元素就是堆顶，也就是最大的元素。我们把它和最后一个元素交换，最大的元素就放到了下标为 <code>n - 1</code> 的位置。然后把堆的有效范围缩小一位，只对新的堆顶向下调整，继续重复这些步骤，直至数组升序排列。已排序的尾部不再参与堆调整。</li></ul> <p>假设我们有一个数组 [4, 10, 3, 5, 1]，堆排序的过程如下：</p> <ol><li>构建最大堆：[10, 5, 3, 4, 1]</li> <li>交换堆顶元素与最后一个元素：[1, 5, 3, 4, 10]</li> <li>调整剩余元素为堆：[5, 4, 3, 1]</li> <li>再次交换堆顶元素与最后一个元素：[1, 4, 3, 5]</li> <li>调整剩余元素为堆：[4, 3, 1]</li> <li>继续上述过程直到排序完成：[1, 3, 4, 5, 10]</li></ol> <p>算法实现：</p> <pre><code class=\"language-java\">public class HeapSort {\n    // 堆排序方法\n    public static void heapSort(int[] arr) {\n        int n = arr.length;\n\n        // 构建堆（重新排列数组）\n        for (int i = n / 2 - 1; i &gt;= 0; i--) {\n            heapify(arr, n, i);\n        }\n\n        // 依次从堆中提取元素\n        for (int i = n - 1; i &gt; 0; i--) {\n            // 将当前根节点移动到末尾\n            int temp = arr[0];\n            arr[0] = arr[i];\n            arr[i] = temp;\n\n            // 在堆中调整\n            heapify(arr, i, 0);\n        }\n    }\n\n    // 迭代向下调整，避免递归栈带来的额外空间\n    private static void heapify(int[] arr, int n, int i) {\n        while (i &lt; n / 2) { // 只有非叶子节点才需要调整\n            int largest = i;\n            int left = 2 * i + 1;\n            int right = left + 1;\n            if (arr[left] &gt; arr[largest]) largest = left;\n            if (right &lt; n &amp;&amp; arr[right] &gt; arr[largest]) largest = right;\n            if (largest == i) break;\n\n            int temp = arr[i];\n            arr[i] = arr[largest];\n            arr[largest] = temp;\n            i = largest; // 继续调整受影响的子树\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] arr = {4, 10, 3, 5, 1};\n        heapSort(arr);\n        \n        System.out.println(&quot;排序后的数组:&quot;);\n        for (int i : arr) {\n            System.out.print(i + &quot; &quot;);\n        }\n    }\n}\n</code></pre><p>现在我们来分析一下堆排序的时间复杂度、空间复杂度以及稳定性。</p> <ul><li><p>上面的向下调整采用迭代实现，只需要常数个临时变量，<strong>额外空间复杂度是 O(1)，属于原地排序</strong>。如果把向下调整写成递归，还要计入最坏 O(log n) 的调用栈空间。</p></li> <li><p>堆排序包括建堆和排序两个操作，建堆的时间复杂度是O(n)，排序过程时间复杂度是O(nlogN)。所以，<strong>堆排序的整个时间复杂度是O(nlogN)</strong>。</p></li> <li><p>因为在排序的过程中，存在将堆的最后一个节点跟堆顶互换的操作，所以有可能会改变值相同数据的原始相对顺序，所以<strong>堆排序不是稳定的排序算法</strong>。例如，假设我们有两个相同的元素A和B，且A在B前面。在构建和调整堆的过程中，B可能被移动到A的前面，从而破坏了它们原来的相对顺序。</p></li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#堆排序算法原理-稳定吗"
+ },
+ {
+  "id": "xl-data-029",
+  "category": "数据结构与算法",
+  "title": "归并排序和快速排序的使用场景",
+  "answer": "<ul><li><strong>归并排序</strong>：适合需要保持相同关键字相对顺序、要求最坏时间复杂度为 O(n log n) 的场景。对数组排序时通常需要 O(n) 的临时空间；对链表排序时可以通过调整指针合并，也适合外部排序中的有序文件归并。</li> <li><strong>快速排序</strong>：适合内存中的数组排序，通常有较好的数据局部性，平均时间复杂度为 O(n log n)。普通快排不稳定，最坏会退化到 O(n²)，因此通常要结合随机基准、三路划分等优化。</li></ul> <p>实际选择还要看数据规模、重复值比例、是否要求稳定、可用内存等条件，不能直接说快排在所有场景中都是最快的。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "场景设计",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#归并排序和快速排序的使用场景"
+ },
+ {
+  "id": "xl-data-030",
+  "category": "数据结构与算法",
+  "title": "什么是排序稳定性？",
+  "answer": "<p>排序算法的稳定性是指在排序过程中，当有多个具有相同关键字的元素时，这些元素在排序后的序列中保持它们原有的相对顺序。</p> <p>换句话说，如果两个元素有相同的键值，那么在排序前，如果第一个元素在第二个元素之前，排序后第一个元素也应该在第二个元素之前。</p> <p>具体来说，对于一个序列中的两个元素A和B，如果A和B的键值相同，且在排序前A在B之前，那么在排序后A仍然应该在B之前，算法才能被称为是稳定的。</p> <p>例如，考虑一个包含姓名和年龄的列表：</p> <pre><code class=\"language-plain\">[(&quot;Alice&quot;, 25), (&quot;Bob&quot;, 25), (&quot;Charlie&quot;, 20)]\n</code></pre><p>如果排序算法是稳定的，那么在按年龄排序后，&quot;Alice&quot;和&quot;Bob&quot;的相对顺序不会改变：</p> <pre><code class=\"language-plain\">[(&quot;Charlie&quot;, 20), (&quot;Alice&quot;, 25), (&quot;Bob&quot;, 25)]\n</code></pre><p>但如果排序算法不稳定，&quot;Alice&quot;和&quot;Bob&quot;的相对顺序可能会在排序后改变：</p> <pre><code class=\"language-plain\">[(&quot;Charlie&quot;, 20), (&quot;Bob&quot;, 25), (&quot;Alice&quot;, 25)]\n</code></pre><p>在这种情况下，排序算法就被认为是不稳定的。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#什么是排序稳定性"
+ },
+ {
+  "id": "xl-data-031",
+  "category": "数据结构与算法",
+  "title": "稳定和不稳定排序算法有什么特点？",
+  "answer": "<p>稳定排序算法的特点：</p> <ul><li>相同元素的相对位置不会改变，排序后仍然保持原始顺序。</li> <li>适用于需要保持元素间相对顺序关系的场景，例如先按姓名排序，再稳定地按年龄排序，就能得到「年龄优先，同龄时按姓名」的结果。</li></ul> <p>不稳定排序算法的特点：</p> <ul><li>相同元素的相对位置可能会改变，排序后不保证原始顺序。</li> <li>不保证相同关键字元素的原始顺序；如果业务需要保留这个顺序，通常应选稳定排序。稳定性本身并不能决定快慢，仍要比较具体算法和实现。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#稳定和不稳定排序算法有什么特点"
+ },
+ {
+  "id": "xl-data-032",
+  "category": "数据结构与算法",
+  "title": "说说快排流程，时间复杂度",
+  "answer": "<p>快速排序的流程如下：</p> <ul><li>从数组中选择一个基准元素（通常是数组中间位置的元素）。</li> <li>将数组分成两部分，小于基准元素的放在左边，大于基准元素的放在右边。</li> <li>递归地对左右两部分进行快速排序。</li></ul> <p>快速排序的时间复杂度为O(n log n)，其中n为数组的长度。最坏情况下时间复杂度为O(n^2)，发生在每次选择的基准元素都是最大或最小值时。平均情况下时间复杂度为O(n log n)，效率较高。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "原理",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#说说快排流程-时间复杂度"
+ },
+ {
+  "id": "xl-data-033",
+  "category": "数据结构与算法",
+  "title": "快排为什么时间复杂度最差是O（n^2）",
+  "answer": "<p>主要是因为在每次划分时选择的基准元素不合适导致的。当每次选择的基准元素都是当前子数组中的最大或最小元素时，就会导致每次划分只能减少一个元素，而不是均匀地分成两部分，从而造成时间复杂度达到O(n^2)。</p> <p>比如固定选择首尾元素作为基准时，已经有序的数组就容易出现这种情况；使用前面的单向扫描划分时，大量重复元素也可能导致退化。各轮划分的工作量为 <code>(n - 1) + (n - 2) + … + 1</code>，所以总时间复杂度是 O(n²)，递归栈也会达到 O(n)。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/c4fefd46_quicksort-recursion-balance.png\" alt=\"\"></p> <p>随机选择基准、三数取中可以降低不均衡划分的风险，但不能保证消除 O(n²) 的最坏情况。大量重复值适合三路划分；如果要求最坏 O(n log n)，可以选择堆排序、归并排序，或者在递归过深时切换到堆排序的混合方案。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "原理",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#快排为什么时间复杂度最差是o-n-2"
+ },
+ {
+  "id": "xl-data-034",
+  "category": "数据结构与算法",
+  "title": "快排这么强，那冒泡排序还有必要吗？",
+  "answer": "<p>冒泡排序在一些特定场景下仍然有其优势，比如：</p> <ul><li><strong>实现简单</strong>：适合讲解排序和处理很小的数据量。加上提前结束判断后，对已经有序的数据只需扫描一轮，时间复杂度是 O(n)。但「基本有序」不代表一定很快，比如最小值在数组末尾时，普通冒泡仍可能需要很多轮，不能笼统认为比快排快。</li> <li>冒泡排序是<strong>稳定</strong>排序算法，相对于快速排序的不稳定性，在要求稳定性的场景（比如按多关键字排序时保留原有顺序）更合适。</li> <li>空间复杂度更低：快速排序虽然也是原地排序，但递归调用需要 O(log n)（最坏 O(n)）的栈空间；而冒泡排序只需要 O(1) 额外空间。不过插入排序也能做到稳定、O(1) 额外空间，且对小规模或接近有序的数据通常更实用，不能只凭空间复杂度就优先选冒泡排序。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "性能优化"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#快排这么强-那冒泡排序还有必要吗"
+ },
+ {
+  "id": "xl-data-035",
+  "category": "数据结构与算法",
+  "title": "如果要对一个很大的数据集，进行排序，而没办法一次性在内存排序，这时候怎么办？",
+  "answer": "<p>可以使用外部排序来解决，基本思路分为两个阶段。</p> <blockquote><p>部分排序阶段。</p></blockquote> <p>我们根据内存大小，将待排序的文件拆成多个部分，使得每个部分都是足以存入内存中的。然后选择合适的内排序算法，将多个文件部分排序，并输出到容量可以更大的外存临时文件中，每个临时文件都是有序排列的，我们将其称之为一个“顺段”。</p> <p>在第一个阶段部分排序中，由于内存可以装下每个顺段的所有元素，可以使用<strong>快速排序</strong>，时间复杂度是O(nlogn)。</p> <blockquote><p>归并阶段</p></blockquote> <p>我们对前面的多个“顺段”进行合并，思想和归并排序其实是一样的。以 2 路归并为例，每次都将两个连续的顺段合并成一个更大的顺段。</p> <p>因为内存限制，每次可能只能读入两个顺段的部分内容，所以我们需要一部分一部分读入，在内存里将可以确定顺序的部分排列，并输出到外存里的文件中，不断重复这个过程，直至两个顺段被完整遍历。这样经过多层的归并之后，最终会得到一个完整的顺序文件。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233745307.png\" alt=\"image-20240725233745307\"></p> <p>归并阶段有个非常大的时间消耗就是 IO，也就是输入输出。可以通过增加归并路数 k 来减少归并轮数，但要为每一路输入以及输出预留缓冲区。选出 k 路当前元素中的最小值，可以使用最小堆或者<strong>败者树</strong>。败者树负责高效选择下一项，减少归并轮数的是增加路数，两者不要混淆。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/8ac631b3_external-sort-buffered-merge.png\" alt=\"\"></p> <p>败者树和胜者树是一对概念：胜者树的非终端结点存储的是每次比较中<strong>胜利</strong>的一方（左右孩子相比较，谁最小即为胜者），而<strong>败者树的非终端结点存储的是比较中失败的一方</strong>，真正的&quot;胜者&quot;会被传到上一层继续参加比较。比较过程中都是拿上一轮的胜者去参加下一轮比较，这样当某一路的数据发生变化时，只需要沿着从叶子到根的一条路径重新比较即可，每次更新只需要 O(log k) 次比较。胜者树和最小堆也能做到 O(log k)，败者树的优势主要在比较过程的常数开销，而不是复杂度等级不同。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com//picgo/image-20240725233754449.png\" alt=\"image-20240725233754449\"></p> <p>现在有了败者树的加持，多路归并排序就可以比较高效地解决外部排序的问题了。</p> <p>大致思路就是：</p> <ul><li>先用内排序算法（比如快速排序），尽可能多的加载源文件，将其变成 n 个有序顺段。</li> <li>在内存有限的前提下每 k 个文件为一组，每次流式地从各个文件中读取一个单词，借助败者树选出字典序最低的一个，输出到文件中，这样就可以将 k 个顺段合并到一个顺段中了；反复执行这样的操作，直至所有顺段被归并到同一个顺段。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#如果要对一个很大的数据集-进行排序-而没办法一次性在内存排序-这时候怎么办"
+ },
+ {
+  "id": "xl-data-036",
+  "category": "数据结构与算法",
+  "title": "数组长度为N，找出最大的前K个值，怎么设计这个算法？时间复杂度是多少",
+  "answer": "<p>常见的解决方案有几种：</p> <p>先明确边界：K 必须在 <code>[0, N]</code> 内，K 为 0 时返回空数组；这里允许重复值占据多个名额，比如 <code>[5, 5, 3]</code> 的前两个最大值是 <code>[5, 5]</code>，如果要求不同的值，需要额外去重。还要区分「找出最大的 K 个值」和「把这 K 个值排好序」，后者会增加排序成本。下面的排序法和快速选择会修改原数组，最小堆方法不会；如果需要保留原数组，可以先复制，但还要计入复制时间和空间。</p> <ol><li><strong>排序法</strong>：对整个数组进行升序排序，然后取最后 K 个元素。比如使用快速排序，时间复杂度是O(N log N)。不过如果K远小于N，这种方法可能效率不高，因为排序整个数组没有必要。代码实现如下：</li></ol> <pre><code class=\"language-java\">import java.util.Arrays;\n\npublic class TopKBySorting {\n    public static int[] topK(int[] arr, int k) {\n        if (arr == null || k &lt; 0 || k &gt; arr.length) {\n            throw new IllegalArgumentException(&quot;Invalid array or k&quot;);\n        }\n        if (k == 0) return new int[0];\n        Arrays.sort(arr);\n        int n = arr.length;\n        int[] result = new int[k];\n        for (int i = 0; i &lt; k; i++) {\n            result[i] = arr[n - k + i];\n        }\n        return result;\n    }\n\n    public static void main(String[] args) {\n        int[] arr = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};\n        int k = 3;\n        int[] topK = topK(arr, k);\n        for (int num : topK) {\n            System.out.print(num + &quot; &quot;);\n        }\n    }\n}\n</code></pre><ol start=\"2\"><li><strong>堆（优先队列）</strong>：使用一个最小堆，维护K个最大的元素。遍历数组，当堆的大小小于K时直接加入，否则比较当前元素和堆顶，如果更大就替换堆顶，并调整堆。扫描并维护堆的时间复杂度是 O(N log K)，K 为 1 时是 O(N)，额外空间是 O(K)。下面代码最后连续出堆，得到降序结果，这一步需要 O(K log K)。这种方法适合处理大数据流的情况，因为不需要一次性加载所有数据到内存。代码实现如下：</li></ol> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/797b39c5_top-k-min-heap.png\" alt=\"\"></p> <pre><code class=\"language-java\">import java.util.PriorityQueue;\n\npublic class TopKByMinHeap {\n    public static int[] topK(int[] arr, int k) {\n        if (arr == null || k &lt; 0 || k &gt; arr.length) {\n            throw new IllegalArgumentException(&quot;Invalid array or k&quot;);\n        }\n        if (k == 0) return new int[0];\n        PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;(k);\n        for (int num : arr) {\n            if (minHeap.size() &lt; k) {\n                minHeap.offer(num);\n            } else if (num &gt; minHeap.peek()) {\n                minHeap.poll();\n                minHeap.offer(num);\n            }\n        }\n        int[] result = new int[k];\n        for (int i = k - 1; i &gt;= 0; i--) {\n            result[i] = minHeap.poll();\n        }\n        return result;\n    }\n\n    public static void main(String[] args) {\n        int[] arr = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};\n        int k = 3;\n        int[] topK = topK(arr, k);\n        for (int num : topK) {\n            System.out.print(num + &quot; &quot;);\n        }\n    }\n}\n</code></pre><ol start=\"3\"><li><strong>快速选择算法</strong>：基于快排的划分思想，找到升序情况下下标为 <code>N - K</code> 的位置，右侧的 K 个元素就是所需结果，但它们内部不保证有序。随机选基准时，选择过程的期望时间复杂度是 O(N)，最坏仍是 O(N²)。下面使用三路划分处理重复值，选择过程采用迭代，只需 O(1) 额外空间；复制结果需要 O(K) 空间。如果像下面代码一样继续把结果排序，总时间复杂度就是期望 O(N + K log K)，不能只写 O(N)。代码实现如下：</li></ol> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/c76f3912_quickselect-three-way-partition.png\" alt=\"\"></p> <pre><code class=\"language-java\">import java.util.Arrays;\nimport java.util.concurrent.ThreadLocalRandom;\n\npublic class TopKByQuickSelect {\n    public static int[] topK(int[] arr, int k) {\n        if (arr == null || k &lt; 0 || k &gt; arr.length) {\n            throw new IllegalArgumentException(&quot;Invalid array or k&quot;);\n        }\n        if (k == 0) return new int[0];\n        quickSelect(arr, 0, arr.length - 1, k);\n        int[] result = Arrays.copyOfRange(arr, arr.length - k, arr.length);\n        Arrays.sort(result);\n        return result;\n    }\n\n    private static void quickSelect(int[] arr, int left, int right, int k) {\n        int target = arr.length - k;\n        while (left &lt; right) {\n            int pivot = arr[ThreadLocalRandom.current().nextInt(left, right + 1)];\n            int lt = left, i = left, gt = right;\n            // [left, lt) 小于 pivot，[lt, i) 等于 pivot，(gt, right] 大于 pivot\n            while (i &lt;= gt) {\n                if (arr[i] &lt; pivot) {\n                    swap(arr, lt++, i++);\n                } else if (arr[i] &gt; pivot) {\n                    swap(arr, i, gt--); // 换来的元素还没有判断，i 不前进\n                } else {\n                    i++;\n                }\n            }\n            if (target &lt; lt) right = lt - 1;\n            else if (target &gt; gt) left = gt + 1;\n            else return; // target 落在等于 pivot 的区域\n        }\n    }\n\n    private static void swap(int[] arr, int i, int j) {\n        int temp = arr[i];\n        arr[i] = arr[j];\n        arr[j] = temp;\n    }\n\n    public static void main(String[] args) {\n        int[] arr = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};\n        int k = 3;\n        int[] topK = topK(arr, k);\n        for (int num : topK) {\n            System.out.print(num + &quot; &quot;);\n        }\n    }\n}\n</code></pre><p>具体怎么选，可以根据具体需求选择合适的方法：</p> <ul><li>如果 <em>K</em> 很小，推荐使用 <strong>最小堆</strong> 方法，其时间复杂度为 O(NlogK)。</li> <li>如果数据能放入内存、允许修改原数组，并且只需要无序的 K 个最大值，可以使用 <strong>快速选择</strong>，期望时间复杂度为 O(N)。如果还要有序输出，则需要再考虑 O(K log K) 的排序时间。</li> <li>如果对实现复杂度要求较低且 <em>K</em> 接近 <em>N</em>，可以直接使用 <strong>排序法</strong> ，时间复杂度为 O(NlogN)。</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "排序算法",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#数组长度为n-找出最大的前k个值-怎么设计这个算法-时间复杂度是多少"
+ },
+ {
+  "id": "xl-data-037",
+  "category": "数据结构与算法",
+  "title": "哈希表的原理是什么？哈希冲突怎么解决？",
+  "answer": "<p>哈希表（Hash Table）是一种通过<strong>哈希函数</strong>把键（key）映射到数组下标，从而在平均 O(1) 时间内完成查找、插入、删除的数据结构。</p> <p><strong>核心原理</strong>：</p> <ol><li>准备一个数组作为「桶数组」，后续可以按需要扩容</li> <li>用哈希函数 <code>hash(key)</code> 把键映射成一个整数</li> <li>用这个整数对数组长度取模（或位运算）得到桶下标</li> <li>把键值对放到这个桶里</li></ol> <p><strong>哈希冲突</strong>：不同的 key 经过哈希函数后可能映射到同一个下标，这就是哈希冲突，无法完全避免。主要有两大类解决方案：</p> <ul><li><strong>链地址法（拉链法）</strong>：每个桶里挂一个链表（或红黑树），冲突的元素都挂在对应桶的链表上。<strong>Java HashMap 和 Redis 的 dict 都用这种方式</strong>。JDK 8 的 HashMap 在桶内链表较长时会尝试树化，常说的阈值是 8；桶数组长度不足 64 时优先扩容，达到要求时才转换为红黑树，具体触发还取决于插入路径。</li> <li><strong>开放寻址法</strong>：冲突时按一定规则在数组里寻找下一个空位。常见的探测方式有<strong>线性探测</strong>（<code>i, i+1, i+2...</code>）、<strong>二次探测</strong>（<code>i, i+1², i+2²...</code>）、<strong>双重哈希</strong>（用第二个哈希函数算步长）。<strong>Java 的 <code>ThreadLocalMap</code> 就是用线性探测</strong>。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/f0cb5934_hash-collision-strategies.png\" alt=\"\"></p> <p><strong>当前负载</strong>可以用 <code>元素数量 / 桶数量</code> 表示，装入的元素越多，通常越容易冲突。Java HashMap 默认的负载因子阈值是 0.75，一般在元素数量超过 <code>容量 × 负载因子</code> 时扩容。扩容需要重新分配桶，并把原有元素放到新的位置，单次成本可能是 O(n)，所以平均 O(1) 不代表每次插入都是 O(1)。</p> <p>对于普通链地址哈希表，如果所有元素都冲突到同一个链表，查找最坏会退化为 O(n)。开放寻址法删除元素时也要小心，不能随便把槽位清空，否则可能截断后续元素的探测路径，通常需要删除标记或重新整理探测区间。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "原理",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#哈希表的原理是什么-哈希冲突怎么解决"
+ },
+ {
+  "id": "xl-data-038",
+  "category": "数据结构与算法",
+  "title": "归并排序的原理是什么？怎么实现？",
+  "answer": "<p>归并排序（Merge Sort）是一种典型的<strong>分治</strong>算法，思想非常清晰，就是&quot;<strong>分、治、合</strong>&quot;三步：</p> <ol><li><strong>分</strong>：把数组从中间一分为二</li> <li><strong>治</strong>：递归地对两半分别排序</li> <li><strong>合</strong>：把两个已排序的子数组合并成一个有序数组</li></ol> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/eadf2fdd_merge-sort-split-and-combine.png\" alt=\"\"></p> <p><strong>复杂度</strong>：</p> <ul><li>时间复杂度：最好、最坏、平均都是 <strong>O(n log n)</strong>（共 log n 层递归，每层合并总共处理 n 个元素）</li> <li>空间复杂度：<strong>O(n)</strong>（需要额外的临时数组存放合并结果）</li> <li>稳定性：<strong>稳定排序</strong>，合并时相同元素按原始顺序放入</li></ul> <p>Java 实现：</p> <pre><code class=\"language-java\">public class MergeSort {\n    public static void mergeSort(int[] arr, int left, int right) {\n        if (left &gt;= right) return;\n        int mid = left + (right - left) / 2;\n        mergeSort(arr, left, mid);        // 递归排序左半\n        mergeSort(arr, mid + 1, right);   // 递归排序右半\n        merge(arr, left, mid, right);     // 合并两个有序子数组\n    }\n\n    private static void merge(int[] arr, int left, int mid, int right) {\n        int[] temp = new int[right - left + 1];\n        int i = left, j = mid + 1, k = 0;\n        while (i &lt;= mid &amp;&amp; j &lt;= right) {\n            if (arr[i] &lt;= arr[j]) temp[k++] = arr[i++];\n            else                   temp[k++] = arr[j++];\n        }\n        while (i &lt;= mid)   temp[k++] = arr[i++];\n        while (j &lt;= right) temp[k++] = arr[j++];\n        System.arraycopy(temp, 0, arr, left, temp.length);\n    }\n}\n</code></pre><p>相比快排的优势：<strong>稳定</strong>、最坏情况也是 O(n log n)（快排最坏是 O(n²)）。\n相比快排的劣势：需要 O(n) 额外空间，不是原地排序。</p> <p>归并排序的典型应用场景：<strong>外部排序</strong>（内存放不下的海量数据）、<strong>链表排序</strong>（使用自底向上的迭代归并、不计已有节点时，额外空间可以做到 O(1)；递归版本仍需要 O(log n) 的调用栈）、<strong>需要稳定性</strong>的业务场景。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#归并排序的原理是什么-怎么实现"
+ },
+ {
+  "id": "xl-data-039",
+  "category": "数据结构与算法",
+  "title": "二分查找怎么实现？写代码时容易出哪些坑？",
+  "answer": "<p>二分查找（Binary Search）是对<strong>有序数组</strong>进行查找的经典算法，时间复杂度 O(log n)。</p> <p><strong>核心思想</strong>：每次比较中间元素，根据大小关系把查找范围缩小一半。</p> <p>标准实现：</p> <pre><code class=\"language-java\">public int binarySearch(int[] arr, int target) {\n    int left = 0, right = arr.length - 1;\n    while (left &lt;= right) {\n        int mid = left + (right - left) / 2;  // 避免整数溢出\n        if (arr[mid] == target) return mid;\n        else if (arr[mid] &lt; target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;  // 未找到\n}\n</code></pre><p><strong>容易踩的坑</strong>：</p> <ol><li><strong>整数溢出</strong>：不要写 <code>(left + right) / 2</code>，当 <code>left</code> 和 <code>right</code> 都接近 <code>Integer.MAX_VALUE</code> 时会溢出，必须写成 <code>left + (right - left) / 2</code></li> <li><strong>边界区间的写法要统一</strong>：\n<ul><li>闭区间 <code>[left, right]</code>：循环条件 <code>left &lt;= right</code>，更新时 <code>left = mid + 1</code> / <code>right = mid - 1</code></li> <li>左闭右开 <code>[left, right)</code>：循环条件 <code>left &lt; right</code>，更新时 <code>left = mid + 1</code> / <code>right = mid</code>（<strong>不减 1</strong>）</li> <li>两种写法不能混用，否则要么死循环要么漏解</li></ul></li> <li><strong>死循环</strong>：如果循环里某个分支忘记让 <code>left</code> 或 <code>right</code> 变化，会导致死循环</li> <li><strong>变体题</strong>：查找&quot;第一个等于 target&quot;、&quot;最后一个等于 target&quot;、&quot;第一个大于等于 target&quot;等变体，需要小心 <code>&lt;</code> 和 <code>&lt;=</code> 的取舍，是面试里的高频进阶问法</li></ol>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#二分查找怎么实现-写代码时容易出哪些坑"
+ },
+ {
+  "id": "xl-data-040",
+  "category": "数据结构与算法",
+  "title": "有重复元素时，怎么二分查找第一个大于等于目标值的位置？",
+  "answer": "<p>普通二分查找遇到等于目标值的元素就返回，只能找到某个匹配位置。如果要求第一个大于等于 target 的位置，就要在满足条件后<strong>继续往左收缩</strong>。</p> <p>下面采用左闭右开的区间 <code>[left, right)</code>：</p> <pre><code class=\"language-java\">public int lowerBound(int[] arr, int target) {\n    int left = 0, right = arr.length;\n    while (left &lt; right) {\n        int mid = left + (right - left) / 2;\n        if (arr[mid] &lt; target) {\n            left = mid + 1; // mid 及左侧都不满足条件\n        } else {\n            right = mid;   // mid 可能是答案，继续向左找\n        }\n    }\n    return left;\n}\n</code></pre><p>比如数组 <code>[1, 2, 2, 4]</code>：</p> <ul><li>target 为 2，返回下标 1，也就是第一个 2。</li> <li>target 为 3，返回下标 3，也就是 4 所在的位置。</li> <li>target 为 5，返回数组长度 4，表示没有符合条件的元素。</li></ul> <p>如果需要查找第一个等于 target 的元素，要先判断 <code>index &lt; arr.length</code>，再判断 <code>arr[index] == target</code>。查找第一个大于 target 的位置时，把代码中的 <code>&lt; target</code> 改为 <code>&lt;= target</code>，就是 upper bound。</p> <p>lower bound 和 upper bound 的差值，就是 target 在有序数组中出现的次数。两次查找的时间复杂度仍然是 O(log n)，额外空间是 O(1)。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/133528ab_binary-search-lower-bound.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#有重复元素时-怎么二分查找第一个大于等于目标值的位置"
+ },
+ {
+  "id": "xl-data-041",
+  "category": "数据结构与算法",
+  "title": "DFS 和 BFS 有什么区别？分别在什么场景用？",
+  "answer": "<p>DFS（深度优先搜索）和 BFS（广度优先搜索）都是图/树的遍历算法，区别在于遍历方向：</p> <ul><li><strong>DFS（深度优先）</strong>：一条路走到黑，走不通再回溯。通常用<strong>递归</strong>或<strong>栈</strong>实现。</li> <li><strong>BFS（广度优先）</strong>：一层一层向外扩展。通常用<strong>队列</strong>实现。</li></ul> <table><thead><tr><th>维度</th> <th>DFS</th> <th>BFS</th></tr></thead> <tbody><tr><td>实现</td> <td>递归 / 栈</td> <td>队列</td></tr> <tr><td>树上的辅助空间</td> <td>O(h)，h 是树高，指递归或按路径维护的栈，不计结果</td> <td>O(w)，w 是树的最大宽度，不计结果</td></tr> <tr><td>能否求最短路径</td> <td>不能直接求</td> <td><strong>可以</strong>（边权相等的图，BFS 第一次到达即最短路径）</td></tr> <tr><td>典型应用</td> <td>全排列、子集、拓扑排序、检测环、连通分量、回溯</td> <td>层序遍历、求最短路径、&quot;最少几步&quot;类问题</td></tr></tbody></table> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/87372c52_dfs-bfs-traversal-order.png\" alt=\"\"></p> <p><strong>经典题举例</strong>：</p> <ul><li>二叉树前/中/后序遍历 → DFS</li> <li>二叉树层序遍历 → BFS</li> <li>LeetCode 200 岛屿数量 → DFS/BFS 都行</li> <li>LeetCode 994 腐烂的橘子（求最短感染时间）→ BFS</li> <li>回溯类题目（全排列、N 皇后、子集、组合）→ DFS</li></ul> <p>遍历含 V 个顶点、E 条边的图时，如果使用邻接表，两者的时间复杂度都是 O(V + E)，辅助空间最坏都是 O(V)，包括 visited 和栈或队列。使用邻接矩阵时，扫描所有邻居的时间可能达到 O(V²)。</p> <p>图可能有环，要通过 visited 避免重复访问。BFS 通常在<strong>入队时就标记已访问</strong>，否则同一个顶点可能被不同邻居重复加入队列；如果图不连通，还要从没有访问过的顶点继续遍历。</p> <p>需要找无权图或等权图的最短路径、最少步数时，可以用 BFS；要穷举方案或沿一条路径深入时，可以用 DFS。边权不同时，就不能直接套普通 BFS 的最短路结论。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "对比",
+   "场景设计"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#dfs-和-bfs-有什么区别-分别在什么场景用"
+ },
+ {
+  "id": "xl-data-042",
+  "category": "数据结构与算法",
+  "title": "图一般怎么存储？邻接矩阵和邻接表有什么区别？",
+  "answer": "<p>常见的图存储方式有<strong>邻接矩阵</strong>和<strong>邻接表</strong>。假设图有 V 个顶点、E 条边：</p> <table><thead><tr><th>对比项</th> <th>邻接矩阵</th> <th>邻接表</th></tr></thead> <tbody><tr><td>存储方式</td> <td>用二维数组记录两个顶点之间是否有边或边权</td> <td>每个顶点保存它的邻居列表</td></tr> <tr><td>空间复杂度</td> <td>O(V²)</td> <td>O(V + E)</td></tr> <tr><td>判断两点是否相连</td> <td>O(1)</td> <td>普通列表最坏需要遍历该顶点的所有邻居</td></tr> <tr><td>遍历某个顶点的邻居</td> <td>O(V)</td> <td>O(该顶点的度数)</td></tr> <tr><td>适用场景</td> <td>稠密图、频繁判断任意两点是否有边</td> <td>稀疏图、经常遍历邻居</td></tr></tbody></table> <p>比如有 1 万个顶点，但只有 2 万条边，用邻接矩阵仍然要保存 1 亿个位置，大部分位置没有边；邻接表只保存实际存在的邻接关系，通常更节省空间。</p> <p>有向图的一条边 <code>u → v</code> 只需要加入 u 的邻接表；无向图的一条边通常要同时加入 u 和 v 的邻接表，所以会存储两次，但空间复杂度仍然是 O(V + E)。加权图还需要在边上保存权重。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/49063fb0_graph-matrix-adjacency-list.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#图一般怎么存储-邻接矩阵和邻接表有什么区别"
+ },
+ {
+  "id": "xl-data-043",
+  "category": "数据结构与算法",
+  "title": "如何反转一个链表？",
+  "answer": "<p>链表手撕题里最经典的一道，要会两种解法。下面示例中的 <code>ListNode</code> 表示包含 <code>int val</code> 和 <code>ListNode next</code> 的单链表节点，后续链表题也使用这个定义。</p> <p><strong>解法一：迭代（推荐，O(1) 空间）</strong></p> <p>用三个指针 <code>prev</code>、<code>curr</code>、<code>next</code> 依次调转每个节点的指向：</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/4db4da61_linked-list-pointer-reversal.png\" alt=\"\"></p> <pre><code class=\"language-java\">public ListNode reverseList(ListNode head) {\n    ListNode prev = null;\n    ListNode curr = head;\n    while (curr != null) {\n        ListNode next = curr.next;  // 暂存下一个节点\n        curr.next = prev;            // 反转当前节点的指针\n        prev = curr;                 // prev 前进\n        curr = next;                 // curr 前进\n    }\n    return prev;  // 最后 prev 就是新的头节点\n}\n</code></pre><p>时间复杂度 O(n)，空间复杂度 O(1)。</p> <p><strong>解法二：递归</strong></p> <pre><code class=\"language-java\">public ListNode reverseList(ListNode head) {\n    if (head == null || head.next == null) return head;\n    ListNode newHead = reverseList(head.next);\n    head.next.next = head;  // 让下一个节点的 next 指向当前节点\n    head.next = null;       // 当前节点的 next 设为 null，避免成环\n    return newHead;\n}\n</code></pre><p>时间复杂度 O(n)，但递归栈占用 O(n) 空间。</p> <p>面试时一定要考虑<strong>空链表</strong>（<code>head == null</code>）和<strong>只有一个节点</strong>的边界情况，上面两种写法都已经处理了。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#如何反转一个链表"
+ },
+ {
+  "id": "xl-data-044",
+  "category": "数据结构与算法",
+  "title": "如何判断一个链表是否有环？如何找到环的入口节点？",
+  "answer": "<p>这是<strong>快慢指针（Floyd 判圈算法）</strong> 的经典应用题，两问都有标准答案。</p> <p><strong>第一问：判断有没有环</strong></p> <p>用两个指针 <code>slow</code> 和 <code>fast</code>，<code>slow</code> 每次走 1 步，<code>fast</code> 每次走 2 步：</p> <ul><li>如果 <code>fast</code> 走到了 <code>null</code>，说明没有环</li> <li>如果 <code>fast</code> 追上了 <code>slow</code>（相遇），说明有环</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/66140fde_floyd-cycle-detection.png\" alt=\"\"></p> <pre><code class=\"language-java\">public boolean hasCycle(ListNode head) {\n    ListNode slow = head, fast = head;\n    while (fast != null &amp;&amp; fast.next != null) {\n        slow = slow.next;\n        fast = fast.next.next;\n        if (slow == fast) return true;\n    }\n    return false;\n}\n</code></pre><p><strong>第二问：找环的入口节点</strong></p> <p>关键结论（Floyd 算法的数学推导）：<strong>在 slow 和 fast 相遇后，让其中一个指针回到链表头，两个指针都每次走一步，再次相遇的地方就是环的入口</strong>。</p> <pre><code class=\"language-java\">public ListNode detectCycle(ListNode head) {\n    ListNode slow = head, fast = head;\n    while (fast != null &amp;&amp; fast.next != null) {\n        slow = slow.next;\n        fast = fast.next.next;\n        if (slow == fast) {\n            // 相遇，开始找入口\n            ListNode p = head;\n            while (p != slow) {\n                p = p.next;\n                slow = slow.next;\n            }\n            return p;\n        }\n    }\n    return null;\n}\n</code></pre><p>两种方法的时间复杂度都是 O(n)，额外空间复杂度都是 O(1)。注意比较的是<strong>节点引用是否相同</strong>，不是节点的值，相同值的两个节点不代表有环。</p> <p><strong>数学原理</strong>：设头到入口距离为 <code>a</code>，入口到相遇点为 <code>b</code>，相遇点到入口（沿环走）为 <code>c</code>。相遇时 <code>slow = a + b</code>，<code>fast = a + b + k(b + c)</code>（多跑了 k 圈）。由 <code>fast = 2·slow</code> 推出 <code>a = (k - 1)(b + c) + c</code>，含义就是：<strong>从头走 a 步，等价于从相遇点走 c 步再走若干整圈</strong>，两者一定会同时到达入口。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/89497979_floyd-cycle-entry.png\" alt=\"\"></p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#如何判断一个链表是否有环-如何找到环的入口节点"
+ },
+ {
+  "id": "xl-data-045",
+  "category": "数据结构与算法",
+  "title": "二叉树有几种遍历方式？分别怎么实现？",
+  "answer": "<p>二叉树常见的遍历分两大类：<strong>DFS 三种</strong> 和 <strong>BFS 一种</strong>，一共<strong>四种</strong>。下面的 <code>TreeNode</code> 表示包含 <code>int val</code>、<code>TreeNode left</code>、<code>TreeNode right</code> 的二叉树节点，集合类型需要导入 <code>java.util</code> 中的对应类。</p> <p><strong>DFS 三种</strong>（根据根节点被访问的顺序区分）：</p> <ul><li><strong>前序遍历</strong>：根 → 左 → 右</li> <li><strong>中序遍历</strong>：左 → 根 → 右（<strong>二叉搜索树的中序遍历结果是升序的</strong>，这是经典考点）</li> <li><strong>后序遍历</strong>：左 → 右 → 根（常用于&quot;先处理子树再处理当前节点&quot;的场景，比如释放整棵树的内存）</li></ul> <p>递归实现（以中序为例）：</p> <pre><code class=\"language-java\">public void inorder(TreeNode root, List&lt;Integer&gt; result) {\n    if (root == null) return;\n    inorder(root.left, result);\n    result.add(root.val);\n    inorder(root.right, result);\n}\n</code></pre><p>迭代实现需要显式用栈，面试中常考中序遍历的迭代写法：</p> <pre><code class=\"language-java\">public List&lt;Integer&gt; inorderTraversal(TreeNode root) {\n    List&lt;Integer&gt; result = new ArrayList&lt;&gt;();\n    Deque&lt;TreeNode&gt; stack = new ArrayDeque&lt;&gt;();\n    TreeNode curr = root;\n    while (curr != null || !stack.isEmpty()) {\n        while (curr != null) {\n            stack.push(curr);\n            curr = curr.left;\n        }\n        curr = stack.pop();\n        result.add(curr.val);\n        curr = curr.right;\n    }\n    return result;\n}\n</code></pre><p><strong>BFS 一种：层序遍历（Level Order）</strong></p> <p>用队列实现，一层一层访问：</p> <pre><code class=\"language-java\">public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {\n    List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();\n    if (root == null) return result;\n    Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();\n    queue.offer(root);\n    while (!queue.isEmpty()) {\n        int size = queue.size();\n        List&lt;Integer&gt; level = new ArrayList&lt;&gt;();\n        for (int i = 0; i &lt; size; i++) {\n            TreeNode node = queue.poll();\n            level.add(node.val);\n            if (node.left != null)  queue.offer(node.left);\n            if (node.right != null) queue.offer(node.right);\n        }\n        result.add(level);\n    }\n    return result;\n}\n</code></pre><p>四种遍历都会访问所有节点，时间复杂度是 O(n)。前面 DFS 写法的栈空间是 O(h)，层序遍历的队列空间是 O(w)；如果把保存遍历结果的列表也计入，总空间通常是 O(n)。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#二叉树有几种遍历方式-分别怎么实现"
+ },
+ {
+  "id": "xl-data-046",
+  "category": "数据结构与算法",
+  "title": "滑动窗口是什么？为什么有些嵌套循环仍然是 O(n)？",
+  "answer": "<p>滑动窗口适合处理数组、字符串中的<strong>连续区间</strong>。通过左右两个指针维护一个区间，右指针扩大窗口，左指针在条件不满足时缩小窗口，避免每次都从头统计。</p> <p>比如求字符串中最长的无重复子串，可以用哈希表记录每个字符最后一次出现的位置：</p> <pre><code class=\"language-java\">public int lengthOfLongestSubstring(String s) {\n    Map&lt;Character, Integer&gt; lastIndex = new HashMap&lt;&gt;();\n    int left = 0, maxLength = 0;\n    for (int right = 0; right &lt; s.length(); right++) {\n        char c = s.charAt(right);\n        Integer prev = lastIndex.put(c, right);\n        if (prev != null) {\n            left = Math.max(left, prev + 1); // left 不能往回走\n        }\n        maxLength = Math.max(maxLength, right - left + 1);\n    }\n    return maxLength;\n}\n</code></pre><p>比如字符串 <code>abba</code>，扫描到最后的 <code>a</code> 时，它之前出现在下标 0，但窗口左边界已经移动到 2，不能重新退回 1，否则窗口又会包含重复的 <code>b</code>。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/ef0d1939_sliding-window-abba.png\" alt=\"\"></p> <p>在哈希表操作平均为 O(1) 的前提下，时间复杂度是 O(n)，空间复杂度是 O(min(n, 字符集大小))。这里按 Java 的 <code>char</code> 处理字符；如果题目要求按 Unicode 码点处理，需要调整字符遍历方式。</p> <p>另一类写法会在外层循环中用 while 不断移动左指针，看起来有两层循环，但<strong>每个指针在整个过程中最多前进 n 次</strong>，所以总时间仍然是 O(n)。</p> <p>滑动窗口不能套到所有连续区间问题上。例如求和至少为 target 的最短子数组，元素都是正数时，可以根据窗口和扩大、缩小窗口；如果包含负数，加入元素不一定使和增大，删除元素也不一定使和减小，就不能直接使用同一套判断逻辑。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#滑动窗口是什么-为什么有些嵌套循环仍然是-o-n"
+ },
+ {
+  "id": "xl-data-047",
+  "category": "数据结构与算法",
+  "title": "单调栈是什么？适合解决什么问题？",
+  "answer": "<p>单调栈是在普通栈的基础上，要求栈内元素按某种规则保持单调。常用来求<strong>某个元素左边或右边第一个更大、更小的元素</strong>，例如每日温度、下一个更大元素、柱状图中的最大矩形。</p> <p>以「找数组中每个元素右边第一个更大元素的下标」为例，从左到右遍历，栈中保存还没有找到答案的元素下标，对应的值从栈底到栈顶保持非递增。</p> <pre><code class=\"language-java\">public int[] nextGreaterIndex(int[] nums) {\n    int[] result = new int[nums.length];\n    Arrays.fill(result, -1);\n    Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();\n    for (int i = 0; i &lt; nums.length; i++) {\n        while (!stack.isEmpty() &amp;&amp; nums[i] &gt; nums[stack.peek()]) {\n            result[stack.pop()] = i;\n        }\n        stack.push(i);\n    }\n    return result;\n}\n</code></pre><p>比如 <code>[2, 1, 3]</code>，遍历到 3 时，栈顶的 1 和后面的 2 都找到了右边第一个更大元素，因此依次弹出并记录下标 2，最终结果是 <code>[2, 2, -1]</code>。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/5f8f6eaf_monotonic-stack-next-greater.png\" alt=\"\"></p> <p>这里保存下标，既能比较元素值，也能计算距离。如果题目问还要等几天才升温，就用答案下标减去当前下标。</p> <p>虽然循环里有 while，但每个元素只会入栈一次、出栈一次，所以时间复杂度是 O(n)，辅助空间复杂度是 O(n)。还要注意严格大于和大于等于的区别，相等元素是否弹出，会影响答案。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#单调栈是什么-适合解决什么问题"
+ },
+ {
+  "id": "xl-data-048",
+  "category": "数据结构与算法",
+  "title": "拓扑排序是什么？怎么判断任务依赖中是否有环？",
+  "answer": "<p>拓扑排序是对<strong>有向无环图（DAG）</strong> 的顶点进行排序，使得对每条边 <code>u → v</code>，u 都出现在 v 前面。比如「先编译依赖模块，再编译当前模块」就可以用拓扑排序确定顺序。</p> <p>常用的 Kahn 算法依靠入度和队列实现：</p> <ol><li>统计每个顶点的入度，也就是指向它的边数。</li> <li>把所有入度为 0 的顶点加入队列，它们没有尚未完成的前置依赖。</li> <li>取出一个顶点加入结果，对它的每个后继顶点，把入度减 1。</li> <li>如果某个后继的入度变成 0，就把它加入队列。</li> <li>队列为空后，如果结果包含所有顶点，说明得到了一种拓扑顺序；否则说明图中有环。</li></ol> <p>为什么能判断有环？环中的每个顶点都依赖环内的另一个顶点，无法通过移除入度为 0 的顶点，把环里的依赖全部解除，因此这些顶点无法被完整处理。未处理的顶点可能还包括依赖这个环的后续顶点，并不一定全部都在环上。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/604ec6d7_topological-sort-cycle-blocking.png\" alt=\"\"></p> <p>使用邻接表时，时间复杂度是 O(V + E)，辅助空间是 O(V)，不计图本身的存储。拓扑顺序不一定唯一，如果同时有多个入度为 0 的顶点，选择它们的先后顺序可能不同。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#拓扑排序是什么-怎么判断任务依赖中是否有环"
+ },
+ {
+  "id": "xl-data-049",
+  "category": "数据结构与算法",
+  "title": "并查集是什么？路径压缩和按大小合并有什么作用？",
+  "answer": "<p>并查集用来维护元素所属的集合，主要支持两个操作：</p> <ul><li><strong>find</strong>：找到某个元素所在集合的代表，也就是根节点。</li> <li><strong>union</strong>：把两个元素所在的集合合并。</li></ul> <p>判断两个元素是否连通，只需要比较它们的根节点是否相同。常用于无向图的连通性判断、连通分量统计，以及 Kruskal 最小生成树算法。</p> <p>如果随意把一棵树挂到另一棵树下面，可能形成很长的链，find 就会变慢，所以常用两种优化：</p> <ul><li><strong>路径压缩</strong>：查找根节点时，把路径上的节点直接指向根，后续查询就能跳过中间节点。</li> <li><strong>按大小合并</strong>：把节点数较少的树挂到较大的树下面，避免树高增长过快。也可以按秩合并，秩用于控制树高增长。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/54d5abbf_union-find-merge-by-size.png\" alt=\"\"></p> <p>Java 实现如下，元素编号为 <code>[0, n)</code>：</p> <pre><code class=\"language-java\">class UnionFind {\n    private final int[] parent;\n    private final int[] size;\n\n    public UnionFind(int n) {\n        parent = new int[n];\n        size = new int[n];\n        for (int i = 0; i &lt; n; i++) {\n            parent[i] = i;\n            size[i] = 1;\n        }\n    }\n\n    public int find(int x) {\n        int root = x;\n        while (root != parent[root]) root = parent[root];\n        while (x != root) {\n            int next = parent[x];\n            parent[x] = root;\n            x = next;\n        }\n        return root;\n    }\n\n    public boolean union(int a, int b) {\n        int rootA = find(a), rootB = find(b);\n        if (rootA == rootB) return false; // 已经在同一集合\n        if (size[rootA] &lt; size[rootB]) {\n            int temp = rootA;\n            rootA = rootB;\n            rootB = temp;\n        }\n        parent[rootB] = rootA;\n        size[rootA] += size[rootB];\n        return true;\n    }\n}\n</code></pre><p>同时使用路径压缩和按大小合并时，find、union 的均摊时间复杂度是 O(α(n))，α 是反阿克曼函数，增长极慢，实际中可以近似看作常数，但不是每一次操作都严格为 O(1)。初始化时间和空间复杂度都是 O(n)。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/d3a567e9_union-find-path-compression.png\" alt=\"\"></p> <p>对无向图，逐条加入边时，如果一条边的两个端点已经属于同一集合，说明加入这条边会形成环；但<strong>有向图不能直接用这个规则判断有向环</strong>。普通并查集也不适合直接处理删除边后的连通性，因为它擅长合并集合，不能直接拆分集合。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#并查集是什么-路径压缩和按大小合并有什么作用"
+ },
+ {
+  "id": "xl-data-050",
+  "category": "数据结构与算法",
+  "title": "什么是动态规划？典型的动态规划问题有哪些？",
+  "answer": "<p><strong>动态规划（Dynamic Programming，DP）</strong> 是一种把大问题拆解为<strong>重叠子问题</strong>、通过记录子问题的解来避免重复计算的算法思想。</p> <p>求最优解的问题使用 DP，通常要关注以下特征。DP 也可以用于计数、判断可行性，不局限于求最优解：</p> <ol><li><strong>最优子结构</strong>：原问题的最优解可以由子问题的最优解组合而来</li> <li><strong>重叠子问题</strong>：递归求解时会反复计算相同的子问题，通过保存结果避免重复计算。</li> <li><strong>状态能够描述后续决策需要的信息</strong>：给定状态后，不需要再关心到达该状态的完整历史，也就是常说的「无后效性」。如果历史会影响后续选择，就需要把必要的历史信息加入状态。</li></ol> <p><strong>DP 的核心是写出&quot;状态转移方程&quot;</strong>，解题套路：</p> <ul><li><strong>定义状态</strong>：<code>dp[i]</code> 或 <code>dp[i][j]</code> 表示什么</li> <li><strong>状态转移方程</strong>：<code>dp[i]</code> 如何从之前的状态推导出来</li> <li><strong>初始化</strong>：边界状态如何给值</li> <li><strong>遍历顺序</strong>：从前往后 / 从后往前 / 按某种维度</li></ul> <p><strong>典型题目</strong>：</p> <ul><li><strong>斐波那契 / 爬楼梯</strong>：<code>dp[i] = dp[i-1] + dp[i-2]</code>，最入门的 DP</li> <li><strong>0-1 背包</strong>：<code>dp[i][j]</code> = 前 i 个物品装进容量 j 的背包能得到的最大价值</li> <li><strong>完全背包</strong>：物品可以重复选，经典的&quot;零钱兑换&quot;就是完全背包</li> <li><strong>最长公共子序列（LCS）</strong>：两个字符串的最长公共子序列</li> <li><strong>最长递增子序列（LIS）</strong>：一个数组里最长的递增子序列</li> <li><strong>最长回文子串</strong>：<code>dp[i][j]</code> 表示 <code>s[i..j]</code> 是否是回文</li> <li><strong>编辑距离</strong>：把字符串 s1 改成 s2 最少需要多少步（增删改）</li> <li><strong>打家劫舍</strong>：每间房偷/不偷的选择题</li> <li><strong>零钱兑换</strong>：凑出目标金额的最少硬币数</li></ul> <p><strong>进阶技巧</strong>：先想暴力递归 → 发现重叠子问题 → 用数组/哈希表做<strong>记忆化搜索</strong> → 改写成自底向上的迭代 DP → 最后用<strong>滚动数组</strong>优化空间。关键还是先把状态含义和转移条件定义清楚，滚动数组也只有在依赖关系允许时才能使用。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#什么是动态规划-典型的动态规划问题有哪些"
+ },
+ {
+  "id": "xl-data-051",
+  "category": "数据结构与算法",
+  "title": "0-1 背包和完全背包有什么区别？为什么一维 DP 的遍历方向不同？",
+  "answer": "<p>两者的区别是物品能使用多少次：</p> <ul><li><strong>0-1 背包</strong>：每个物品最多使用一次。</li> <li><strong>完全背包</strong>：每个物品可以使用多次。</li></ul> <p>以最大化总价值、总重量不超过容量为例，定义 <code>dp[j]</code> 表示容量为 j 时能获得的最大价值，初始都为 0。物品重量 w 必须为正数，价值为 v。</p> <p>依次遍历每个物品，对于当前物品的重量 w、价值 v，0-1 背包按容量<strong>从大到小</strong>更新：</p> <pre><code class=\"language-java\">for (int j = capacity; j &gt;= w; j--) {\n    dp[j] = Math.max(dp[j], dp[j - w] + v);\n}\n</code></pre><p>这样 <code>dp[j - w]</code> 还是没有加入当前物品时的结果，当前物品不会被重复使用。如果反过来从小到大遍历，<code>dp[j - w]</code> 可能已经用了当前物品，再加一次就变成重复选取。</p> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/2933487d_zero-one-knapsack-reverse-update.png\" alt=\"\"></p> <p>完全背包允许重复选，所以容量<strong>从小到大</strong>更新：</p> <pre><code class=\"language-java\">for (int j = w; j &lt;= capacity; j++) {\n    dp[j] = Math.max(dp[j], dp[j - w] + v);\n}\n</code></pre><p>比如只有一件重量为 2、价值为 3 的物品，背包容量为 4：</p> <ul><li>0-1 背包只能选一次，最大价值为 3。</li> <li>完全背包可以选两次，最大价值为 6。</li></ul> <p><img loading=\"lazy\" referrerpolicy=\"no-referrer\" src=\"https://cdn.xiaolincoding.com/xiaolinnote/interview/images/data/5f49aa46_complete-knapsack-forward-update.png\" alt=\"\"></p> <p>物品数为 n、容量为 C 时，这两种写法的时间复杂度都是 O(n × C)，空间复杂度都是 O(C)。这里讨论的是「重量不超过容量」；如果要求恰好装满，除 <code>dp[0]</code> 外，其余状态需要初始化为不可达，再从可达状态转移，不能仍然全设为 0。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "对比",
+   "原理"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#_0-1-背包和完全背包有什么区别-为什么一维-dp-的遍历方向不同"
+ },
+ {
+  "id": "xl-data-052",
+  "category": "数据结构与算法",
+  "title": "时间复杂度和空间复杂度怎么分析？",
+  "answer": "<p><strong>时间复杂度</strong> 描述的是<strong>算法运行时间随输入规模增长的趋势</strong>；<strong>空间复杂度</strong> 描述的是<strong>算法占用的额外空间随输入规模增长的趋势</strong>。通常用<strong>大 O 记法（Big O）</strong> 描述渐进上界，忽略常数和低阶项。大 O 并不只用于最坏情况，也可以描述最好、平均、期望或均摊复杂度，回答时要说明分析的是哪一种。这里空间复杂度主要讨论不计输入存储的辅助空间；是否计入输出空间，也要说明口径。</p> <p><strong>常见复杂度等级</strong>（从快到慢）：</p> <pre><code>O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ) &lt; O(n!)\n</code></pre><p><strong>分析时间复杂度的几条基本规则</strong>：</p> <ol><li><strong>只关注最高阶项</strong>：<code>3n² + 2n + 5 = O(n²)</code></li> <li><strong>忽略常数系数</strong>：<code>5n = O(n)</code></li> <li><strong>加法原则</strong>：顺序执行的两段代码取较大的：<code>O(n) + O(n²) = O(n²)</code></li> <li><strong>嵌套循环要看总执行次数</strong>：如果外层执行 n 次，每次内层也执行 n 次，则是 O(n²)。但如果两个指针在整个过程中各自最多移动 n 次，即使代码里有嵌套循环，也可能只有 O(n)，不能只看循环层数。</li></ol> <p><strong>常见代码模式对应的复杂度</strong>：</p> <ul><li>单层循环遍历 n 个元素：O(n)</li> <li>两层循环分别完整遍历 n 个元素：O(n²)</li> <li>每次规模减半（如二分查找）：O(log n)</li> <li>归并排序：每次递归产生两个规模减半的子问题，各层合并总工作量为 O(n)，一共 O(log n) 层，所以总时间为 O(n log n)</li> <li>暴力斐波那契递归：每次递归求 <code>f(n-1)</code> 和 <code>f(n-2)</code>，会大量重复计算，常用 O(2ⁿ) 表示其指数级上界；带记忆化后只需计算 O(n) 个状态</li></ul> <p><strong>空间复杂度分析</strong>关注两部分：</p> <ul><li><strong>额外开辟的数据结构大小</strong>：比如归并排序的临时数组是 O(n)</li> <li><strong>递归调用栈深度</strong>：比如对 n 个元素快速排序的平均递归栈深度是 O(log n)，最坏 O(n)</li></ul> <p>典型对照：</p> <ul><li>冒泡排序：时间 O(n²)，空间 O(1)</li> <li>快速排序：时间平均 O(n log n)、最坏 O(n²)，递归栈空间平均 O(log n)、最坏 O(n)</li> <li>归并排序：时间 O(n log n)，空间 O(n)</li> <li>堆排序：时间 O(n log n)，空间 O(1)</li></ul>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "概念"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#时间复杂度和空间复杂度怎么分析"
+ },
+ {
+  "id": "xl-data-053",
+  "category": "数据结构与算法",
+  "title": "贪心算法和动态规划有什么区别？",
+  "answer": "<p>两者都可以用于求最优解，但决策方式不同：<strong>贪心每一步按某个规则直接选择，通常不再重新考虑已经做出的选择；动态规划保存不同状态的结果，通过状态转移比较候选方案</strong>。</p> <table><thead><tr><th>维度</th> <th>贪心算法</th> <th>动态规划</th></tr></thead> <tbody><tr><td><strong>决策方式</strong></td> <td>选择当前符合贪心规则的方案</td> <td>比较到达某个状态的不同方案，保存所需结果</td></tr> <tr><td><strong>正确性条件</strong></td> <td>需要证明贪心选择可以导向全局最优</td> <td>状态要完整，转移、边界和计算顺序要正确</td></tr> <tr><td><strong>时间复杂度</strong></td> <td>取决于具体算法，比如活动选择排序后为 O(n log n)</td> <td>通常看状态数量 × 每个状态的转移成本</td></tr> <tr><td><strong>空间复杂度</strong></td> <td>取决于需要维护的数据结构</td> <td>取决于状态存储和能否压缩空间</td></tr></tbody></table> <p><strong>贪心并不是「当前选择不影响未来」</strong>。当前选择通常会影响后续可选方案，只是能证明按这个规则选择，不会损失得到最优解的机会。也不能笼统说动态规划一定比贪心慢，或者只要用了 DP 就一定正确。</p> <p>比如面值为 <code>[1, 3, 4]</code> 的硬币，凑出 6：</p> <ul><li>贪心如果每次选最大的面值，得到 <code>4 + 1 + 1</code>，需要 3 枚。</li> <li>最优解是 <code>3 + 3</code>，只需要 2 枚。</li></ul> <p>这说明「优先选最大面值」对这组面值不成立。如果硬币可以无限使用，可以定义 <code>dp[x]</code> 为凑出金额 x 的最少硬币数，枚举最后选的一枚硬币：</p> <pre><code class=\"language-plain\">dp[0] = 0\ndp[x] = min(dp[x - coin] + 1)，要求 x &gt;= coin，且 dp[x - coin] 可达\n</code></pre><p>不可达的状态先初始化为无穷大。如果 <code>dp[6]</code> 可达，它就是最少硬币数；否则说明无法凑出目标金额。金额为 A、硬币种类数为 C 时，这种做法的时间复杂度是 O(A × C)，空间复杂度是 O(A)。</p> <p>常见的贪心场景：</p> <ul><li><strong>活动选择</strong>：在最大化不重叠活动数量时，按结束时间排序，优先选最早结束且不冲突的活动。若活动带有不同收益，要最大化总收益，就不能直接套这个规则。</li> <li><strong>霍夫曼编码</strong>：每次合并频率最小的两个节点，用最小堆维护候选项。</li> <li><strong>跳跃游戏的可达性判断</strong>：扫描当前位置能到达的范围，持续更新最远可达位置。不是每次实际跳到最远的下标，因为那个位置的下一步跳跃能力可能很差。</li></ul> <p>常见的动态规划场景有背包问题、最长公共子序列、编辑距离、打家劫舍、零钱兑换等。</p> <p>面试时，如果采用贪心，需要说明为什么当前选择不会破坏全局最优，常用交换论证来证明；如果采用动态规划，则要讲清楚状态含义、转移方程、初始化和遍历顺序。</p>",
+  "format": "html",
+  "source": "小林coding",
+  "tags": [
+   "经典算法与思想",
+   "对比"
+  ],
+  "url": "https://xiaolincoding.com/interview/data.html#贪心算法和动态规划有什么区别"
+ }
+]

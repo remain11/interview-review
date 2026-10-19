@@ -1,0 +1,19 @@
+# 个人进度与口令
+data/state*.json
+data/token.txt
+data/backups/
+
+# 个人题库（只在本地使用，不公开）
+data/bank/*
+!data/bank/xiaolin_*.json
+data/qd/
+tools/extract_qd.py
+tools/import_notes.py
+tools/merge_*.py
+
+# 缓存 / 测试产物
+scrape/
+shots/
+__pycache__/
+*.pyc
+*.tmp
