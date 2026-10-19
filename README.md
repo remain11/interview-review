@@ -9,7 +9,7 @@
 需要 Python 3.10+，不用装第三方包。
 
 ```bash
-git clone https://github.com/<you>/interview-review.git
+git clone https://github.com/remain11/interview-review.git
 cd interview-review
 python -X utf8 server.py      # Windows 也可以直接双击 start.bat
 ```
